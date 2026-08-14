@@ -1,0 +1,1200 @@
+openapi: 3.1.0
+info:
+  title: digital-registered-letter
+  contact: { }
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "3.1"
+servers:
+  - url: http://localhost:64724
+    description: Generated server url
+tags:
+  - name: Scheduler Resource
+    description: Manually trigger scheduled tasks
+  - name: Letter Resource
+    description: Send and manage digital registered letters
+  - name: Tenant Resource
+    description: Manage tenants
+  - name: Eligibility Resource
+    description: Check eligibility for sending digital registered letters
+paths:
+  /{municipalityId}/tenants/{id}:
+    get:
+      tags:
+        - Tenant Resource
+      summary: Get tenant
+      description: Returns a specific tenant
+      operationId: getTenant
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tenant"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    put:
+      tags:
+        - Tenant Resource
+      summary: Update tenant
+      description: Updates an existing tenant
+      operationId: updateTenant
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Tenant"
+        required: true
+      responses:
+        "204":
+          description: Successful Operation - No Content
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+        - Tenant Resource
+      summary: Delete tenant
+      description: Deletes an existing tenant
+      operationId: deleteTenant
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Successful Operation - No Content
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{organizationNumber}/letters:
+    post:
+      tags:
+        - Letter Resource
+      summary: Send letter
+      description: Send a digital registered letter using Kivra
+      operationId: sendLetter
+      parameters:
+        - name: X-Sent-By
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: organizationNumber
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                letter:
+                  $ref: "#/components/schemas/LetterRequest"
+                letterAttachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+                - letter
+                - letterAttachments
+      responses:
+        "201":
+          description: Successful operation - Created
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Letter"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{organizationNumber}/eligibility/kivra:
+    post:
+      tags:
+        - Eligibility Resource
+      summary: Check if the given partyIds are eligible for receiving digital registered
+        letters with Kivra
+      description: "Returns a list of party IDs that are eligible for Kivra based\
+        \ on the provided municipality ID, organization number and party IDs"
+      operationId: checkKivraEligibility
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: organizationNumber
+          in: path
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EligibilityRequest"
+        required: true
+      responses:
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/tenants:
+    get:
+      tags:
+        - Tenant Resource
+      summary: Get all tenants
+      description: Returns all tenants for a municipality
+      operationId: getTenants
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tenant"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+        - Tenant Resource
+      summary: Create tenant
+      description: Creates a new tenant
+      operationId: createTenant
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Tenant"
+        required: true
+      responses:
+        "201":
+          description: Successful operation - Created
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/status/letters:
+    post:
+      tags:
+        - Status Resource
+      summary: Get status of given letters
+      description: Returns the current status for each provided letterId
+      operationId: getLetterStatuses
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LetterStatusRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LetterStatus"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/scheduler:
+    post:
+      tags:
+        - Scheduler Resource
+      summary: Trigger update letter information task
+      description: Triggers the task that updates letter information
+      operationId: updateLetterInformation
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful Operation - OK
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/scheduler/certificate-health:
+    post:
+      tags:
+        - Scheduler Resource
+      summary: Trigger certificate health check
+      description: Triggers the task that checks the Kivra certificate health
+      operationId: checkCertificateHealth
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful Operation - OK
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/letters:
+    get:
+      tags:
+        - Letter Resource
+      summary: Get all letters
+      description: "Retrieves all letters for a municipality. Response is possible\
+        \ to filter by any combination of department id, username, earliest and latest\
+        \ created date."
+      operationId: getLetters
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: orgId
+          in: query
+          description: Optional filter for matching organization id
+          required: false
+          schema:
+            type: integer
+            format: int64
+            description: Optional filter for matching organization id
+            examples:
+              - 44
+        - name: username
+          in: query
+          description: Optional filter for matching username
+          required: false
+          schema:
+            type: string
+            description: Optional filter for matching username
+            examples:
+              - joe01doe
+        - name: createdEarliest
+          in: query
+          description: Optional filter with format YYYY-MM-DD for matching earliest
+            date when letter was sent
+          required: false
+          schema:
+            type: string
+            format: date-time
+            description: Optional filter with format YYYY-MM-DD for matching earliest
+              date when letter was sent
+            examples:
+              - 2025-08-18
+        - name: createdLatest
+          in: query
+          description: Optional filter with format YYYY-MM-DD for matching latest date
+            when letter was sent
+          required: false
+          schema:
+            type: string
+            format: date-time
+            description: Optional filter with format YYYY-MM-DD for matching latest
+              date when letter was sent
+            examples:
+              - 2025-09-18
+        - name: page
+          in: query
+          description: Zero-based page index (0..N)
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: size
+          in: query
+          description: The size of the page to be returned
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+        - name: sort
+          in: query
+          description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: Successful Operation - OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Letters"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/letters/{letterId}:
+    get:
+      tags:
+        - Letter Resource
+      summary: Get letter
+      description: Retrieves a letter by id
+      operationId: getLetter
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: letterId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful Operation - OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Letter"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/letters/{letterId}/signinginfo:
+    get:
+      tags:
+        - Letter Resource
+      summary: Get signing information
+      description: Retrieves signing information connected to letter matching provided
+        id
+      operationId: getSigningInformation
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: letterId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful Operation - OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SigningInfo"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/letters/{letterId}/receipt:
+    get:
+      tags:
+        - Letter Resource
+      summary: Read letter receipt with the complete letter
+      description: Retrieves letter receipt combined with the letter
+      operationId: readLetterReceipt
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: letterId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful Operation
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/letters/{letterId}/attachments/{attachmentId}:
+    get:
+      tags:
+        - Letter Resource
+      summary: Downloads letter attachment content
+      description: Retrieves attachment content by id
+      operationId: downloadLetterAttachment
+      parameters:
+        - name: municipalityId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: letterId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: attachmentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful Operation
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+        - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    Tenant:
+      type: object
+      description: Tenant model
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the tenant
+          examples:
+            - cb20c51f-fcf3-42c0-b613-de563634a8ec
+          readOnly: true
+        orgNumber:
+          type: string
+          description: Organization number
+          examples:
+            - "5591628136"
+          minLength: 1
+        tenantKey:
+          type: string
+          description: Tenant key identifier
+          examples:
+            - some-tenant-key
+          minLength: 1
+          writeOnly: true
+      required:
+        - orgNumber
+        - tenantKey
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: { }
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    LetterRequest:
+      type: object
+      description: Request to send a digital registered letter
+      properties:
+        partyId:
+          type: string
+          description: Party ID of the recipient
+          examples:
+            - 7ca29702-a07f-4e13-a66a-4ebc27929cfd
+        subject:
+          type: string
+          description: Subject of the letter
+          examples:
+            - Important Notification
+          minLength: 1
+        supportInfo:
+          $ref: "#/components/schemas/SupportInfo"
+          description: Support information for the letter
+        organization:
+          $ref: "#/components/schemas/Organization"
+          description: Information regarding the organizational unit sending the letter
+        contentType:
+          type: string
+          description: "Content type of the letter body, e.g., 'text/plain' or 'text/html'"
+          examples:
+            - text/plain
+        body:
+          type: string
+          description: Body of the letter
+          examples:
+            - This is the content of the letter. Plain-text body
+          minLength: 1
+      required:
+        - body
+        - contentType
+        - organization
+        - partyId
+        - subject
+        - supportInfo
+    Organization:
+      type: object
+      properties:
+        number:
+          type: integer
+          format: int64
+          description: Unique id for the organization
+          examples:
+            - 44
+        name:
+          type: string
+          description: Readable name for the organization
+          examples:
+            - Department 44
+          minLength: 1
+      required:
+        - name
+        - number
+    SupportInfo:
+      type: object
+      properties:
+        supportText:
+          type: string
+          description: Support text for the letter
+          examples:
+            - "For support, please contact us at the information below."
+          minLength: 1
+        contactInformationUrl:
+          type: string
+          description: URL for contact
+          examples:
+            - https://example.com/support
+          minLength: 1
+        contactInformationPhoneNumber:
+          type: string
+          description: Phone number for contact
+          examples:
+            - "+46123456789"
+        contactInformationEmail:
+          type: string
+          format: email
+          description: Email address for contact
+          examples:
+            - support@email.com
+      required:
+        - contactInformationEmail
+        - contactInformationPhoneNumber
+        - contactInformationUrl
+        - supportText
+    Attachment:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Unique identifier for the attachment, used for fetching the\
+            \ attachment content"
+          examples:
+            - 123e4567-e89b-12d3-a456-426614174001
+        fileName:
+          type: string
+          description: Name of the attachment file
+          examples:
+            - document.pdf
+        contentType:
+          type: string
+          description: Content type of the attachment
+          examples:
+            - application/pdf
+    Letter:
+      type: object
+      description: Digital registered letter response
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the letter
+          examples:
+            - 123e4567-e89b-12d3-a456-426614174000
+        subject:
+          type: string
+          description: Letter subject
+          examples:
+            - Important Notification
+        municipalityId:
+          type: string
+          description: Municipality ID for the sender of the letter
+          examples:
+            - "2281"
+        status:
+          type: string
+          description: Status of the letter
+          examples:
+            - NEW
+            - SENT
+            - SIGNED
+            - EXPIRED
+            - FAILED - Client Error
+            - FAILED - Server Error
+            - FAILED - Unknown Error
+        body:
+          type: string
+          description: The letter body
+        contentType:
+          type: string
+          description: Content type of the letter body
+          examples:
+            - text/html
+        created:
+          type: string
+          format: date-time
+          description: When the letter was sent
+          examples:
+            - 2023-10-09T12:34:56+00:00
+        updated:
+          type: string
+          format: date-time
+          description: When the letter was last updated
+          examples:
+            - 2023-10-09T12:34:56+00:00
+        supportInfo:
+          $ref: "#/components/schemas/SupportInfo"
+          description: Support information for the letter
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+            description: List of attachments for the letter
+      readOnly: true
+    EligibilityRequest:
+      type: object
+      description: Eligibility request model
+      properties:
+        partyIds:
+          type: array
+          items:
+            type: string
+            description: List of party IDs to check for eligibility
+            examples:
+              - 123e4567-e89b-12d3-a456-426614174000
+    LetterStatusRequest:
+      type: object
+      description: Request model for checking the statuses of given letters
+      properties:
+        letterIds:
+          type: array
+          items:
+            type: string
+            description: List of letter IDs to check status for
+            examples:
+              - ac6ffd60-fffe-4fec-bf67-d5f18a62c458
+          minItems: 1
+      required:
+        - letterIds
+    LetterStatus:
+      type: object
+      description: Letter status
+      properties:
+        letterId:
+          type: string
+          description: Letter ID
+          examples:
+            - 43a32404-28ee-480f-a095-00d48109afab
+        status:
+          type: string
+          description: Delivery status of the letter
+          examples:
+            - SENT
+        signingInformation:
+          type: string
+          description: Information about the signing process
+          examples:
+            - PENDING
+    Direction:
+      type: string
+      enum:
+        - ASC
+        - DESC
+    Letters:
+      type: object
+      description: Paginated response containing a list of letters
+      properties:
+        _meta:
+          $ref: "#/components/schemas/PagingAndSortingMetaData"
+          readOnly: true
+        letters:
+          type: array
+          items:
+            $ref: "#/components/schemas/Letter"
+            readOnly: true
+    PagingAndSortingMetaData:
+      type: object
+      description: PagingAndSortingMetaData model
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Current page
+          examples:
+            - 5
+          readOnly: true
+        limit:
+          type: integer
+          format: int32
+          description: Displayed objects per page
+          examples:
+            - 20
+          readOnly: true
+        count:
+          type: integer
+          format: int32
+          description: Displayed objects on current page
+          examples:
+            - 13
+          readOnly: true
+        totalRecords:
+          type: integer
+          format: int64
+          description: Total amount of hits based on provided search parameters
+          examples:
+            - 98
+          readOnly: true
+        totalPages:
+          type: integer
+          format: int32
+          description: Total amount of pages based on provided search parameters
+          examples:
+            - 23
+          readOnly: true
+        sortBy:
+          type: array
+          items:
+            type: string
+            description: The properties to sort by
+            examples:
+              - property
+            readOnly: true
+        sortDirection:
+          $ref: "#/components/schemas/Direction"
+          description: The sort order direction
+          examples:
+            - ASC
+    Device:
+      type: object
+      properties:
+        ipAddress:
+          type: string
+          description: Ip address used when the letter was signed
+          readOnly: true
+    SigningInfo:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the signing order
+          readOnly: true
+        signed:
+          type: string
+          format: date-time
+          description: Timestamp when the letter was signed by receiving party
+          readOnly: true
+        contentKey:
+          type: string
+          description: The unique Kivra id for the signing order
+          readOnly: true
+        orderRef:
+          type: string
+          description: Order reference in Kivra for the signing order
+          readOnly: true
+        signature:
+          type: string
+          description: The signature made by the receiving party
+          readOnly: true
+        ocspResponse:
+          type: string
+          description: Online certificate status protocol for the signing order
+          readOnly: true
+        user:
+          $ref: "#/components/schemas/User"
+          description: Information regarding the signing party
+          readOnly: true
+        device:
+          $ref: "#/components/schemas/Device"
+          description: Information regarding the device used for the signing order
+          readOnly: true
+        stepUp:
+          $ref: "#/components/schemas/StepUp"
+          description: Information about possible additional verifications that were
+            part of the signing order
+          readOnly: true
+    StepUp:
+      type: object
+      properties:
+        mrtd:
+          type: boolean
+          description: Whether an MRTD check was performed before the order was completed
+          readOnly: true
+    User:
+      type: object
+      properties:
+        personalIdentityNumber:
+          type: string
+          description: Personal identity number for the signing party
+          readOnly: true
+        name:
+          type: string
+          description: Full name of the signing party
+          readOnly: true
+        givenName:
+          type: string
+          description: First name of the signing party
+          readOnly: true
+        surname:
+          type: string
+          description: Last name of the signing party
+          readOnly: true
+  securitySchemes: { }

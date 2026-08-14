@@ -1,0 +1,525 @@
+openapi: 3.1.0
+info:
+  title: api-agreement
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "4.1"
+servers:
+- url: http://localhost:54080
+  description: Generated server url
+tags:
+- name: Paged Agreement
+  description: Agreement resources with paging
+- name: Agreement
+  description: Agreement resources
+paths:
+  /{municipalityId}/paged/agreements/{partyId}:
+    get:
+      tags:
+      - Paged Agreement
+      summary: "Get agreements connected to a party-ID, optionally filtered by provided\
+        \ categories"
+      operationId: getAgreementsForPartyId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: partyId
+        in: path
+        description: Party-ID
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
+      - name: category
+        in: query
+        description: "Optional list of one or more agreement categories to be included\
+          \ in response, default is to return all agreements connected to the party-ID"
+        required: false
+        schema:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/Category"
+      - name: parameters
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/AgreementParameters"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedAgreementResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/agreements/{partyId}:
+    get:
+      tags:
+      - Agreement
+      summary: "Get agreements connected to a party-ID, optionally filtered by provided\
+        \ categories"
+      operationId: getAgreementsForPartyId_1
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: partyId
+        in: path
+        description: Party-ID
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
+      - name: category
+        in: query
+        description: "Optional list of one or more agreement categories to be included\
+          \ in response, default is to return all agreements connected to the party-ID"
+        required: false
+        schema:
+          type: array
+          default: []
+          items:
+            $ref: "#/components/schemas/Category"
+      - name: onlyActive
+        in: query
+        description: "Signal if only active or all agreements should be included in\
+          \ response, default is to only return active agreements."
+        required: false
+        schema:
+          type: boolean
+          default: true
+        example: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgreementResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/agreements/{category}/{facilityId}:
+    get:
+      tags:
+      - Agreement
+      summary: Get agreements by category and facility-id
+      operationId: getAgreementsByCategoryAndFacilityId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: category
+        in: path
+        description: Agreement category
+        required: true
+        schema:
+          $ref: "#/components/schemas/Category"
+        example: ELECTRICITY
+      - name: facilityId
+        in: path
+        description: Id for the facility
+        required: true
+        schema:
+          type: string
+        example: 1471222
+      - name: onlyActive
+        in: query
+        description: "Signal if only active or all agreements should be included in\
+          \ response, default is to only return active agreements."
+        required: false
+        schema:
+          type: boolean
+          default: true
+        example: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgreementResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Category:
+      type: string
+      description: Category model
+      enum:
+      - COMMUNICATION
+      - DISTRICT_COOLING
+      - DISTRICT_HEATING
+      - ELECTRICITY
+      - ELECTRICITY_TRADE
+      - WASTE_MANAGEMENT
+      - WATER
+    AgreementParameters:
+      type: object
+      description: Agreement request parameters model
+      properties:
+        page:
+          type: integer
+          format: int32
+          default: 1
+          description: Page number
+          examples:
+          - 1
+          minimum: 1
+        limit:
+          type: integer
+          format: int32
+          description: Result size per page. Maximum allowed value is dynamically
+            configured
+          examples:
+          - 15
+          minimum: 1
+        onlyActive:
+          type: boolean
+          description: "Signal if only active or all agreements should be included\
+            \ in response, default is to only return active agreements."
+          examples:
+          - "true"
+    Agreement:
+      type: object
+      description: Agreement model
+      properties:
+        customerId:
+          type: string
+          description: Customer identifier at the supplier of the agreement
+          examples:
+          - "81471222"
+          readOnly: true
+        agreementId:
+          type: string
+          description: Agreement identifier
+          examples:
+          - 223344-A
+          readOnly: true
+        billingId:
+          type: string
+          description: Billing identifier
+          examples:
+          - "111222333"
+          readOnly: true
+        category:
+          $ref: "#/components/schemas/Category"
+          readOnly: true
+        description:
+          type: string
+          description: Description
+          examples:
+          - The master agreement
+          readOnly: true
+        facilityId:
+          type: string
+          description: Id of the facility connected to the agreement
+          examples:
+          - "1223334"
+          readOnly: true
+        mainAgreement:
+          type: boolean
+          description: Signal indicating whether the agreement is the main agreement
+            or not
+          examples:
+          - "true"
+          readOnly: true
+        binding:
+          type: boolean
+          description: Signal indicating whether the agreement has a binding period
+            or not
+          examples:
+          - "true"
+          readOnly: true
+        bindingRule:
+          type:
+          - string
+          - "null"
+          description: Description of the binding rule in cases where the agreement
+            has a binding period
+          examples:
+          - 12 mån bindning
+          readOnly: true
+        placementStatus:
+          type: string
+          description: Placement status for agreement
+          examples:
+          - Tillkopplad
+          readOnly: true
+        netAreaId:
+          type: string
+          description: Net area id for agreement
+          examples:
+          - SUV
+          readOnly: true
+        siteAddress:
+          type: string
+          description: Site address connected to the agreement
+          examples:
+          - Första gatan 2
+          readOnly: true
+        production:
+          type:
+          - boolean
+          - "null"
+          description: Signal if the agreement is a production agreement or not (can
+            be null if not applicable)
+          examples:
+          - "true"
+          readOnly: true
+        fromDate:
+          type: string
+          format: date
+          description: Start date of the agreement
+          examples:
+          - 2022-01-01
+          readOnly: true
+        toDate:
+          type: string
+          format: date
+          description: End date of the agreement
+          examples:
+          - 2022-12-31
+          readOnly: true
+        active:
+          type: boolean
+          description: Signal if the agreement is active or not
+          examples:
+          - "true"
+          readOnly: true
+    PagedAgreementResponse:
+      type: object
+      description: Paged agreement response model
+      properties:
+        agreements:
+          type: array
+          items:
+            $ref: "#/components/schemas/Agreement"
+            readOnly: true
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          readOnly: true
+    PagingMetaData:
+      type: object
+      description: PagingMetaData model
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Current page
+          examples:
+          - 5
+          readOnly: true
+        limit:
+          type: integer
+          format: int32
+          description: Displayed objects per page
+          examples:
+          - 20
+          readOnly: true
+        count:
+          type: integer
+          format: int32
+          description: Displayed objects on current page
+          examples:
+          - 13
+          readOnly: true
+        totalRecords:
+          type: integer
+          format: int64
+          description: Total amount of hits based on provided search parameters
+          examples:
+          - 98
+          readOnly: true
+        totalPages:
+          type: integer
+          format: int32
+          description: Total amount of pages based on provided search parameters
+          examples:
+          - 23
+          readOnly: true
+    AgreementParty:
+      type: object
+      description: Agreement party model
+      properties:
+        customerId:
+          type: string
+          description: Customer identifier at the supplier of the agreement
+          examples:
+          - "81471222"
+          readOnly: true
+        agreements:
+          type: array
+          items:
+            $ref: "#/components/schemas/Agreement"
+            readOnly: true
+    AgreementResponse:
+      type: object
+      description: Agreement response model
+      properties:
+        agreementParties:
+          type: array
+          items:
+            $ref: "#/components/schemas/AgreementParty"
+            readOnly: true
+  securitySchemes: {}

@@ -1,0 +1,542 @@
+openapi: 3.1.0
+info:
+  title: api-businessengagements
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "3.0"
+servers:
+- url: http://localhost:50526
+  description: Generated server url
+tags:
+- name: Business Engagements
+  description: Show a persons business engagements and company information.
+paths:
+  /{municipalityId}/information/{partyId}:
+    get:
+      tags:
+      - Business Engagements
+      summary: Get business information
+      description: Get information about a company
+      operationId: getBusinessInformation
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: partyId
+        in: path
+        description: Unique identifier for an organization number
+        required: true
+        schema:
+          type: string
+        example: fb2f0290-3820-11ed-a261-0242ac120002
+      - name: organizationName
+        in: query
+        description: Name of the organization
+        required: false
+        schema:
+          type: string
+        example: Lelles Kebaberia
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusinessInformation"
+        "204":
+          description: No Content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusinessInformation"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/engagements/{partyId}:
+    get:
+      tags:
+      - Business Engagements
+      summary: Get business engagements
+      description: Get a list of business engagements for a person
+      operationId: getEngagements
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: partyId
+        in: path
+        description: Unique identifier for a person
+        required: true
+        schema:
+          type: string
+        example: 6a5c3d04-412d-11ec-973a-0242ac130003
+      - name: personalName
+        in: query
+        description: The first and surname of the person
+        required: true
+        schema:
+          type: string
+          minLength: 1
+      - name: serviceName
+        in: query
+        description: Name of the system initiating the request
+        required: true
+        schema:
+          type: string
+          minLength: 1
+        example: Mina Sidor
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusinessEngagementsResponse"
+        "204":
+          description: No Content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BusinessEngagementsResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Address:
+      type: object
+      description: Address model
+      properties:
+        city:
+          type: string
+          description: City
+          examples:
+          - Sundsvall
+        street:
+          type: string
+          description: Street address
+          examples:
+          - Storgatan 10
+        postcode:
+          type: string
+          description: Postal code
+          examples:
+          - "85740"
+        careOf:
+          type: string
+          description: Care of
+          examples:
+          - John Doe
+    BusinessInformation:
+      type: object
+      description: Business information model
+      properties:
+        companyName:
+          type: string
+          description: The company's name
+          examples:
+          - Sundsvalls kommun
+        legalForm:
+          $ref: "#/components/schemas/LegalForm"
+        address:
+          $ref: "#/components/schemas/Address"
+        emailAddress:
+          type: string
+          description: The company's contact email
+          examples:
+          - somecompany@noreply.com
+        phoneNumber:
+          type: string
+          description: The company's contact phone number
+          examples:
+          - 070-1740605
+        municipality:
+          $ref: "#/components/schemas/Municipality"
+        county:
+          $ref: "#/components/schemas/County"
+        fiscalYear:
+          $ref: "#/components/schemas/FiscalYear"
+        companyForm:
+          $ref: "#/components/schemas/CompanyForm"
+        companyRegistrationTime:
+          type: string
+          format: date
+          description: When the company was registered
+          examples:
+          - 2022-01-01
+        liquidationInformation:
+          $ref: "#/components/schemas/LiquidationInformation"
+          description: Liquidation information
+        deregistrationDate:
+          type: string
+          format: date
+          description: When and if the company was deregistered
+          examples:
+          - 2022-09-01
+        companyLocation:
+          $ref: "#/components/schemas/Address"
+          description: Company location
+        businessSignatory:
+          type: string
+          description: Who may sign for the company
+          examples:
+          - Firman tecknas av styrelsen
+        companyDescription:
+          type: string
+          description: Information regarding the company's operations
+          examples:
+          - Psykologisk forskning på bin samt därmed förenlig verksamhet.
+        sharesInformation:
+          $ref: "#/components/schemas/SharesInformation"
+        errorInformation:
+          $ref: "#/components/schemas/ErrorInformation"
+    CompanyForm:
+      type: object
+      description: Company form information model
+      properties:
+        companyFormCode:
+          type: string
+          description: Company form
+          examples:
+          - AB
+        companyFormDescription:
+          type: string
+          description: Company form description
+          examples:
+          - Aktiebolag
+    County:
+      type: object
+      description: County information model
+      properties:
+        countyName:
+          type: string
+          description: County
+          examples:
+          - Västernorrland
+        countyCode:
+          type: string
+          description: County code
+          examples:
+          - "22"
+    ErrorInformation:
+      type: object
+      description: Error information model
+      properties:
+        hasErrors:
+          type: boolean
+          description: Indicates if there was an error while fetching data and that
+            one or more parameters could not be fetched
+          examples:
+          - "true"
+        errorDescriptions:
+          type: object
+          additionalProperties:
+            type: string
+          description: Map with error code (from bolagsverket) as key and the error
+            description as value
+          examples:
+          - "9071006, Ej behörig - ej firmatecknare."
+    FiscalYear:
+      type: object
+      description: Fiscal year information model
+      properties:
+        fromDay:
+          type: integer
+          format: int32
+          description: Fiscal year start day
+          examples:
+          - "1"
+        fromMonth:
+          type: integer
+          format: int32
+          description: Fiscal year start month
+          examples:
+          - "1"
+        toDay:
+          type: integer
+          format: int32
+          description: Fiscal year end day
+          examples:
+          - "31"
+        toMonth:
+          type: integer
+          format: int32
+          description: Fiscal year end month
+          examples:
+          - "12"
+    LegalForm:
+      type: object
+      description: Legal form information model
+      properties:
+        legalFormDescription:
+          type: string
+          description: Legal form
+          examples:
+          - Övriga aktiebolag
+        legalFormCode:
+          type: string
+          description: Legal form code
+          examples:
+          - "49"
+    LiquidationInformation:
+      type: object
+      description: Liquidation information model
+      properties:
+        liquidationReasons:
+          type: array
+          items:
+            $ref: "#/components/schemas/LiquidationReason"
+        cancelledLiquidation:
+          $ref: "#/components/schemas/LiquidationReason"
+    LiquidationReason:
+      type: object
+      description: Reason for liquidation or cancellation of liquidation
+      properties:
+        liquidationCode:
+          type: string
+          description: Liquidation code
+          examples:
+          - "21"
+        liquidationDescription:
+          type: string
+          description: Liquidation description
+          examples:
+          - Konkurs avslutad
+        liquidationDate:
+          type: string
+          format: date
+          description: Liquidation date
+          examples:
+          - 2022-09-01
+        liquidationType:
+          type: string
+          description: Type of liquidation
+          examples:
+          - Konkurs
+    Municipality:
+      type: object
+      description: Municipality information model
+      properties:
+        municipalityName:
+          type: string
+          description: Municipality
+          examples:
+          - Sundsvalls Kommun
+        municipalityCode:
+          type: string
+          description: Municipality code
+          examples:
+          - "2281"
+    ShareType:
+      type: object
+      description: Share information model
+      properties:
+        label:
+          type: string
+          description: Label of the shares
+          examples:
+          - B
+        numberOfShares:
+          type: integer
+          description: Number of shares of this class
+          examples:
+          - "25000"
+        voteValue:
+          type: string
+          description: The vote value for one share
+          examples:
+          - 1/10
+    SharesInformation:
+      type: object
+      description: Shares information model
+      properties:
+        shareTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShareType"
+        numberOfShares:
+          type: integer
+          description: Number of total shares
+          examples:
+          - "100000"
+        shareCapital:
+          type: number
+          description: Shares value
+          examples:
+          - "120000.00"
+        shareCurrency:
+          type: string
+          description: Shares value currency
+          examples:
+          - sek
+    BusinessEngagementsResponse:
+      type: object
+      description: Business engagements response model
+      properties:
+        engagements:
+          type: array
+          items:
+            $ref: "#/components/schemas/Engagement"
+        statusDescriptions:
+          type: object
+          additionalProperties:
+            type: string
+          description: "In case fetching one or more engagement failed, this will\
+            \ show why it failed. There may be more than one description if several\
+            \ engagements failed."
+          examples:
+          - Timeout
+        status:
+          type: string
+          description: If fetching all engagements went "OK" or "NOK". A "NOK" may
+            still return engagements but indicates that the information is incomplete.
+          enum:
+          - OK
+          - NOK
+          examples:
+          - OK
+      required:
+      - status
+    Engagement:
+      type: object
+      description: Represents a persons business engagement.
+      properties:
+        organizationName:
+          type: string
+          description: Name of the organization
+          examples:
+          - Styrbjörns båtar
+        organizationNumber:
+          type: string
+          description: "Organization number, may also be personal number in case of\
+            \ enskild firma"
+          examples:
+          - "2021005448"
+        organizationId:
+          type: string
+          description: Unique id for the organization (UUID)
+          examples:
+          - bab17d8b-af38-4531-967c-083f15ca1571
+  securitySchemes: {}

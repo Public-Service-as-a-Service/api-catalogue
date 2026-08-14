@@ -1,0 +1,233 @@
+openapi: 3.1.0
+info:
+  title: api-business-rules
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+servers:
+- url: http://localhost:50577
+  description: Generated server url
+tags:
+- name: BusinessRules
+  description: Business rule engine resource
+paths:
+  /{municipalityId}/engine:
+    post:
+      tags:
+      - BusinessRules
+      summary: Run rule engine
+      operationId: run
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RuleEngineRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RuleEngineResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Fact:
+      type: object
+      description: Fact model
+      properties:
+        key:
+          type: string
+          description: The attribute key
+          examples:
+          - attribute-x
+          minLength: 1
+        value:
+          type: string
+          description: The attribute value
+          examples:
+          - Some value
+      required:
+      - key
+      - value
+    RuleEngineRequest:
+      type: object
+      description: RuleEngineRequest model
+      properties:
+        context:
+          type: string
+          description: The rule engine context
+          examples:
+          - PARKING_PERMIT
+        facts:
+          type: array
+          description: Alias for the destination
+          items:
+            $ref: "#/components/schemas/Fact"
+          minItems: 1
+      required:
+      - context
+      - facts
+    Result:
+      type: object
+      description: Result model
+      properties:
+        value:
+          $ref: "#/components/schemas/ResultValue"
+          description: The result value
+          examples:
+          - PASS
+        rule:
+          type: string
+          description: The name of the rule that generated the result
+          examples:
+          - The almighty business rule
+        details:
+          type: array
+          description: Rule result details
+          items:
+            $ref: "#/components/schemas/ResultDetail"
+    ResultDetail:
+      type: object
+      description: RuleResultDetail model
+      properties:
+        origin:
+          type: string
+          description: The result detail origin
+          examples:
+          - THE_SPECIAL_RULE_CRITERIA
+        evaluationValue:
+          type: boolean
+          description: The result detail evaluation value
+          examples:
+          - "false"
+        description:
+          type: string
+          description: The result detail description
+          examples:
+          - Failed because of reasons
+    ResultValue:
+      type: string
+      description: ResultValue model
+      enum:
+      - PASS
+      - FAIL
+      - VALIDATION_ERROR
+      - NOT_APPLICABLE
+    RuleEngineResponse:
+      type: object
+      description: RuleEngineResponse model
+      properties:
+        context:
+          type: string
+          description: The rule engine context
+          examples:
+          - PARKING_PERMIT
+        results:
+          type: array
+          description: The rule engine results
+          items:
+            $ref: "#/components/schemas/Result"
+  securitySchemes: {}

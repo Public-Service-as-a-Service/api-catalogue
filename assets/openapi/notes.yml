@@ -1,0 +1,812 @@
+openapi: 3.1.0
+info:
+  title: api-notes
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "4.1"
+servers:
+- url: http://localhost:51196
+  description: Generated server url
+tags:
+- name: Notes
+  description: Note operations
+- name: Revisions
+  description: Revision operations
+paths:
+  /{municipalityId}/notes:
+    get:
+      tags:
+      - Notes
+      summary: Find all notes filtered by incoming parameters
+      operationId: findNotes
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: searchParams
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/FindNotesRequest"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FindNotesResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - Notes
+      summary: Create new note
+      operationId: createNote
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNoteRequest"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/notes/{id}:
+    get:
+      tags:
+      - Notes
+      summary: Get note by ID
+      operationId: getNoteByIdAndMunicipalityId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Note ID
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc15
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - Notes
+      summary: Delete note by ID
+      operationId: deleteNoteByIdAndMunicipalityId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Note ID
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc15
+      responses:
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    patch:
+      tags:
+      - Notes
+      summary: Update note
+      operationId: updateNote
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Note ID
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc15
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateNoteRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/notes/{id}/revisions:
+    get:
+      tags:
+      - Revisions
+      summary: Get revisions by note ID
+      operationId: getRevisionsByNoteId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Note ID
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc15
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Revision"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/notes/{id}/revisions/difference:
+    get:
+      tags:
+      - Revisions
+      summary: "Diff revisions by noteId, source and target version"
+      operationId: getDifferenceByVersions
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Note ID
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc15
+      - name: source
+        in: query
+        description: Source version
+        required: true
+        schema:
+          type: integer
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+        example: 1
+      - name: target
+        in: query
+        description: Target version
+        required: true
+        schema:
+          type: integer
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+        example: 2
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DifferenceResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    CreateNoteRequest:
+      type: object
+      description: CreateNoteRequest model
+      properties:
+        context:
+          type: string
+          description: Context for note
+          examples:
+          - SUPPORT
+          maxLength: 255
+          minLength: 1
+        role:
+          type: string
+          description: Role of note creator
+          examples:
+          - FIRST_LINE_SUPPORT
+          maxLength: 255
+          minLength: 1
+        clientId:
+          type: string
+          description: Id of the client who is the owner of the note
+          examples:
+          - SUPPORT_MGMT
+          maxLength: 255
+          minLength: 1
+        partyId:
+          type: string
+          description: Party id (e.g. a personId or an organizationId)
+          examples:
+          - 81471222-5798-11e9-ae24-57fa13b361e1
+        subject:
+          type: string
+          description: The note subject
+          examples:
+          - This is a subject
+          exclusiveMaximum: 256
+          maxLength: 255
+          minLength: 1
+        body:
+          type: string
+          description: The note body
+          examples:
+          - This is a note
+          exclusiveMaximum: 2049
+          maxLength: 2048
+          minLength: 1
+        createdBy:
+          type: string
+          description: Created by
+          examples:
+          - John Doe
+          minLength: 1
+        caseId:
+          type: string
+          description: Id for the case
+          examples:
+          - "12345"
+          maxLength: 255
+          minLength: 1
+        caseType:
+          type: string
+          description: Type of the case
+          examples:
+          - Byggärende
+          maxLength: 255
+          minLength: 1
+        caseLink:
+          type: string
+          description: Link to the case
+          examples:
+          - http://caselink.com/12345
+          maxLength: 512
+          minLength: 1
+        externalCaseId:
+          type: string
+          description: External id for the case
+          examples:
+          - "2229"
+          maxLength: 255
+          minLength: 1
+      required:
+      - body
+      - clientId
+      - context
+      - createdBy
+      - role
+      - subject
+    UpdateNoteRequest:
+      type: object
+      description: UpdateNoteRequest model
+      properties:
+        subject:
+          type: string
+          description: The note subject
+          examples:
+          - This is a subject
+          exclusiveMaximum: 256
+          maxLength: 255
+          minLength: 1
+        body:
+          type: string
+          description: The note body
+          examples:
+          - This is a note
+          exclusiveMaximum: 2049
+          maxLength: 2048
+          minLength: 1
+        modifiedBy:
+          type: string
+          description: Modified by
+          examples:
+          - John Doe
+          minLength: 1
+        caseId:
+          type: string
+          description: Id for the case
+          examples:
+          - "12345"
+          maxLength: 255
+          minLength: 1
+        caseType:
+          type: string
+          description: Type of the case
+          examples:
+          - Byggärende
+          maxLength: 255
+          minLength: 1
+        caseLink:
+          type: string
+          description: Link to the case
+          examples:
+          - http://caselink.com/12345
+          maxLength: 512
+          minLength: 1
+        externalCaseId:
+          type: string
+          description: External id for the case
+          examples:
+          - "2229"
+          maxLength: 255
+          minLength: 1
+      required:
+      - modifiedBy
+    Note:
+      type: object
+      description: Note model
+      properties:
+        id:
+          type: string
+          description: Note ID
+          examples:
+          - b82bd8ac-1507-4d9a-958d-369261eecc15
+        context:
+          type: string
+          description: Context for note
+          examples:
+          - SUPPORT
+        role:
+          type: string
+          description: Role of note creator
+          examples:
+          - FIRST_LINE_SUPPORT
+        clientId:
+          type: string
+          description: Id of the client who is the owner of the note
+          examples:
+          - SUPPORT_MGMT
+        partyId:
+          type: string
+          description: Party ID (e.g. a personId or an organizationId)
+          examples:
+          - 81471222-5798-11e9-ae24-57fa13b361e1
+        subject:
+          type: string
+          description: The note subject
+          examples:
+          - This is a subject
+        body:
+          type: string
+          description: The note body
+          examples:
+          - This is a note
+        caseId:
+          type: string
+          description: Id for the case
+          examples:
+          - "12345"
+        caseType:
+          type: string
+          description: Type of the case
+          examples:
+          - Byggärende
+        caseLink:
+          type: string
+          description: Link to the case
+          examples:
+          - http://caselink.com/12345
+        externalCaseId:
+          type: string
+          description: External id for the case
+          examples:
+          - "2229"
+        createdBy:
+          type: string
+          description: Created by
+          examples:
+          - John Doe
+        modifiedBy:
+          type: string
+          description: Modified by
+          examples:
+          - John Doe
+        created:
+          type: string
+          format: date-time
+          description: Created timestamp
+        modified:
+          type: string
+          format: date-time
+          description: Modified timestamp
+    FindNotesRequest:
+      type: object
+      description: FindNotesRequest model
+      properties:
+        context:
+          type: string
+          description: Context for note
+          examples:
+          - SUPPORT
+        role:
+          type: string
+          description: Role of note creator
+          examples:
+          - FIRST_LINE_SUPPORT
+        clientId:
+          type: string
+          description: Id of the client who is the owner of the note
+          examples:
+          - SUPPORT_MGMT
+        partyId:
+          type: string
+          description: Party id (e.g. a personId or an organizationId)
+          examples:
+          - 81471222-5798-11e9-ae24-57fa13b361e1
+        caseId:
+          type: string
+          description: Id for the case
+          examples:
+          - "12345"
+        page:
+          type: integer
+          format: int32
+          default: 1
+          description: Page number
+          examples:
+          - 1
+          minimum: 1
+        limit:
+          type: integer
+          format: int32
+          default: 100
+          description: Result size per page
+          examples:
+          - 100
+          maximum: 1000
+          minimum: 1
+    FindNotesResponse:
+      type: object
+      description: FindNotesResponse model
+      properties:
+        notes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Note"
+            readOnly: true
+        _meta:
+          $ref: "#/components/schemas/MetaData"
+          readOnly: true
+    MetaData:
+      type: object
+      description: Metadata model
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Current page
+          examples:
+          - 5
+          readOnly: true
+        limit:
+          type: integer
+          format: int32
+          description: Displayed objects per page
+          examples:
+          - 20
+          readOnly: true
+        count:
+          type: integer
+          format: int32
+          description: Displayed objects on current page
+          examples:
+          - 13
+          readOnly: true
+        totalRecords:
+          type: integer
+          format: int64
+          description: Total amount of hits based on provided search parameters
+          examples:
+          - 98
+          readOnly: true
+        totalPages:
+          type: integer
+          format: int32
+          description: Total amount of pages based on provided search parameters
+          examples:
+          - 23
+          readOnly: true
+    Revision:
+      type: object
+      description: Revision model
+      properties:
+        id:
+          type: string
+          description: Id for the revision
+        entityId:
+          type: string
+          description: Id for entity connected to the created revision
+        entityType:
+          type: string
+          description: Type of entity connected to the created revision
+        version:
+          type: integer
+          format: int32
+          description: Revision version
+        created:
+          type: string
+          format: date-time
+          description: Created timestamp
+    DifferenceResponse:
+      type: object
+      description: DifferenceResponse model
+      properties:
+        operations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Operation"
+            readOnly: true
+    Operation:
+      type: object
+      description: Operation model
+      properties:
+        op:
+          type: string
+          description: Type of operation
+          examples:
+          - replace
+        path:
+          type: string
+          description: Path to attribute
+          examples:
+          - /name/firstName
+        value:
+          type: string
+          description: Value of attribute
+          examples:
+          - John
+        fromValue:
+          type: string
+          description: Previous value of attribute
+          examples:
+          - John
+  securitySchemes: {}

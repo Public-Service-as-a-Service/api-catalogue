@@ -1,0 +1,334 @@
+openapi: 3.1.0
+info:
+  title: api-alkt
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+servers:
+  - url: http://localhost:54735
+    description: Generated server url
+tags:
+  - name: Case
+    description: Case operations
+  - name: Owner
+    description: Owner operations
+paths:
+  /{municipalityId}/owners/{partyId}:
+    get:
+      tags:
+        - Owner
+      summary: Get owners and their cases by partyId
+      operationId: getOwners
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+        - name: partyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Owner"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/case/{caseId}:
+    get:
+      tags:
+        - Case
+      summary: Get case by caseId
+      operationId: getCase
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+        - name: caseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+        - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        instance:
+          type: string
+          format: uri
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Case:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Case number
+          examples:
+            - 123
+        registrationNumber:
+          type: string
+          description: Registration number
+          examples:
+            - "1234567890"
+        description:
+          type: string
+          description: Case description
+          examples:
+            - "Nytt tillstånd, allmänheten"
+        changed:
+          type: string
+          format: date-time
+          description: When the case was changed
+          examples:
+            - 2021-01-01T00:00:00
+        closed:
+          type: string
+          format: date-time
+          description: When the case was closed
+          examples:
+            - 2021-01-01T00:00:00
+        opened:
+          type: string
+          format: date-time
+          description: When the case was opened
+          examples:
+            - 2021-01-01T00:00:00
+        posted:
+          type: string
+          format: date-time
+          description: When the case was posted
+          examples:
+            - 2021-01-01T00:00:00
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+            description: List of events on a case
+        decision:
+          $ref: "#/components/schemas/Decision"
+          description: A Decision on a case
+        open:
+          type: boolean
+    Decision:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A description of which decision was made
+          examples:
+            - Tillstånd allmänhet
+        created:
+          type: string
+          format: date-time
+          description: When the decision was made
+          examples:
+            - 2021-01-01T00:00:00
+    Establishment:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the establishment
+          examples:
+            - Lelles bar
+        posted:
+          type: string
+          format: date-time
+          description: When the establishment was first created
+          examples:
+            - 2021-01-01T00:00:00
+        changed:
+          type: string
+          format: date-time
+          description: When the establishment was changed
+          examples:
+            - 2021-01-01T00:00:00
+        cases:
+          type: array
+          items:
+            $ref: "#/components/schemas/Case"
+            description: All cases on an establishment
+    Event:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description of the event
+          examples:
+            - Remiss till skattemyndigheten
+        changed:
+          type: string
+          format: date-time
+          description: When the event was changed
+          examples:
+            - 2021-01-01T00:00:00
+        created:
+          type: string
+          format: date-time
+          description: When the event happened
+          examples:
+            - 2021-01-01T00:00:00
+        posted:
+          type: string
+          format: date-time
+          description: When the event was posted
+          examples:
+            - 2021-01-01T00:00:00
+    Owner:
+      type: object
+      properties:
+        organizationName:
+          type: string
+          description: Name of the organization
+          examples:
+            - Lelles AB
+        establishments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Establishment"
+            description: List of all establishments
+  securitySchemes: {}

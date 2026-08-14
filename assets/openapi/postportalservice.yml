@@ -1,0 +1,2092 @@
+openapi: 3.1.0
+info:
+  title: Postportalservice
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "1.9"
+servers:
+- url: http://localhost:52228
+  description: Generated server url
+tags:
+- name: E-signing
+  description: Inbound signing events from api-service-e-signing
+paths:
+  /{municipalityId}/precheck:
+    post:
+      tags:
+      - Precheck Resources
+      summary: "Checks how a recipient can be contacted, digital post or physical\
+        \ letter"
+      operationId: precheckRecipients
+      parameters:
+      - name: X-Sent-By
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrecheckRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrecheckResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/precheck/kivra:
+    post:
+      tags:
+      - Precheck Resources
+      summary: Check if the given partyIds are eligible for receiving digital registered
+        letters with Kivra
+      operationId: checkKivraEligibility
+      parameters:
+      - name: X-Sent-By
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: municipalityId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KivraEligibilityRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/precheck/csv:
+    post:
+      tags:
+      - Precheck Resources
+      summary: Check if a given csv is properly formatted. Also returns information
+        about any duplicate entries
+      operationId: precheckLetterCsv
+      parameters:
+      - name: municipalityId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                csv-file:
+                  type: string
+                  format: binary
+              required:
+              - csv-file
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrecheckCsvResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/precheck/csv/sms:
+    post:
+      tags:
+      - Precheck Resources
+      summary: Check if a given csv is properly formatted for SMS. Also returns information
+        about any duplicate entries
+      operationId: precheckSmsCsv
+      parameters:
+      - name: municipalityId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                csv-file:
+                  type: string
+                  format: binary
+              required:
+              - csv-file
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrecheckCsvResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/messages/sms:
+    post:
+      tags:
+      - Message Resources
+      summary: Send an SMS
+      operationId: sendSms
+      parameters:
+      - name: X-Sent-By
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SmsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/messages/sms/csv:
+    post:
+      tags:
+      - Message Resources
+      summary: Send SMS to recipients from a CSV file
+      operationId: sendSmsCsv
+      parameters:
+      - name: X-Sent-By
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                request:
+                  $ref: "#/components/schemas/SmsCsvRequest"
+                csv-file:
+                  type: string
+                  format: binary
+              required:
+              - csv-file
+              - request
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/messages/registered-letter:
+    post:
+      tags:
+      - Message Resources
+      summary: Send a digital registered letter.
+      operationId: sendDigitalRegisteredLetter
+      parameters:
+      - name: X-Sent-By
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                request:
+                  $ref: "#/components/schemas/DigitalRegisteredLetterRequest"
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+              - attachments
+              - request
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/messages/letter:
+    post:
+      tags:
+      - Message Resources
+      summary: Send a message by either digital mail or as a physical letter. Digital
+        mail is always preferred if possible.
+      operationId: sendLetter
+      parameters:
+      - name: X-Sent-By
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                request:
+                  $ref: "#/components/schemas/LetterRequest"
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+              - attachments
+              - request
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/messages/letter/csv:
+    post:
+      tags:
+      - Message Resources
+      summary: Send a message by either digital mail or as a physical letter. Digital
+        mail is always preferred if possible.
+      operationId: sendLetterCSV
+      parameters:
+      - name: X-Sent-By
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                request:
+                  $ref: "#/components/schemas/LetterCsvRequest"
+                csv-file:
+                  type: string
+                  format: binary
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+              - csv-file
+              - request
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/messages/e-signing:
+    post:
+      tags:
+      - Message Resources
+      summary: Start a Comfact e-signing of a document.
+      operationId: sendESigning
+      parameters:
+      - name: X-Sent-By
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                request:
+                  $ref: "#/components/schemas/ESigningRequest"
+                document:
+                  type: string
+                  format: binary
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+              - document
+              - request
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/e-signing/events/{messageId}:
+    post:
+      tags:
+      - E-signing
+      summary: Receive a signing event and update the signing case identified by the
+        message id
+      operationId: receiveSigningEvent
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: messageId
+        in: path
+        description: The Postportalen message id the signing case belongs to
+        required: true
+        schema:
+          type: string
+        example: 550e8400-e29b-41d4-a716-446655440000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SigningEvent"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/statistics/departments:
+    get:
+      tags:
+      - Statistics Resources
+      summary: Get general statistics for each department within the municipality
+      operationId: getStatisticsByDepartment
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: year
+        in: query
+        description: Filter statistics by year
+        required: true
+        schema:
+          type: string
+          pattern: "[0-9]{4}"
+      - name: month
+        in: query
+        description: Filter statistics by month
+        required: true
+        schema:
+          type: string
+          pattern: "^0?[1-9]$|^1[0-2]$"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Statistics"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/history/users/{userId}/messages:
+    get:
+      tags:
+      - History Resources
+      summary: Get messages sent by user
+      operationId: getUserMessages
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: userId
+        in: path
+        description: Username for user to fetch messages for
+        required: true
+        schema:
+          type: string
+        example: joe01doe
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Messages"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/history/users/{userId}/messages/{messageId}:
+    get:
+      tags:
+      - History Resources
+      summary: Get messages details
+      operationId: getMessageDetails
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: userId
+        in: path
+        description: Username for the user who sent the message
+        required: true
+        schema:
+          type: string
+        example: joe01doe
+      - name: messageId
+        in: path
+        description: Message ID
+        required: true
+        schema:
+          type: string
+        example: 9ce333ec-a473-438b-8406-a71e957dc107
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageDetails"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/history/messages/{messageId}/signinginfo:
+    get:
+      tags:
+      - History Resources
+      summary: Get signing information
+      description: Retrieves signing information connected to letter matching provided
+        id
+      operationId: getSigningInformation
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: messageId
+        in: path
+        description: Message ID
+        required: true
+        schema:
+          type: string
+        example: 9ce333ec-a473-438b-8406-a71e957dc107
+      responses:
+        "200":
+          description: Successful Operation - OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SigningInformation"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/history/messages/{messageId}/signed-document:
+    get:
+      tags:
+      - History Resources
+      summary: Download the signed document for an e-signing message
+      description: Streams the signed (merged) PDF produced once the e-signing case
+        has completed
+      operationId: downloadSignedDocument
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: messageId
+        in: path
+        description: Message ID
+        required: true
+        schema:
+          type: string
+        example: 9ce333ec-a473-438b-8406-a71e957dc107
+      responses:
+        "200":
+          description: Successful Operation - OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/history/messages/{messageId}/receipt:
+    get:
+      tags:
+      - History Resources
+      summary: Read digital registered letter receipt with the complete letter
+      description: Retrieves letter receipt combined with the letter
+      operationId: readLetterReceipt
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: messageId
+        in: path
+        description: Message ID
+        required: true
+        schema:
+          type: string
+        example: 9ce333ec-a473-438b-8406-a71e957dc107
+      responses:
+        "200":
+          description: Successful Operation - OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/attachments/{attachmentId}:
+    get:
+      tags:
+      - Attachment Resources
+      summary: Downloads letter attachment content
+      description: Retrieves attachment content by id
+      operationId: downloadAttachment
+      parameters:
+      - name: municipalityId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: attachmentId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful Operation - OK
+          content:
+            '*/*':
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+  /{municipalityId}/messages/e-signing/{messageId}:
+    delete:
+      tags:
+      - Message Resources
+      summary: Cancel an ongoing Comfact e-signing.
+      operationId: cancelESigning
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: messageId
+        in: path
+        description: Message ID
+        required: true
+        schema:
+          type: string
+        example: 9ce333ec-a473-438b-8406-a71e957dc107
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+components:
+  schemas:
+    PrecheckRequest:
+      type: object
+      description: Precheck request model
+      properties:
+        partyIds:
+          type: array
+          description: List of party ids to precheck
+          examples:
+          - - b46f0ca2-d2ad-43e8-8d50-3aeb949e3604
+            - fd99a03c-790c-4b87-bc4b-f4f73e4a2df4
+          items:
+            type: string
+          minItems: 1
+      required:
+      - partyIds
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        cause:
+          $ref: "#/components/schemas/ThrowableProblem"
+        stackTrace:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConstraintViolationProblemStackTraceInner"
+        type:
+          type:
+          - string
+          - "null"
+          format: uri
+        status:
+          $ref: "#/components/schemas/StatusType"
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type:
+          - string
+          - "null"
+        message:
+          type:
+          - string
+          - "null"
+        instance:
+          type:
+          - string
+          - "null"
+          format: uri
+        parameters:
+          type: object
+          additionalProperties: {}
+        detail:
+          type:
+          - string
+          - "null"
+        suppressed:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConstraintViolationProblemSuppressedInner"
+        localizedMessage:
+          type:
+          - string
+          - "null"
+    ConstraintViolationProblemStackTraceInner:
+      type: object
+      properties:
+        classLoaderName:
+          type:
+          - string
+          - "null"
+        moduleName:
+          type:
+          - string
+          - "null"
+        moduleVersion:
+          type:
+          - string
+          - "null"
+        methodName:
+          type:
+          - string
+          - "null"
+        fileName:
+          type:
+          - string
+          - "null"
+        lineNumber:
+          type:
+          - integer
+          - "null"
+          format: int32
+        className:
+          type:
+          - string
+          - "null"
+        nativeMethod:
+          type:
+          - boolean
+          - "null"
+    ConstraintViolationProblemSuppressedInner:
+      type: object
+      properties:
+        stackTrace:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConstraintViolationProblemStackTraceInner"
+        message:
+          type:
+          - string
+          - "null"
+        localizedMessage:
+          type:
+          - string
+          - "null"
+    StatusType:
+      type: "null"
+      properties:
+        statusCode:
+          type:
+          - integer
+          - "null"
+          format: int32
+        reasonPhrase:
+          type:
+          - string
+          - "null"
+    ThrowableProblem:
+      type: "null"
+      properties:
+        cause:
+          type: "null"
+        stackTrace:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConstraintViolationProblemStackTraceInner"
+        message:
+          type:
+          - string
+          - "null"
+        instance:
+          type:
+          - string
+          - "null"
+          format: uri
+        type:
+          type:
+          - string
+          - "null"
+          format: uri
+        parameters:
+          type: object
+          additionalProperties: {}
+        title:
+          type:
+          - string
+          - "null"
+        detail:
+          type:
+          - string
+          - "null"
+        status:
+          $ref: "#/components/schemas/StatusType"
+        suppressed:
+          type: array
+          items:
+            $ref: "#/components/schemas/ConstraintViolationProblemSuppressedInner"
+        localizedMessage:
+          type:
+          - string
+          - "null"
+    Violation:
+      type: object
+      properties:
+        field:
+          type:
+          - string
+          - "null"
+        message:
+          type:
+          - string
+          - "null"
+    PrecheckRecipient:
+      type: object
+      description: Per-recipient delivery capability
+      properties:
+        personalIdentityNumber:
+          type: string
+          description: Personal identity number of the recipient
+          examples:
+          - 19111111-1111
+        partyId:
+          type: string
+          description: Party ID of the recipient
+          examples:
+          - da03b33e-9de2-45ac-8291-31a88de59410
+        deliveryMethod:
+          type: string
+          description: Delivery method for the recipient
+          enum:
+          - DIGITAL_MAIL
+          - SNAIL_MAIL
+          - DELIVERY_NOT_POSSIBLE
+          examples:
+          - DIGITAL_MAIL
+        reason:
+          type: string
+          description: Reason when delivery method isn't available or an upstream
+            lookup failed
+          examples:
+          - Person not found
+    PrecheckResponse:
+      type: object
+      description: Result of precheck for given recipients
+      properties:
+        recipients:
+          type: array
+          description: Per-recipient result
+          items:
+            $ref: "#/components/schemas/PrecheckRecipient"
+    KivraEligibilityRequest:
+      type: object
+      description: Kivra eligibility request model
+      properties:
+        partyIds:
+          type: array
+          description: List of party IDs to check for Kivra eligibility
+          examples:
+          - - da03b33e-9de2-45ac-8291-31a88de59410
+            - eb13b33e-9de2-45ac-8291-31a88de59411
+          items:
+            type: string
+          minItems: 1
+      required:
+      - partyIds
+    PrecheckCsvResponse:
+      type: object
+      description: Model used as response when validating csv format and duplicate
+        entries
+      properties:
+        duplicateEntries:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+        rejectedEntries:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+    SmsRecipient:
+      type: object
+      description: SMS recipient model
+      properties:
+        partyId:
+          type: string
+          description: PartyId is the unique identifier for the recipient
+          examples:
+          - 6d0773d6-3e7f-4552-81bc-f0007af95adf
+        phoneNumber:
+          type: string
+          description: "Phone number of the recipient, used for SMS notifications"
+          examples:
+          - "+46701234567"
+      required:
+      - phoneNumber
+    SmsRequest:
+      type: object
+      description: SMS request model
+      properties:
+        message:
+          type: string
+          description: The message to be sent
+          examples:
+          - This is the message to be sent
+          minLength: 1
+        recipients:
+          type: array
+          items:
+            $ref: "#/components/schemas/SmsRecipient"
+            description: List of recipients
+          minItems: 1
+      required:
+      - message
+      - recipients
+    SmsCsvRequest:
+      type: object
+      description: SMS CSV request model
+      properties:
+        message:
+          type: string
+          description: The message to be sent
+          examples:
+          - This is the message to be sent
+          minLength: 1
+      required:
+      - message
+    DigitalRegisteredLetterRequest:
+      type: object
+      description: Digital registered letter request model
+      properties:
+        body:
+          type: string
+          description: The body of the letter in HTML format
+          examples:
+          - <h1>This is the body of the letter</h1>
+          minLength: 1
+        contentType:
+          type: string
+          description: The content type of the body
+          examples:
+          - text/html
+        partyId:
+          type: string
+          description: The party id of the recipient
+          examples:
+          - 6d0773d6-3e7f-4552-81bc-f0007af95adf
+        subject:
+          type: string
+          description: The subject of the letter
+          examples:
+          - This is the subject of the letter
+          minLength: 1
+      required:
+      - body
+      - subject
+    Address:
+      type: object
+      description: Address model
+      properties:
+        firstName:
+          type: string
+          description: First name of the recipient. Required together with lastName
+            if organizationName is not provided.
+          examples:
+          - John
+        lastName:
+          type: string
+          description: Last name of the recipient. Required together with firstName
+            if organizationName is not provided.
+          examples:
+          - Doe
+        organizationName:
+          type: string
+          description: Organization name of the recipient. Required if firstName and
+            lastName are not provided.
+          examples:
+          - Acme AB
+        street:
+          type: string
+          description: Street address
+          examples:
+          - Main Street 1
+          minLength: 1
+        apartmentNumber:
+          type: string
+          description: Apartment number
+          examples:
+          - "1101"
+        careOf:
+          type: string
+          description: Care of
+          examples:
+          - c/o Jane Doe
+        zipCode:
+          type: string
+          description: Zip code
+          examples:
+          - "12345"
+          minLength: 1
+        city:
+          type: string
+          description: City
+          examples:
+          - Sundsvall
+          minLength: 1
+        country:
+          type: string
+          description: Country. Optional; typically omitted for domestic mail.
+          examples:
+          - Sweden
+      required:
+      - city
+      - street
+      - zipCode
+    LetterRequest:
+      type: object
+      description: Letter request model
+      properties:
+        subject:
+          type: string
+          description: The subject of the letter
+          examples:
+          - This is the subject of the letter
+          minLength: 1
+        body:
+          type: string
+          description: The body of the letter
+          examples:
+          - This is the body of the letter
+        contentType:
+          type: string
+          description: The content type of the body
+          examples:
+          - text/plain
+        recipients:
+          type: array
+          items:
+            $ref: "#/components/schemas/Recipient"
+            description: List of recipients
+        addresses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+            description: List of addresses
+      required:
+      - subject
+    Recipient:
+      type: object
+      description: Recipient model
+      properties:
+        partyId:
+          type: string
+          description: PartyId is the unique identifier for the recipient
+          examples:
+          - 6d0773d6-3e7f-4552-81bc-f0007af95adf
+        deliveryMethod:
+          type: string
+          description: Delivery method for the recipient
+          enum:
+          - DIGITAL_MAIL
+          - SNAIL_MAIL
+          - DELIVERY_NOT_POSSIBLE
+          examples:
+          - DIGITAL_MAIL
+        address:
+          $ref: "#/components/schemas/Address"
+          description: "Address details for the recipient, used for SNAIL_MAIL delivery\
+            \ method"
+      required:
+      - deliveryMethod
+    LetterCsvRequest:
+      type: object
+      description: Letter CSV request model
+      properties:
+        subject:
+          type: string
+          description: The subject of the letter
+          examples:
+          - This is the subject of the letter
+          minLength: 1
+        body:
+          type: string
+          description: The body of the letter
+          examples:
+          - This is the body of the letter
+          minLength: 1
+        contentType:
+          type: string
+          description: The content type of the body
+          examples:
+          - text/plain
+          minLength: 1
+      required:
+      - body
+      - contentType
+      - subject
+    ESigningRequest:
+      type: object
+      description: E-signing request model
+      properties:
+        subject:
+          type: string
+          description: The subject of the notification sent to the signatories
+          examples:
+          - Please sign the document
+          minLength: 1
+        body:
+          type: string
+          description: The body of the notification sent to the signatories
+          examples:
+          - "Dear John Doe, please sign the attached document."
+          minLength: 1
+        language:
+          type: string
+          description: The language used for the signing instance. Swedish is used
+            if not provided
+          examples:
+          - sv-SE
+        expires:
+          type: string
+          format: date-time
+          description: Optional date and time when the signing request expires
+          examples:
+          - 2026-12-31T23:59:59Z
+        signatories:
+          type: array
+          items:
+            $ref: "#/components/schemas/ESigningSignatory"
+          minItems: 1
+      required:
+      - body
+      - signatories
+      - subject
+    ESigningSignatory:
+      type: object
+      description: A signatory that should sign the document
+      properties:
+        partyId:
+          type: string
+          description: The party id of the signatory
+          examples:
+          - 6d0773d6-3e7f-4552-81bc-f0007af95adf
+        name:
+          type: string
+          description: The name of the signatory
+          examples:
+          - John Doe
+          minLength: 1
+        email:
+          type: string
+          format: email
+          description: The email address of the signatory
+          examples:
+          - john.doe@sundsvall.se
+          minLength: 1
+      required:
+      - email
+      - name
+    EventSignatory:
+      type: object
+      description: The signatory that acted in a signing event
+      properties:
+        partyId:
+          type: string
+          description: The party id of the signatory
+          examples:
+          - 6d0773d6-3e7f-4552-81bc-f0007af95adf
+        action:
+          type: string
+          description: The normalized action taken by the signatory
+          enum:
+          - APPROVED
+          - DECLINED
+          examples:
+          - APPROVED
+        reason:
+          type: string
+          description: "The reason given for the action, when provided"
+          examples:
+          - Not authorised to sign
+    SignedDocument:
+      type: object
+      description: A signed document received in a signing event
+      properties:
+        name:
+          type: string
+          description: Descriptive name of the document
+          examples:
+          - Employment contract
+        fileName:
+          type: string
+          description: The document file name including extension
+          examples:
+          - contract.pdf
+        mimeType:
+          type: string
+          description: The document mime type
+          examples:
+          - application/pdf
+        content:
+          type: string
+          description: Base64-encoded content of the signed document
+          minLength: 1
+      required:
+      - content
+    SigningEvent:
+      type: object
+      description: A provider-neutral signing event delivered by api-service-e-signing
+      properties:
+        customerReference:
+          type: string
+          description: The consumer's own reference echoed back by the provider (the
+            Postportalen message id)
+          examples:
+          - 550e8400-e29b-41d4-a716-446655440000
+        providerCaseId:
+          type: string
+          description: The signing provider's case id
+          examples:
+          - "1234567890"
+          minLength: 1
+        provider:
+          type: string
+          description: The id of the signing provider that produced the event
+          examples:
+          - comfact
+        eventType:
+          type: string
+          description: The normalized event type
+          enum:
+          - CASE_CREATED
+          - SIGNATORY_APPROVED
+          - SIGNATORY_DECLINED
+          - CASE_COMPLETED
+          - CASE_WITHDRAWN
+          - CASE_EXPIRED
+          - CASE_HALTED
+          - CASE_REACTIVATED
+          examples:
+          - CASE_COMPLETED
+        status:
+          type: string
+          description: The normalized case status
+          enum:
+          - INITIATED
+          - PENDING
+          - SIGNED
+          - EXPIRED
+          - FAILED
+          examples:
+          - SIGNED
+        signatory:
+          $ref: "#/components/schemas/EventSignatory"
+          description: "The acting signatory, present on signatory events"
+        signedDocument:
+          $ref: "#/components/schemas/SignedDocument"
+          description: "The signed document, present only on a completed event"
+        occurredAt:
+          type: string
+          format: date-time
+          description: When the event occurred at the provider
+          examples:
+          - 2026-12-31T23:59:59Z
+      required:
+      - providerCaseId
+    Statistics:
+      type: object
+      description: Statistics model
+      properties:
+        id:
+          type: string
+          description: Entity id
+          examples:
+          - f40e6975-a82a-4167-8622-4b0e71ab8d92
+        name:
+          type: string
+          description: Entity name
+          examples:
+          - Test Department
+        snailMail:
+          type: integer
+          format: int64
+          description: Number of snail mail sent
+          examples:
+          - 50
+        digitalMail:
+          type: integer
+          format: int64
+          description: Number of digital mail sent
+          examples:
+          - 30
+        sms:
+          type: integer
+          format: int64
+          description: Number of text messages
+          examples:
+          - 20
+        digitalRegisteredLetter:
+          type: integer
+          format: int64
+          description: Number of registered letters sent
+          examples:
+          - 5
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+    Message:
+      type: object
+      description: Message model
+      properties:
+        messageId:
+          type: string
+          description: Message ID
+          examples:
+          - "123456"
+          readOnly: true
+        subject:
+          type: string
+          description: The subject
+          examples:
+          - Important information
+          readOnly: true
+        type:
+          type: string
+          description: Type of message
+          examples:
+          - SMS
+          - LETTER
+          - DIGITAL_REGISTERED_LETTER
+          readOnly: true
+        sentAt:
+          type: string
+          format: date-time
+          description: When the message was sent
+          examples:
+          - 2021-01-01T12:00:00
+          readOnly: true
+        signingStatus:
+          $ref: "#/components/schemas/SigningStatus"
+          description: Status for signing process. Only applicable for message type
+            DIGITAL_REGISTERED_LETTER
+          readOnly: true
+        numberOfRecipients:
+          type: integer
+          format: int32
+          description: Total number of recipients to whom the message has been sent
+          examples:
+          - 12
+          readOnly: true
+    Messages:
+      type: object
+      description: Messages model
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Message"
+            readOnly: true
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          readOnly: true
+    PagingMetaData:
+      type: object
+      description: PagingMetaData model
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Current page
+          examples:
+          - 5
+          readOnly: true
+        limit:
+          type: integer
+          format: int32
+          description: Displayed objects per page
+          examples:
+          - 20
+          readOnly: true
+        count:
+          type: integer
+          format: int32
+          description: Displayed objects on current page
+          examples:
+          - 13
+          readOnly: true
+        totalRecords:
+          type: integer
+          format: int64
+          description: Total amount of hits based on provided search parameters
+          examples:
+          - 98
+          readOnly: true
+        totalPages:
+          type: integer
+          format: int32
+          description: Total amount of pages based on provided search parameters
+          examples:
+          - 23
+          readOnly: true
+    SigningStatus:
+      type: object
+      description: Signing status model
+      properties:
+        letterState:
+          type: string
+          description: Present state for the letter
+          examples:
+          - NEW
+          - SENT
+          - SIGNED
+          - EXPIRED
+          - FAILED - Client Error
+          - FAILED - Server Error
+          - FAILED - Unknown Error
+          readOnly: true
+        signingProcessState:
+          type: string
+          description: Present state for the signing process
+          examples:
+          - PENDING
+          - COMPLETED
+          - FAILED
+          readOnly: true
+    AttachmentDetails:
+      type: object
+      properties:
+        attachmentId:
+          type: string
+          description: Attachment ID
+          examples:
+          - 123e4567-e89b-12d3-a456-426614174000
+          readOnly: true
+        fileName:
+          type: string
+          description: File name of the attachment
+          examples:
+          - document.pdf
+          readOnly: true
+        contentType:
+          type: string
+          description: MIME type of the attachment
+          examples:
+          - application/pdf
+          readOnly: true
+    MessageDetails:
+      type: object
+      description: Message details model
+      properties:
+        subject:
+          type: string
+          description: Message subject
+          examples:
+          - This is a subject
+          readOnly: true
+        body:
+          type: string
+          description: Message body
+          examples:
+          - This is the message body
+          readOnly: true
+        sentAt:
+          type: string
+          format: date-time
+          description: When the message was sent
+          examples:
+          - 2021-01-01T12:00:00
+          readOnly: true
+        signingStatus:
+          $ref: "#/components/schemas/SigningStatus"
+          description: Status for signing process. Only applicable for message type
+            DIGITAL_REGISTERED_LETTER
+          readOnly: true
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttachmentDetails"
+            description: List of attachment details
+            readOnly: true
+        recipients:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecipientDetails"
+            description: List of recipient details
+            readOnly: true
+    RecipientDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the recipient
+          examples:
+          - John Doe
+          readOnly: true
+        partyId:
+          type: string
+          description: The recipients party ID
+          examples:
+          - "1234567890"
+          readOnly: true
+        legalId:
+          type: string
+          description: The recipients legal ID
+          examples:
+          - "198001011234"
+          readOnly: true
+        mobileNumber:
+          type: string
+          description: Mobile number
+          examples:
+          - "+46701234567"
+          readOnly: true
+        streetAddress:
+          type: string
+          description: Street address
+          examples:
+          - Main Street 5
+          readOnly: true
+        zipCode:
+          type: string
+          description: Zip code
+          examples:
+          - "85751"
+          readOnly: true
+        city:
+          type: string
+          description: City
+          examples:
+          - Sundsvall
+          readOnly: true
+        messageType:
+          type: string
+          description: Message type
+          examples:
+          - SNAIL_MAIL
+          - DIGITAL_MAIL
+          - SMS
+          readOnly: true
+        status:
+          type: string
+          description: Status of the message to this recipient
+          examples:
+          - SENT
+          - NOT_SENT
+          - FAILED
+          readOnly: true
+    Device:
+      type: object
+      properties:
+        ipAddress:
+          type: string
+          description: Ip address used when the letter was signed
+    SigningInformation:
+      type: object
+      description: SigningInformation model
+      properties:
+        status:
+          type: string
+          description: Status of the signing order
+        signedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the letter was signed by receiving party
+        contentKey:
+          type: string
+          description: The unique Kivra id for the signing order
+        orderReference:
+          type: string
+          description: Order reference in Kivra for the signing order
+        signature:
+          type: string
+          description: The signature made by the receiving party
+        ocspResponse:
+          type: string
+          description: Online certificate status protocol for the signing order
+        user:
+          $ref: "#/components/schemas/User"
+          description: Information about the user that signed the letter
+        device:
+          $ref: "#/components/schemas/Device"
+          description: Information about the device used when signing the letter
+        stepUp:
+          $ref: "#/components/schemas/StepUp"
+          description: Step-up information for the signing order
+    StepUp:
+      type: object
+      properties:
+        mrtd:
+          type: boolean
+          description: Whether an MRTD check was performed before the order was completed
+    User:
+      type: object
+      properties:
+        personalIdentityNumber:
+          type: string
+          description: Personal identity number for the signing party
+        name:
+          type: string
+          description: Full name of the signing party
+        givenName:
+          type: string
+          description: First name of the signing party
+        surname:
+          type: string
+          description: Last name of the signing party
+  securitySchemes: {}

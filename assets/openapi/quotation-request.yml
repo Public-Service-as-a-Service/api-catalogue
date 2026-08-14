@@ -1,0 +1,291 @@
+openapi: 3.1.0
+info:
+  title: api-quotation-request
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+servers:
+- url: http://localhost:55098
+  description: Generated server url
+tags:
+- name: MetaData
+  description: MetaData operations
+- name: QuotationRequest
+  description: QuotationRequest operations
+paths:
+  /{municipalityId}/quotation-request:
+    post:
+      tags:
+      - QuotationRequest
+      summary: Create a QuotationRequest
+      operationId: createQuotationRequest
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuotationRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/meta-data:
+    get:
+      tags:
+      - MetaData
+      summary: Get MetaData
+      operationId: getMetaData
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetaDataResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    ContactDetails:
+      type: object
+      description: Model for ContactDetails
+      properties:
+        firstName:
+          type: string
+          description: First Name
+          examples:
+          - Joe
+          minLength: 1
+        surname:
+          type: string
+          description: Surname
+          examples:
+          - Doe
+          minLength: 1
+        phoneNumber:
+          type: string
+          description: Phone Number
+          examples:
+          - 079 1234567
+          minLength: 1
+        emailAddress:
+          type: string
+          format: email
+          description: Email Address
+          examples:
+          - joe.doe@test.se
+          minLength: 1
+      required:
+      - emailAddress
+      - firstName
+      - phoneNumber
+      - surname
+    QuotationRequest:
+      type: object
+      description: QuotationRequest creation request model
+      properties:
+        title:
+          type: string
+          description: Title of Quotation Request
+          examples:
+          - Installation av elnät
+          minLength: 1
+        note:
+          type: string
+          description: Description of Quotation Request
+          examples:
+          - Beskrivning av installationen
+          minLength: 1
+        helpdeskId:
+          type: string
+          description: Category of Quotation Request
+          examples:
+          - "3601"
+          minLength: 1
+        officeId:
+          type: string
+          description: Where the Quotation Request should end up
+          examples:
+          - "2701"
+          minLength: 1
+        contactDetails:
+          $ref: "#/components/schemas/ContactDetails"
+      required:
+      - contactDetails
+      - helpdeskId
+      - note
+      - officeId
+      - title
+    MetaData:
+      type: object
+      description: Model for MetaData
+      properties:
+        name:
+          type: string
+          description: Name
+          examples:
+          - Blåberget
+        id:
+          type: string
+          description: Id
+          examples:
+          - "123231123"
+    MetaDataResponse:
+      type: object
+      description: Model for MetaData Response
+      properties:
+        offices:
+          type: array
+          description: List of available offices
+          items:
+            $ref: "#/components/schemas/MetaData"
+        helpdeskCategories:
+          type: array
+          description: List of available helpdeskcategories
+          items:
+            $ref: "#/components/schemas/MetaData"
+  securitySchemes: {}

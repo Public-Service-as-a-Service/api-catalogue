@@ -1,0 +1,191 @@
+openapi: 3.1.0
+info:
+  title: api-private-precheck
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "0.5"
+servers:
+- url: http://localhost:55078
+  description: Generated server url
+tags:
+- name: Pre-check
+  description: Pre-check operations
+paths:
+  /precheck/{partyId}:
+    get:
+      tags:
+      - Pre-check
+      summary: Fetch permit(s) issued by the provided municipality to the citizen
+        matching the provided partyId
+      operationId: fetchPermits
+      parameters:
+      - name: partyId
+        in: path
+        description: PartyId for the citizen
+        required: true
+        schema:
+          type: string
+        example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      - name: municipalityId
+        in: query
+        description: MunicipalityId for the citizen
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: assetType
+        in: query
+        description: AssetType to filter on (optional)
+        required: false
+        allowEmptyValue: true
+        schema:
+          type: string
+        example: PARKING_PERMIT
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreCheckResponse"
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/PreCheckResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Permit:
+      type: object
+      description: Permit model.
+      properties:
+        type:
+          type: string
+          description: The type of permit.
+          examples:
+          - PARKING_PERMIT
+          readOnly: true
+        orderable:
+          type: boolean
+          description: If the permit is orderable or not.
+          readOnly: true
+        reason:
+          type: string
+          description: "Extra message about the return data, for instance why the\
+            \ permit is not possible to order."
+          readOnly: true
+      readOnly: true
+    PreCheckResponse:
+      type: object
+      description: Pre-check response model.
+      properties:
+        municipalCitizen:
+          type: boolean
+          description: Signal if party is a citizen of the municipality or not.
+          readOnly: true
+        permits:
+          type: array
+          description: List of permits issued to the party.
+          items:
+            $ref: "#/components/schemas/Permit"
+          readOnly: true
+      readOnly: true
+  securitySchemes: {}

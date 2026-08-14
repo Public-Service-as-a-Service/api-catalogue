@@ -1,0 +1,1017 @@
+openapi: 3.1.0
+info:
+  title: api-disturbance
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "5.0"
+servers:
+- url: http://localhost:60111
+  description: Generated server url
+tags:
+- name: Disturbance
+  description: Disturbance operations
+- name: Subscription
+  description: Subscription operations
+paths:
+  /{municipalityId}/subscriptions/{id}:
+    get:
+      tags:
+      - Subscription
+      summary: "Read a subscription for a person or an organization, by ID."
+      operationId: readSubscription
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Subscription ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1234
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    put:
+      tags:
+      - Subscription
+      summary: Updates a subscription.
+      operationId: updateSubscription
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Subscription ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionUpdateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - Subscription
+      summary: Deletes a subscription. I.e. remove subscription on notifications for
+        any new future disturbances.
+      operationId: deleteSubscription
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Subscription ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1234
+      responses:
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/subscriptions:
+    get:
+      tags:
+      - Subscription
+      summary: "Read a subscription for a person or an organization, by query parameters."
+      operationId: findSubscription
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: partyId
+        in: query
+        description: PartyId (e.g. a personId or an organizationId)
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - Subscription
+      summary: Create a subscription for a person or an organization. I.e. subscribe
+        on notifications for all new future disturbances.
+      operationId: createSubscription
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionCreateRequest"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              description: Location of the created resource.
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/disturbances:
+    get:
+      tags:
+      - Disturbance
+      summary: Return all disturbances filtered on status and category.
+      operationId: getDisturbances
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: status
+        in: query
+        description: Status filter parameter
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: "#/components/schemas/Status"
+      - name: category
+        in: query
+        description: Category filter parameter
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Disturbance"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - Disturbance
+      summary: Create a new disturbance.
+      operationId: createDisturbance
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DisturbanceCreateRequest"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              description: Location of the created resource.
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/disturbances/{category}/{disturbanceId}:
+    get:
+      tags:
+      - Disturbance
+      summary: Return information about a specific disturbance.
+      operationId: getDisturbance
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: category
+        in: path
+        description: Disturbance category
+        required: true
+        schema:
+          $ref: "#/components/schemas/Category"
+      - name: disturbanceId
+        in: path
+        description: Disturbance ID
+        required: true
+        schema:
+          type: string
+        example: 435553
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Disturbance"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - Disturbance
+      summary: Delete a disturbance. Should be used when the disturbance is resolved.
+        Any affected persons/organizations (with notification subscriptions) will
+        be notified of the resolved disturbance.
+      operationId: deleteDisturbance
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: category
+        in: path
+        description: Disturbance category
+        required: true
+        schema:
+          $ref: "#/components/schemas/Category"
+      - name: disturbanceId
+        in: path
+        description: Disturbance ID
+        required: true
+        schema:
+          type: string
+        example: 435553
+      responses:
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    patch:
+      tags:
+      - Disturbance
+      summary: Manage updates of a disturbance. Should be used when the set of affected
+        persons/organizations is changed or the disturbance description is updated.
+      operationId: updateDisturbance
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: category
+        in: path
+        description: Disturbance category
+        required: true
+        schema:
+          $ref: "#/components/schemas/Category"
+      - name: disturbanceId
+        in: path
+        description: Disturbance ID
+        required: true
+        schema:
+          type: string
+        example: 435553
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DisturbanceUpdateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Disturbance"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/disturbances/affecteds/{partyId}:
+    get:
+      tags:
+      - Disturbance
+      summary: Return all present disturbances for a person or an organization. The
+        'affected' list in each returned disturbance is filtered to only contain entries
+        matching the provided partyId.
+      operationId: getDisturbancesByPartyId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: partyId
+        in: path
+        description: PartyId (e.g. a personId or an organizationId)
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
+      - name: status
+        in: query
+        description: Status filter parameter
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: "#/components/schemas/Status"
+      - name: category
+        in: query
+        description: Category filter parameter
+        required: false
+        schema:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Disturbance"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        instance:
+          type: string
+          format: uri
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Category:
+      type: string
+      description: Category model
+      enum:
+      - COMMUNICATION
+      - DISTRICT_COOLING
+      - DISTRICT_HEATING
+      - ELECTRICITY
+      - ELECTRICITY_TRADE
+      - WASTE_MANAGEMENT
+      - WATER
+    OptOutSetting:
+      type: object
+      description: Opt-out setting model
+      properties:
+        category:
+          $ref: "#/components/schemas/Category"
+          description: Category of the disturbance
+          examples:
+          - ELECTRICITY
+        values:
+          type: object
+          additionalProperties: {}
+          description: |-
+            Key/value pairs of opt-out values. E.g. ["facilityId" : "12345"].
+            If multiple entries are added, they will have an "and"-relation. I.e. all properties must match in order for the opt-out to be evaluated as true.
+          examples:
+          - facilityId
+          - 123456
+      required:
+      - category
+    SubscriptionUpdateRequest:
+      type: object
+      description: Subscription update request model
+      properties:
+        optOutSettings:
+          type: array
+          description: Opt-out settings
+          items:
+            $ref: "#/components/schemas/OptOutSetting"
+    Subscription:
+      type: object
+      description: Subscription model
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Subscription ID
+          examples:
+          - 1234
+        municipalityId:
+          type: string
+          description: Municipality ID
+          examples:
+          - "2281"
+          readOnly: true
+        partyId:
+          type: string
+          description: PartyId (e.g. a personId or an organizationId)
+          examples:
+          - 81471222-5798-11e9-ae24-57fa13b361e1
+        optOutSettings:
+          type: array
+          description: Opt out settings
+          items:
+            $ref: "#/components/schemas/OptOutSetting"
+        created:
+          type: string
+          format: date-time
+          description: Created timestamp
+        updated:
+          type: string
+          format: date-time
+          description: Updated timestamp
+      readOnly: true
+    SubscriptionCreateRequest:
+      type: object
+      description: Subscription create request model
+      properties:
+        partyId:
+          type: string
+          description: PartyId (e.g. a personId or an organizationId)
+          examples:
+          - 81471222-5798-11e9-ae24-57fa13b361e1
+        optOutSettings:
+          type: array
+          description: Opt-out settings
+          items:
+            $ref: "#/components/schemas/OptOutSetting"
+      required:
+      - partyId
+    Affected:
+      type: object
+      description: Affected persons and/or organizations model
+      properties:
+        partyId:
+          type: string
+          description: PartyId (e.g. a personId or an organizationId)
+          examples:
+          - 81471222-5798-11e9-ae24-57fa13b361e1
+        reference:
+          type: string
+          description: Reference information
+          examples:
+          - Streetname 123
+          maxLength: 512
+          minLength: 0
+        facilityId:
+          type: string
+          description: Facitlity-ID. The unique facility identifier
+          examples:
+          - "735999109175011012"
+        coordinates:
+          type: string
+          description: "The coordinates to the facility on the format:{coordinate-system}:N{north-coordinate}:E{east-coordinate}"
+          examples:
+          - SWEREF 991715:N6919620.98828125:E152414.77734375
+      required:
+      - partyId
+      - reference
+    DisturbanceCreateRequest:
+      type: object
+      description: Disturbance create request model
+      properties:
+        id:
+          type: string
+          description: Disturbance ID
+          examples:
+          - "435553"
+          maxLength: 255
+          minLength: 0
+        category:
+          $ref: "#/components/schemas/Category"
+        title:
+          type: string
+          description: Title
+          examples:
+          - Disturbance
+          maxLength: 255
+          minLength: 0
+        description:
+          type: string
+          description: Description
+          examples:
+          - Major disturbance
+          maxLength: 8192
+          minLength: 0
+        status:
+          $ref: "#/components/schemas/Status"
+        plannedStartDate:
+          type: string
+          format: date-time
+          description: Planned start date for the disturbance
+        plannedStopDate:
+          type: string
+          format: date-time
+          description: Planned stop date for the disturbance
+        affecteds:
+          type: array
+          items:
+            $ref: "#/components/schemas/Affected"
+      required:
+      - category
+      - description
+      - id
+      - status
+      - title
+    Status:
+      type: string
+      description: Status model
+      enum:
+      - OPEN
+      - CLOSED
+      - PLANNED
+    DisturbanceUpdateRequest:
+      type: object
+      description: Disturbance update request model
+      properties:
+        title:
+          type: string
+          description: Title
+          examples:
+          - Disturbance
+          maxLength: 255
+          minLength: 0
+        description:
+          type: string
+          description: Description
+          examples:
+          - Major disturbance
+          maxLength: 8192
+          minLength: 0
+        status:
+          $ref: "#/components/schemas/Status"
+        plannedStartDate:
+          type: string
+          format: date-time
+          description: Planned start date for the disturbance
+        plannedStopDate:
+          type: string
+          format: date-time
+          description: Planned stop date for the disturbance
+        affecteds:
+          type: array
+          items:
+            $ref: "#/components/schemas/Affected"
+      required:
+      - title
+    Disturbance:
+      type: object
+      description: Disturbance model
+      properties:
+        id:
+          type: string
+          description: Disturbance ID
+          examples:
+          - "435553"
+        municipalityId:
+          type: string
+          description: Municipality ID
+          examples:
+          - "2281"
+          readOnly: true
+        category:
+          $ref: "#/components/schemas/Category"
+        status:
+          $ref: "#/components/schemas/Status"
+        title:
+          type: string
+          description: Title
+          examples:
+          - Disturbance
+        description:
+          type: string
+          description: Description
+          examples:
+          - Major disturbance in city
+        plannedStartDate:
+          type: string
+          format: date-time
+          description: Planned start date for the disturbance
+        plannedStopDate:
+          type: string
+          format: date-time
+          description: Planned stop date for the disturbance
+        created:
+          type: string
+          format: date-time
+          description: Created timestamp
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          description: Updated timestamp
+          readOnly: true
+        affecteds:
+          type: array
+          items:
+            $ref: "#/components/schemas/Affected"
+      required:
+      - category
+      - status
+  securitySchemes: {}

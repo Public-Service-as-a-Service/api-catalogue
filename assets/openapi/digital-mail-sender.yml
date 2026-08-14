@@ -1,0 +1,484 @@
+openapi: 3.1.0
+info:
+  title: Digital Mail Sender
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "4.1"
+servers:
+- url: http://localhost:51376
+  description: Generated server url
+paths:
+  /{municipalityId}/{organizationNumber}/send-digital-mail:
+    post:
+      tags:
+      - Digital Mail
+      summary: Send a digital mail
+      operationId: sendDigitalMail
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: organizationNumber
+        in: path
+        description: The organization number of the sending organization
+        required: true
+        schema:
+          type: string
+        example: 5561234567
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DigitalMailRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DigitalMailResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{organizationNumber}/mailboxes:
+    post:
+      tags:
+      - Digital Mail
+      summary: "Retrieve a list of mailboxes. Contains partyId, supplier and if the\
+        \ mailbox is reachable for the given organization."
+      operationId: hasAvailableMailboxes
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: organizationNumber
+        in: path
+        description: The organization number of the intended sending organization
+        required: true
+        schema:
+          type: string
+        example: 5561234567
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Mailbox"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/send-digital-invoice:
+    post:
+      tags:
+      - Digital Mail
+      summary: Send a digital invoice
+      operationId: sendDigitalInvoice
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DigitalInvoiceRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DigitalInvoiceResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Attachment:
+      type: object
+      description: A PDF file/attachment
+      properties:
+        contentType:
+          type: string
+          description: "Allowed type is: application/pdf"
+          examples:
+          - application/pdf
+        body:
+          type: string
+          description: BASE64-encoded body
+          minLength: 1
+        filename:
+          type: string
+          description: The name of the file
+          examples:
+          - sample.pdf
+          minLength: 1
+      required:
+      - body
+      - contentType
+      - filename
+    BodyInformation:
+      type: object
+      description: The body of the message
+      properties:
+        contentType:
+          type: string
+          description: "The content type for the message, text/plain for only text,\
+            \ text/html for HTML messages."
+          examples:
+          - text/html
+        body:
+          type: string
+          description: Plain-text body
+      required:
+      - contentType
+    DigitalMailRequest:
+      type: object
+      description: The body of the digital mail request
+      properties:
+        partyId:
+          type: string
+          description: partyId for the person or organization the digital mail should
+            be sent to
+          examples:
+          - 6a5c3d04-412d-11ec-973a-0242ac130003
+        municipalityId:
+          type: string
+          description: MunicipalityId
+          examples:
+          - "2281"
+        headerSubject:
+          type: string
+          description: The subject of the digital mail.
+          examples:
+          - Viktig information från Sundsvalls kommun
+          minLength: 1
+        supportInfo:
+          $ref: "#/components/schemas/SupportInfo"
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+        bodyInformation:
+          $ref: "#/components/schemas/BodyInformation"
+      required:
+      - headerSubject
+      - municipalityId
+      - partyId
+      - supportInfo
+    SupportInfo:
+      type: object
+      description: Contains contact information and where the recipient may turn to
+        for questions.
+      properties:
+        supportText:
+          type: string
+          description: Information text describing the different ways the recipient
+            may contact the sender.
+          examples:
+          - Kontakta oss via epost eller telefon.
+          minLength: 1
+        contactInformationUrl:
+          type: string
+          description: Url where the recipient may find more information.
+          examples:
+          - https://sundsvall.se/
+        contactInformationPhoneNumber:
+          type: string
+          description: Phone number the recipient may call to get in contact with
+            the sender.
+          examples:
+          - "4660191000"
+        contactInformationEmail:
+          type: string
+          description: Email address the recipient may use to get in contact with
+            the sender.
+          examples:
+          - sundsvalls.kommun@sundsvall.se
+      required:
+      - supportText
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    DeliveryStatus:
+      type: object
+      properties:
+        delivered:
+          type: boolean
+        partyId:
+          type: string
+        transactionId:
+          type: string
+    DigitalMailResponse:
+      type: object
+      properties:
+        deliveryStatus:
+          $ref: "#/components/schemas/DeliveryStatus"
+    Mailbox:
+      type: object
+      description: Response model for a mailbox
+      properties:
+        partyId:
+          type: string
+          description: partyId for the legal Id the mailbox belongs to
+        reason:
+          type: string
+          description: "If not reachable, the reason why"
+        supplier:
+          type: string
+          description: "Name of the mailbox, e.g. Kivra"
+        reachable:
+          type: boolean
+          description: If it's possible to send messages to this mailbox
+    Details:
+      type: object
+      description: Invoice details
+      properties:
+        amount:
+          type: number
+          format: float
+          description: The invoice amount
+          examples:
+          - 123.45
+        dueDate:
+          type: string
+          format: date
+          description: The invoice due date
+          examples:
+          - 2023-10-09
+        paymentReferenceType:
+          type: string
+          description: The payment reference type
+          enum:
+          - SE_OCR
+          - TENANT_REF
+          examples:
+          - SE_OCR
+        paymentReference:
+          type: string
+          description: The payment reference number
+          examples:
+          - "426523791"
+          maxLength: 25
+          minLength: 1
+        accountType:
+          type: string
+          description: The receiving account type
+          enum:
+          - BANKGIRO
+          - PLUSGIRO
+          examples:
+          - BANKGIRO
+        accountNumber:
+          type: string
+          description: The receiving account (a valid BANKGIRO or PLUSGIRO number)
+          examples:
+          - "12345"
+      required:
+      - accountNumber
+      - accountType
+      - amount
+      - dueDate
+      - paymentReference
+      - paymentReferenceType
+    DigitalInvoiceRequest:
+      type: object
+      properties:
+        partyId:
+          type: string
+          description: partyId for the person or organization the invoice should be
+            sent to
+          examples:
+          - 6a5c3d04-412d-11ec-973a-0242ac130003
+        type:
+          type: string
+          default: INVOICE
+          description: Invoice type
+          enum:
+          - INVOICE
+          - REMINDER
+          examples:
+          - INVOICE
+        subject:
+          type: string
+          description: The invoice subject
+          examples:
+          - Faktura från Sundsvalls kommun
+          minLength: 1
+        reference:
+          type: string
+          description: Invoice reference
+          examples:
+          - "Faktura #12345"
+        payable:
+          type: boolean
+          default: true
+          description: Whether the invoice is payable
+        details:
+          $ref: "#/components/schemas/Details"
+        files:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+          minItems: 1
+      required:
+      - details
+      - files
+      - partyId
+      - subject
+      - type
+    DigitalInvoiceResponse:
+      type: object
+      properties:
+        partyId:
+          type: string
+        sent:
+          type: boolean
+  securitySchemes: {}

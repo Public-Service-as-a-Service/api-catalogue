@@ -1,0 +1,3381 @@
+openapi: 3.1.0
+info:
+  title: api-lifecare-integrator
+  contact: { }
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "1.0"
+servers:
+  - url: http://localhost:60713
+    description: Generated server url
+tags:
+  - name: Investigations
+    description: Investigation reads from the Lifecare family care system
+  - name: Executions
+    description: Execution reads from the Lifecare family care system
+  - name: Actualisations
+    description: Actualisation (case intake) resource for the Lifecare family care system
+  - name: Resource allocations
+    description: Resource allocation reads from the Lifecare family care system
+  - name: Person
+    description: Person master data and contacts from Lifecare family care
+  - name: Decisions
+    description: "Unified decision resource, merging the Lifecare elderly care (SoL\
+    \ + LSS) and family care decision sources"
+  - name: Payments
+    description: Payment reads from the Lifecare family care system
+  - name: Calculations
+    description: Calculation (normberäkning) resource for the Lifecare family care system
+  - name: Documents
+    description: Documents stored for a person in the Lifecare family care system
+  - name: Services
+    description: Service reads from the Lifecare family care system
+  - name: Users
+    description: Caseworker (user) lookup in the Lifecare family care system
+paths:
+  /{municipalityId}/calculations:
+    get:
+      tags:
+        - Calculations
+      description: Get the calculations registered on a person in the given period
+      operationId: getCalculations
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+            description: Party id of the person
+            examples:
+              - 81471222-5798-11e9-ae24-57fa13b361e1
+        - name: from
+          in: query
+          description: Start of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: Start of the period (inclusive)
+            examples:
+              - 2025-01-01
+        - name: to
+          in: query
+          description: End of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: End of the period (inclusive)
+            examples:
+              - 2026-12-31
+        - name: ascending
+          in: query
+          description: Sort order by date
+          required: false
+          schema:
+            type: boolean
+            description: Sort order by date
+            examples:
+              - "true"
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 1
+            description: Page number
+            examples:
+              - 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Result size per page. Maximum allowed value is dynamically configured
+          required: false
+          schema:
+            type: integer
+            format: int32
+            description: Result size per page. Maximum allowed value is dynamically
+              configured
+            examples:
+              - 15
+            minimum: 1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedCalculationResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+        - Calculations
+      description: Create a calculation in Lifecare family care. Ids in the request
+        come from the proposal endpoint
+      operationId: createCalculation
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCalculationRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedResource"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/actualisations:
+    get:
+      tags:
+        - Actualisations
+      description: Get the actualisations (case intakes) registered on a person in
+        the given period
+      operationId: getActualisations
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+            description: Party id of the person
+            examples:
+              - 81471222-5798-11e9-ae24-57fa13b361e1
+        - name: from
+          in: query
+          description: Start of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: Start of the period (inclusive)
+            examples:
+              - 2025-01-01
+        - name: to
+          in: query
+          description: End of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: End of the period (inclusive)
+            examples:
+              - 2026-12-31
+        - name: ascending
+          in: query
+          description: Sort order by date
+          required: false
+          schema:
+            type: boolean
+            description: Sort order by date
+            examples:
+              - "true"
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 1
+            description: Page number
+            examples:
+              - 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Result size per page. Maximum allowed value is dynamically configured
+          required: false
+          schema:
+            type: integer
+            format: int32
+            description: Result size per page. Maximum allowed value is dynamically
+              configured
+            examples:
+              - 15
+            minimum: 1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedActualisationResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+        - Actualisations
+      description: Create an actualisation (case intake) in Lifecare family care.
+        Ids in the request come from the proposal endpoint
+      operationId: createActualisation
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateActualisationRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatedResource"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/actualisations/{actualisationId}/attachments:
+    post:
+      tags:
+        - Actualisations
+      description: Upload a document and bind it to an actualisation. Type codes come
+        from the proposal endpoint's attachmentTypes
+      operationId: addActualisationAttachment
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: actualisationId
+          in: path
+          description: Id of the actualisation
+          required: true
+          schema:
+            type: integer
+            format: int32
+          example: 12345
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                documentType:
+                  type: string
+                  description: The document type code
+                  minLength: 1
+                senderType:
+                  type: string
+                  description: The document sender type code
+                  minLength: 1
+                title:
+                  type: string
+                  description: The document title
+                senderName:
+                  type: string
+                  description: The sender name
+                file:
+                  type: string
+                  format: binary
+              required:
+                - documentType
+                - file
+                - senderType
+        required: true
+      responses:
+        "204":
+          description: No content
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/users:
+    get:
+      tags:
+        - Users
+      description: Get the family care caseworkers (users)
+      operationId: getUsers
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: limit
+          in: query
+          description: The maximum number of users to return
+          required: true
+          schema:
+            type: integer
+            format: int32
+            exclusiveMinimum: 0
+            maximum: 1000
+          example: 100
+        - name: offset
+          in: query
+          description: The starting point within the result set
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 0
+        - name: modifiedAfter
+          in: query
+          description: Only users modified after this time
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: modifiedBefore
+          in: query
+          description: Only users modified before this time
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Caseworker"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/services:
+    get:
+      tags:
+        - Services
+      description: Get the services registered on a person in the given period
+      operationId: getServices
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+            description: Party id of the person
+            examples:
+              - 81471222-5798-11e9-ae24-57fa13b361e1
+        - name: from
+          in: query
+          description: Start of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: Start of the period (inclusive)
+            examples:
+              - 2025-01-01
+        - name: to
+          in: query
+          description: End of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: End of the period (inclusive)
+            examples:
+              - 2026-12-31
+        - name: ascending
+          in: query
+          description: Sort order by date
+          required: false
+          schema:
+            type: boolean
+            description: Sort order by date
+            examples:
+              - "true"
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 1
+            description: Page number
+            examples:
+              - 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Result size per page. Maximum allowed value is dynamically configured
+          required: false
+          schema:
+            type: integer
+            format: int32
+            description: Result size per page. Maximum allowed value is dynamically
+              configured
+            examples:
+              - 15
+            minimum: 1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedServiceResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/resource-allocations:
+    get:
+      tags:
+        - Resource allocations
+      description: Get the resource allocations registered on a person in the given
+        period
+      operationId: getResourceAllocations
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+            description: Party id of the person
+            examples:
+              - 81471222-5798-11e9-ae24-57fa13b361e1
+        - name: from
+          in: query
+          description: Start of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: Start of the period (inclusive)
+            examples:
+              - 2025-01-01
+        - name: to
+          in: query
+          description: End of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: End of the period (inclusive)
+            examples:
+              - 2026-12-31
+        - name: ascending
+          in: query
+          description: Sort order by date
+          required: false
+          schema:
+            type: boolean
+            description: Sort order by date
+            examples:
+              - "true"
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 1
+            description: Page number
+            examples:
+              - 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Result size per page. Maximum allowed value is dynamically configured
+          required: false
+          schema:
+            type: integer
+            format: int32
+            description: Result size per page. Maximum allowed value is dynamically
+              configured
+            examples:
+              - 15
+            minimum: 1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedResourceAllocationResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/person:
+    get:
+      tags:
+        - Person
+      description: Get person master data for a person.
+      operationId: getPerson
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+          example: 81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Person"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/payments:
+    get:
+      tags:
+        - Payments
+      description: Get the payments registered on a person in the given period
+      operationId: getPayments
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+            description: Party id of the person
+            examples:
+              - 81471222-5798-11e9-ae24-57fa13b361e1
+        - name: from
+          in: query
+          description: Start of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: Start of the period (inclusive)
+            examples:
+              - 2025-01-01
+        - name: to
+          in: query
+          description: End of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: End of the period (inclusive)
+            examples:
+              - 2026-12-31
+        - name: ascending
+          in: query
+          description: Sort order by date
+          required: false
+          schema:
+            type: boolean
+            description: Sort order by date
+            examples:
+              - "true"
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 1
+            description: Page number
+            examples:
+              - 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Result size per page. Maximum allowed value is dynamically configured
+          required: false
+          schema:
+            type: integer
+            format: int32
+            description: Result size per page. Maximum allowed value is dynamically
+              configured
+            examples:
+              - 15
+            minimum: 1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedPaymentResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/investigations:
+    get:
+      tags:
+        - Investigations
+      description: Get the investigations registered on a person in the given period
+      operationId: getInvestigations
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+            description: Party id of the person
+            examples:
+              - 81471222-5798-11e9-ae24-57fa13b361e1
+        - name: from
+          in: query
+          description: Start of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: Start of the period (inclusive)
+            examples:
+              - 2025-01-01
+        - name: to
+          in: query
+          description: End of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: End of the period (inclusive)
+            examples:
+              - 2026-12-31
+        - name: ascending
+          in: query
+          description: Sort order by date
+          required: false
+          schema:
+            type: boolean
+            description: Sort order by date
+            examples:
+              - "true"
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 1
+            description: Page number
+            examples:
+              - 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Result size per page. Maximum allowed value is dynamically configured
+          required: false
+          schema:
+            type: integer
+            format: int32
+            description: Result size per page. Maximum allowed value is dynamically
+              configured
+            examples:
+              - 15
+            minimum: 1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedInvestigationResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/executions:
+    get:
+      tags:
+        - Executions
+      description: Get the executions registered on a person in the given period
+      operationId: getExecutions
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+            description: Party id of the person
+            examples:
+              - 81471222-5798-11e9-ae24-57fa13b361e1
+        - name: from
+          in: query
+          description: Start of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: Start of the period (inclusive)
+            examples:
+              - 2025-01-01
+        - name: to
+          in: query
+          description: End of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: End of the period (inclusive)
+            examples:
+              - 2026-12-31
+        - name: ascending
+          in: query
+          description: Sort order by date
+          required: false
+          schema:
+            type: boolean
+            description: Sort order by date
+            examples:
+              - "true"
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 1
+            description: Page number
+            examples:
+              - 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Result size per page. Maximum allowed value is dynamically configured
+          required: false
+          schema:
+            type: integer
+            format: int32
+            description: Result size per page. Maximum allowed value is dynamically
+              configured
+            examples:
+              - 15
+            minimum: 1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedExecutionResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/documents:
+    get:
+      tags:
+        - Documents
+      description: Get document metadata for a person. The content of a single document
+        is fetched separately
+      operationId: getDocuments
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+            description: Party id of the person
+            examples:
+              - 81471222-5798-11e9-ae24-57fa13b361e1
+        - name: from
+          in: query
+          description: Start of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: Start of the period (inclusive)
+            examples:
+              - 2025-01-01
+        - name: to
+          in: query
+          description: End of the period (inclusive)
+          required: false
+          schema:
+            type: string
+            format: date
+            description: End of the period (inclusive)
+            examples:
+              - 2026-12-31
+        - name: ascending
+          in: query
+          description: Sort order by date
+          required: false
+          schema:
+            type: boolean
+            description: Sort order by date
+            examples:
+              - "true"
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 1
+            description: Page number
+            examples:
+              - 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Result size per page. Maximum allowed value is dynamically configured
+          required: false
+          schema:
+            type: integer
+            format: int32
+            description: Result size per page. Maximum allowed value is dynamically
+              configured
+            examples:
+              - 15
+            minimum: 1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedDocumentResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/documents/{documentId}/content:
+    get:
+      tags:
+        - Documents
+      description: Get the content of a document as a PDF
+      operationId: getDocumentContent
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: documentId
+          in: path
+          description: The document id
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          example: 12345
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: byte
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/decisions:
+    get:
+      tags:
+        - Decisions
+      description: "Get all decisions for a person, merged from all Lifecare decision\
+        \ sources. A source that cannot be reached is reported as UNAVAILABLE in the\
+        \ response instead of failing the request."
+      operationId: getDecisions
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+          example: 81471222-5798-11e9-ae24-57fa13b361e1
+        - name: from
+          in: query
+          description: Only include decisions valid on or after this date
+          required: false
+          schema:
+            type: string
+            format: date
+          example: 2025-01-01
+        - name: to
+          in: query
+          description: Only include decisions valid on or before this date
+          required: false
+          schema:
+            type: string
+            format: date
+          example: 2026-12-31
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DecisionsResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/contacts:
+    get:
+      tags:
+        - Person
+      description: Get the contacts attached to a person.
+      operationId: getContacts
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+          example: 81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Contact"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/calculations/proposal:
+    get:
+      tags:
+        - Calculations
+      description: "Get the proposal (norms, household members, income/expense types\
+        \ and linkable cases) needed to create a calculation for a person. Household\
+        \ members are identified by partyId — a member without a partyId could not\
+        \ be resolved and cannot be referenced in a create request"
+      operationId: getCalculationProposal
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+          example: 81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CalculationProposal"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/actualisations/proposal:
+    get:
+      tags:
+        - Actualisations
+      description: Get the proposal (valid code lists) needed to create an actualisation
+        for a person
+      operationId: getActualisationProposal
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: partyId
+          in: query
+          description: Party id of the person
+          required: true
+          schema:
+            type: string
+          example: 81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActualisationProposal"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+        - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    CalculationExpenseRequest:
+      type: object
+      description: An expense or special expense included in a calculation
+      properties:
+        typeId:
+          type: integer
+          format: int32
+          description: "The id of the expense type, from the calculation proposal's\
+            \ expenseTypes or specialExpenseTypes"
+          examples:
+            - 1
+        amount:
+          type: number
+          description: The amount of the expense
+          examples:
+            - 5000.0
+        approvedAmount:
+          type: number
+          description: The approved amount of the expense
+          examples:
+            - 4500.0
+        note:
+          type: string
+          description: A note on the expense
+          examples:
+            - Hyra april
+      required:
+        - typeId
+    CalculationIncomeRequest:
+      type: object
+      description: An income included in a calculation
+      properties:
+        typeId:
+          type: integer
+          format: int32
+          description: "The id of the income type, from the calculation proposal's\
+            \ incomeTypes"
+          examples:
+            - 1
+        applicantAmount:
+          type: number
+          description: The applicant's amount
+          examples:
+            - 5000.0
+        applicantAmountDate:
+          type: string
+          format: date
+          description: The date of the applicant's amount
+          examples:
+            - 2026-05-01
+        coApplicantAmount:
+          type: number
+          description: The co-applicant's amount
+          examples:
+            - 5000.0
+        coApplicantAmountDate:
+          type: string
+          format: date
+          description: The date of the co-applicant's amount
+          examples:
+            - 2026-05-01
+        note:
+          type: string
+          description: A note on the income
+          examples:
+            - Lön april
+      required:
+        - typeId
+    CalculationPersonRequest:
+      type: object
+      description: A person included in a calculation
+      properties:
+        partyId:
+          type: string
+          description: The party id of the person
+          examples:
+            - 81471222-5798-11e9-ae24-57fa13b361e1
+        numberOfDays:
+          type: integer
+          format: int32
+          description: The number of days the person is included in the calculation
+          examples:
+            - 30
+        deviationFromDate:
+          type: string
+          format: date
+          description: The date the deviation is valid from
+          examples:
+            - 2026-05-01
+        deviationToDate:
+          type: string
+          format: date
+          description: The date the deviation is valid to
+          examples:
+            - 2026-05-31
+      required:
+        - partyId
+    CreateCalculationRequest:
+      type: object
+      description: Request to create a calculation in Lifecare FC. All ids come from
+        the calculation proposal endpoint.
+      properties:
+        partyId:
+          type: string
+          description: The party id of the person the calculation concerns
+          examples:
+            - 81471222-5798-11e9-ae24-57fa13b361e1
+        serviceId:
+          type: integer
+          format: int32
+          description: "The id of the service to link to, from the calculation proposal\
+            \ endpoint"
+          examples:
+            - 12345
+        investigationId:
+          type: integer
+          format: int32
+          description: "The id of the investigation to link to, from the calculation\
+            \ proposal endpoint"
+          examples:
+            - 12345
+        normId:
+          type: integer
+          format: int32
+          description: "The id of the norm to base the calculation on, from the calculation\
+            \ proposal endpoint"
+          examples:
+            - 1
+        actualisationId:
+          type: integer
+          format: int32
+          description: "The id of the actualisation to link to, from the calculation\
+            \ proposal endpoint"
+          examples:
+            - 12345
+        calculationDate:
+          type: string
+          format: date
+          description: The date of the calculation
+          examples:
+            - 2026-05-01
+        calculationFromDate:
+          type: string
+          format: date
+          description: The date the calculation is valid from
+          examples:
+            - 2026-05-01
+        calculationToDate:
+          type: string
+          format: date
+          description: The date the calculation is valid to
+          examples:
+            - 2026-05-31
+        hasCustomHouseholdSize:
+          type: boolean
+          description: Whether a custom household size is used
+          examples:
+            - "false"
+        householdSize:
+          type: integer
+          format: int32
+          description: The size of the household
+          examples:
+            - 4
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/CalculationPersonRequest"
+            description: The persons included in the calculation
+        incomes:
+          type: array
+          items:
+            $ref: "#/components/schemas/CalculationIncomeRequest"
+            description: The incomes included in the calculation
+        expenses:
+          type: array
+          items:
+            $ref: "#/components/schemas/CalculationExpenseRequest"
+            description: The expenses included in the calculation
+        specialExpenses:
+          type: array
+          items:
+            $ref: "#/components/schemas/CalculationExpenseRequest"
+            description: The special expenses included in the calculation
+      required:
+        - calculationDate
+        - calculationFromDate
+        - calculationToDate
+        - normId
+        - partyId
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: { }
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    CreatedResource:
+      type: object
+      description: The id of the created resource in Lifecare FC
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The id of the created resource in Lifecare FC
+          examples:
+            - 12345
+    CreateActualisationRequest:
+      type: object
+      description: Request to create an actualisation in Lifecare FC. All ids come
+        from the actualisation proposal endpoint.
+      properties:
+        partyId:
+          type: string
+          description: The party id of the person the actualisation concerns
+          examples:
+            - 81471222-5798-11e9-ae24-57fa13b361e1
+        date:
+          type: string
+          format: date
+          description: The date of the actualisation
+          examples:
+            - 2026-05-01
+        typeId:
+          type: integer
+          format: int32
+          description: "The id of the actualisation type, from the actualisation proposal\
+            \ endpoint"
+          examples:
+            - 1
+        fromWhoId:
+          type: integer
+          format: int32
+          description: "The id of the from-who value, from the actualisation proposal\
+            \ endpoint"
+          examples:
+            - 1
+        reasonId:
+          type: integer
+          format: int32
+          description: "The id of the reason, from the actualisation proposal endpoint"
+          examples:
+            - 1
+        organisationId:
+          type: integer
+          format: int32
+          description: "The id of the organization, from the actualisation proposal\
+            \ endpoint"
+          examples:
+            - 1
+        organisationUnitId:
+          type: string
+          description: "The id of the organization unit, from the actualisation proposal\
+            \ endpoint"
+          examples:
+            - "100"
+        caseworkerId:
+          type: string
+          description: "The id of the caseworker, from the actualisation proposal\
+            \ endpoint"
+          examples:
+            - abc123
+        specifiesId:
+          type: integer
+          format: int32
+          description: "The id of the specify type, from the actualisation proposal\
+            \ endpoint"
+          examples:
+            - 1
+        serviceId:
+          type: integer
+          format: int32
+          description: "The id of the service to link to, from the actualisation proposal\
+            \ endpoint"
+          examples:
+            - 12345
+        investigationId:
+          type: integer
+          format: int32
+          description: "The id of the investigation to link to, from the actualisation\
+            \ proposal endpoint"
+          examples:
+            - 12345
+        workingStatusId:
+          type: integer
+          format: int32
+          description: "The id of the working status, from the actualisation proposal\
+            \ endpoint"
+          examples:
+            - 1
+      required:
+        - date
+        - partyId
+        - typeId
+    Caseworker:
+      type: object
+      description: A caseworker user account in the Lifecare family care system
+      properties:
+        id:
+          type: string
+          description: The user id in the source system
+          examples:
+            - "12345"
+        hsaId:
+          type: string
+          description: The HSA id of the user
+          examples:
+            - SE2321000032-1234
+        networkUserId:
+          type: string
+          description: The network user id of the user
+          examples:
+            - annand01
+        firstName:
+          type: string
+          description: The first name of the user
+          examples:
+            - Anna
+        lastName:
+          type: string
+          description: The last name of the user
+          examples:
+            - Andersson
+        fullName:
+          type: string
+          description: The full name of the user
+          examples:
+            - Anna Andersson
+        description:
+          type: string
+          description: A description of the user
+          examples:
+            - Handläggare ekonomiskt bistånd
+        validFrom:
+          type: string
+          format: date-time
+          description: The date and time the user account is valid from
+          examples:
+            - 2026-01-01T00:00:00Z
+        validTo:
+          type: string
+          format: date-time
+          description: The date and time the user account is valid to
+          examples:
+            - 2026-12-31T23:59:59Z
+        disabled:
+          type: boolean
+          description: Whether the user account is disabled
+          examples:
+            - "false"
+    CaseService:
+      type: object
+      description: A service (insats) from the Lifecare family care system
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The service id in the source system
+          examples:
+            - 12345
+        type:
+          type: string
+          description: The service type
+          examples:
+            - Ekonomiskt bistånd
+        organization:
+          type: string
+          description: The organization handling the service
+          examples:
+            - IFO Vuxen
+        startDate:
+          type: string
+          format: date
+          description: The date the service starts
+          examples:
+            - 2026-05-01
+        endDate:
+          type: string
+          format: date
+          description: The date the service ends
+          examples:
+            - 2026-10-31
+        caseworker:
+          type: string
+          description: The name of the caseworker
+          examples:
+            - Anna Andersson
+        coCaseworker:
+          type: string
+          description: The name of the co-caseworker
+          examples:
+            - Bengt Bengtsson
+        investigationId:
+          type: integer
+          format: int32
+          description: The id of the investigation the service belongs to
+          examples:
+            - 23456
+        decisionId:
+          type: integer
+          format: int32
+          description: The id of the decision the service belongs to
+          examples:
+            - 34567
+        applicant:
+          type: string
+          description: The name of the applicant
+          examples:
+            - Cecilia Cedersson
+        coApplicant:
+          type: string
+          description: The name of the co-applicant
+          examples:
+            - David Davidsson
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/RelatedPerson"
+            description: The persons the service concerns
+    PagedServiceResponse:
+      type: object
+      description: A paged list of services from the Lifecare family care system
+      properties:
+        services:
+          type: array
+          items:
+            $ref: "#/components/schemas/CaseService"
+            description: The services on this page
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          readOnly: true
+    PagingMetaData:
+      type: object
+      description: PagingMetaData model
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Current page
+          examples:
+            - 5
+          readOnly: true
+        limit:
+          type: integer
+          format: int32
+          description: Displayed objects per page
+          examples:
+            - 20
+          readOnly: true
+        count:
+          type: integer
+          format: int32
+          description: Displayed objects on current page
+          examples:
+            - 13
+          readOnly: true
+        totalRecords:
+          type: integer
+          format: int64
+          description: Total amount of hits based on provided search parameters
+          examples:
+            - 98
+          readOnly: true
+        totalPages:
+          type: integer
+          format: int32
+          description: Total amount of pages based on provided search parameters
+          examples:
+            - 23
+          readOnly: true
+    RelatedPerson:
+      type: object
+      description: A person related to a family care case
+      properties:
+        name:
+          type: string
+          description: The name of the person
+          examples:
+            - Anna Andersson
+        coApplicant:
+          type: boolean
+          description: Whether the person is a co-applicant. Null when the source
+            does not state a role
+          examples:
+            - "false"
+    PagedResourceAllocationResponse:
+      type: object
+      description: A paged list of resource allocations from the Lifecare family care
+        system
+      properties:
+        resourceAllocations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResourceAllocation"
+            description: The resource allocations on this page
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          readOnly: true
+    ResourceAllocation:
+      type: object
+      description: A resource allocation from the Lifecare family care system
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The resource allocation id in the source system
+          examples:
+            - 12345
+        startDate:
+          type: string
+          format: date
+          description: The date the resource allocation starts
+          examples:
+            - 2026-05-01
+        endDate:
+          type: string
+          format: date
+          description: The date the resource allocation ends
+          examples:
+            - 2026-10-31
+        percent:
+          type: integer
+          format: int32
+          description: The allocation percentage
+          examples:
+            - 100
+        resource:
+          type: string
+          description: The allocated resource
+          examples:
+            - Anna Andersson
+        resourceType:
+          type: string
+          description: The type of the allocated resource
+          examples:
+            - Handläggare
+        serviceId:
+          type: integer
+          format: int32
+          description: The id of the service the resource allocation belongs to
+          examples:
+            - 23456
+    Person:
+      type: object
+      description: Person master data from Lifecare family care
+      properties:
+        customerNumber:
+          type: integer
+          format: int32
+          description: The customer number in the source system
+          examples:
+            - 12345
+        name:
+          type: string
+          description: Full name of the person
+          examples:
+            - Anna Andersson
+        streetAddress:
+          type: string
+          description: Street address
+          examples:
+            - Storgatan 1
+        careOfAddress:
+          type: string
+          description: Care of (c/o) address
+          examples:
+            - c/o Karlsson
+        postalCode:
+          type: string
+          description: Postal code
+          examples:
+            - "85185"
+        postalAddress:
+          type: string
+          description: Postal address
+          examples:
+            - Sundsvall
+        phoneHome:
+          type: string
+          description: Home phone number
+          examples:
+            - 060-123456
+        phoneWork:
+          type: string
+          description: Work phone number
+          examples:
+            - 060-654321
+        phoneMobile:
+          type: string
+          description: Mobile phone number
+          examples:
+            - 070-1234567
+        email:
+          type: string
+          description: Email address
+          examples:
+            - anna.andersson@example.com
+        addressProtection:
+          type: boolean
+          description: Whether the person's address is protected
+          examples:
+            - "false"
+        secretPhone:
+          type: boolean
+          description: Whether the person's phone number is secret
+          examples:
+            - "false"
+        protectedRegistration:
+          type: boolean
+          description: Whether the person has protected registration
+          examples:
+            - "false"
+    PagedPaymentResponse:
+      type: object
+      description: A paged list of payments from the Lifecare family care system
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Payment"
+            description: The payments on this page
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          readOnly: true
+    Payment:
+      type: object
+      description: A payment from the Lifecare family care system
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The payment id in the source system
+          examples:
+            - 12345
+        amount:
+          type: number
+          description: The payment amount
+          examples:
+            - 5000.0
+        paymentMethod:
+          type: string
+          description: The payment method
+          examples:
+            - Bankkonto
+        payDate:
+          type: string
+          format: date
+          description: The date the payment is paid out
+          examples:
+            - 2026-05-25
+        clearing:
+          type: string
+          description: The clearing number of the receiving account
+          examples:
+            - "8420"
+        accountNumber:
+          type: string
+          description: The account number of the receiving account
+          examples:
+            - "1234567"
+        name:
+          type: string
+          description: The name of the payment receiver
+          examples:
+            - Anna Andersson
+        streetAddress:
+          type: string
+          description: The street address of the payment receiver
+          examples:
+            - Storgatan 1
+        careOfAddress:
+          type: string
+          description: The care-of address of the payment receiver
+          examples:
+            - c/o Andersson
+        postalCode:
+          type: string
+          description: The postal code of the payment receiver
+          examples:
+            - "85230"
+        postalAddress:
+          type: string
+          description: The postal address of the payment receiver
+          examples:
+            - Sundsvall
+        billingNumber:
+          type: string
+          description: The billing number
+          examples:
+            - 123-4567
+        localNumber:
+          type: string
+          description: The local number
+          examples:
+            - "42"
+        voucherNumber:
+          type: string
+          description: The voucher number
+          examples:
+            - V12345
+        message:
+          type: string
+          description: The payment message
+          examples:
+            - Ekonomiskt bistånd maj
+        investigationExecutionId:
+          type: integer
+          format: int32
+          description: The id of the investigation execution the payment belongs to
+          examples:
+            - 23456
+        serviceId:
+          type: integer
+          format: int32
+          description: The id of the service the payment belongs to
+          examples:
+            - 34567
+        connectedApplication:
+          type: integer
+          format: int32
+          description: The id of the connected application
+          examples:
+            - 45678
+        concernedMonth:
+          type: string
+          description: The month the payment concerns
+          examples:
+            - 2026-05
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/RelatedPerson"
+            description: The persons the payment concerns
+    Investigation:
+      type: object
+      description: An investigation from the Lifecare family care system
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The investigation id in the source system
+          examples:
+            - 12345
+        type:
+          type: string
+          description: The investigation type
+          examples:
+            - Ekonomiskt bistånd
+        fromDate:
+          type: string
+          format: date
+          description: The date the investigation starts
+          examples:
+            - 2026-05-01
+        toDate:
+          type: string
+          format: date
+          description: The date the investigation ends
+          examples:
+            - 2026-10-31
+        caseworker:
+          type: string
+          description: The name of the caseworker
+          examples:
+            - Anna Andersson
+        organization:
+          type: string
+          description: The organization handling the investigation
+          examples:
+            - IFO Vuxen
+        dossierType:
+          type: string
+          description: The dossier type
+          examples:
+            - Vuxen
+        applicant:
+          type: string
+          description: The name of the applicant
+          examples:
+            - Bengt Bengtsson
+        coApplicant:
+          type: string
+          description: The name of the co-applicant
+          examples:
+            - Cecilia Cedersson
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/RelatedPerson"
+            description: The persons included in the investigation
+    PagedInvestigationResponse:
+      type: object
+      description: A paged list of investigations from the Lifecare family care system
+      properties:
+        investigations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Investigation"
+            description: The investigations on this page
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          readOnly: true
+    Execution:
+      type: object
+      description: An execution (verkställighet) from the Lifecare family care system
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The execution id in the source system
+          examples:
+            - 12345
+        type:
+          type: string
+          description: The execution type
+          examples:
+            - Ekonomiskt bistånd
+        fromDate:
+          type: string
+          format: date
+          description: The date the execution starts
+          examples:
+            - 2026-05-01
+        toDate:
+          type: string
+          format: date
+          description: The date the execution ends
+          examples:
+            - 2026-10-31
+        caseworker:
+          type: string
+          description: The name of the caseworker
+          examples:
+            - Anna Andersson
+        organization:
+          type: string
+          description: The organization handling the execution
+          examples:
+            - IFO Vuxen
+        dossierType:
+          type: string
+          description: The dossier type
+          examples:
+            - Vuxen
+    PagedExecutionResponse:
+      type: object
+      description: A paged list of executions from the Lifecare family care system
+      properties:
+        executions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Execution"
+            description: The executions on this page
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          readOnly: true
+    DocumentMetadata:
+      type: object
+      description: Metadata for a document stored in the Lifecare family care system.
+        The document content is fetched separately
+      properties:
+        id:
+          type: string
+          description: The document id in the source system
+          examples:
+            - "12345"
+        title:
+          type: string
+          description: The document title
+          examples:
+            - Utredning ekonomiskt bistånd
+        date:
+          type: string
+          format: date
+          description: The document date
+          examples:
+            - 2026-05-01
+        documentType:
+          type: string
+          description: The document type
+          examples:
+            - Utredning
+        ownerType:
+          type: string
+          description: The type of the document owner
+          examples:
+            - Person
+    PagedDocumentResponse:
+      type: object
+      description: A paged list of documents from the Lifecare family care system
+      properties:
+        documents:
+          type: array
+          items:
+            $ref: "#/components/schemas/DocumentMetadata"
+            description: The documents on this page
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          readOnly: true
+    Decision:
+      type: object
+      description: "A decision from one of the Lifecare systems, re-modelled to a\
+        \ common shape. Uniqueness is per (source, law, decisionId) — the decisionId\
+        \ alone is only unique within its source system."
+      properties:
+        source:
+          type: string
+          description: The source system the decision originates from
+          enum:
+            - ELDERLY_CARE
+            - FAMILY_CARE
+          examples:
+            - ELDERLY_CARE
+        law:
+          type:
+            - string
+            - "null"
+          description: The law the decision is made under. Only present for ELDERLY_CARE
+            decisions
+          enum:
+            - SOL
+            - LSS
+          examples:
+            - SOL
+        decisionId:
+          type: string
+          description: The decision id in the source system
+          examples:
+            - "12345"
+        decided:
+          type: string
+          format: date
+          description: The date the decision was made
+          examples:
+            - 2026-05-01
+        validFrom:
+          type: string
+          format: date
+          description: The date the decision is valid from
+          examples:
+            - 2026-05-01
+        validTo:
+          type: string
+          format: date
+          description: The date the decision is valid to
+          examples:
+            - 2026-10-31
+        type:
+          type: string
+          description: The decision type
+          examples:
+            - Ekonomiskt bistånd
+        reason:
+          type: string
+          description: The decision reason
+          examples:
+            - Bifall
+        decisionMaker:
+          type: string
+          description: Name of the caseworker that made the decision
+          examples:
+            - Anna Andersson
+        amount:
+          type: number
+          description: "The decided amount, when the decision concerns an amount"
+          examples:
+            - 5000.0
+        elderlyCareDetails:
+          type: "null"
+          $ref: "#/components/schemas/ElderlyCareDecisionDetails"
+          description: Details only present for ELDERLY_CARE decisions
+        familyCareDetails:
+          type: "null"
+          $ref: "#/components/schemas/FamilyCareDecisionDetails"
+          description: Details only present for FAMILY_CARE decisions
+    DecisionsResponse:
+      type: object
+      description: "The merged decisions from all Lifecare sources, with per-source\
+        \ fetch status"
+      properties:
+        decisions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Decision"
+            description: "The merged decisions, sorted by decision date (most recent\
+              \ first)"
+        sources:
+          type: array
+          items:
+            $ref: "#/components/schemas/SourceStatus"
+            description: The fetch status per decision source
+    ElderlyCareDecisionDetails:
+      type: object
+      description: Decision details specific to the elderly care (EC) system. The
+        LSS-specific fields are only present on LSS decisions
+      properties:
+        investigationId:
+          type: integer
+          format: int32
+          description: Id of the investigation the decision belongs to
+          examples:
+            - 5678
+        code:
+          type: string
+          description: The decision code
+          examples:
+            - Beviljad
+        serviceCategory:
+          type: string
+          description: The service category
+          examples:
+            - Hemtjänst
+        hours:
+          type: number
+          format: double
+          description: Granted hours
+          examples:
+            - 10.5
+        hourType:
+          type: string
+          description: The type of the granted hours
+          examples:
+            - Per vecka
+        amountType:
+          type: string
+          description: The type of the decided amount
+          examples:
+            - Per månad
+        quantity:
+          type: number
+          format: double
+          description: Granted quantity
+          examples:
+            - 2.0
+        quantityType:
+          type: string
+          description: The type of the granted quantity
+          examples:
+            - Per dag
+        visits:
+          type: number
+          format: double
+          description: Granted visits
+          examples:
+            - 3.0
+        visitType:
+          type: string
+          description: The type of the granted visits
+          examples:
+            - Per vecka
+        days:
+          type: number
+          format: double
+          description: Granted days
+          examples:
+            - 5.0
+        dayType:
+          type: string
+          description: The type of the granted days
+          examples:
+            - Per månad
+        decisionLevel:
+          type: string
+          description: The decision level
+          examples:
+            - Delegation
+        executionStartDate:
+          type: string
+          format: date
+          description: The date the execution of the decision starts
+          examples:
+            - 2026-05-01
+        executionEndDate:
+          type: string
+          format: date
+          description: The date the execution of the decision ends
+          examples:
+            - 2026-10-31
+        iterationNumber:
+          type: integer
+          format: int32
+          description: The iteration number of the decision
+          examples:
+            - 1
+        daysOfDecision:
+          type: number
+          format: double
+          description: The number of days the decision covers
+          examples:
+            - 184.0
+        orderIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+            description: Ids of the orders created from the decision
+        deleted:
+          type: boolean
+          description: Whether the decision is deleted in the source system
+          examples:
+            - "false"
+        personCategory1:
+          type:
+            - boolean
+            - "null"
+          description: "LSS only: whether the person belongs to person category 1"
+          examples:
+            - "true"
+        personCategory2:
+          type:
+            - boolean
+            - "null"
+          description: "LSS only: whether the person belongs to person category 2"
+          examples:
+            - "false"
+        personCategory3:
+          type:
+            - boolean
+            - "null"
+          description: "LSS only: whether the person belongs to person category 3"
+          examples:
+            - "false"
+        personCategory3P:
+          type:
+            - boolean
+            - "null"
+          description: "LSS only: whether the person belongs to person category 3P"
+          examples:
+            - "false"
+        increasedHourlyAmount:
+          type:
+            - number
+            - "null"
+          description: "LSS only: the increased hourly amount"
+          examples:
+            - 150.0
+        standardAmount:
+          type:
+            - number
+            - "null"
+          description: "LSS only: the standard amount"
+          examples:
+            - 300.0
+        sfbCaseworker:
+          type:
+            - string
+            - "null"
+          description: "LSS only: name of the SFB caseworker"
+          examples:
+            - Bo Bengtsson
+    FamilyCareDecisionDetails:
+      type: object
+      description: Decision details specific to the family care (FC) system
+      properties:
+        investigationExecutionId:
+          type: integer
+          format: int32
+          description: Id of the investigation execution the decision belongs to
+          examples:
+            - 5678
+        serviceId:
+          type: integer
+          format: int32
+          description: Id of the service the decision belongs to
+          examples:
+            - 910
+        organization:
+          type: string
+          description: The organization the decision was made in
+          examples:
+            - Vuxen försörjningsstöd
+        coApplicant:
+          type: string
+          description: Name of the co-applicant
+          examples:
+            - Berit Bengtsson
+        reasonCoApplicant:
+          type: string
+          description: The decision reason for the co-applicant
+          examples:
+            - Bifall
+        connectedApplication:
+          type: integer
+          format: int32
+          description: Id of the connected application
+          examples:
+            - 1112
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/RelatedPerson"
+            description: The persons the decision concerns
+    SourceStatus:
+      type: object
+      description: The fetch status for one decision source. When a source is UNAVAILABLE
+        its decisions are missing from the response — consumers must not treat a degraded
+        response as the complete decision set.
+      properties:
+        source:
+          type: string
+          description: The source system
+          enum:
+            - ELDERLY_CARE
+            - FAMILY_CARE
+          examples:
+            - ELDERLY_CARE
+        law:
+          type:
+            - string
+            - "null"
+          description: The law the source covers. Only present for ELDERLY_CARE sources
+          enum:
+            - SOL
+            - LSS
+          examples:
+            - SOL
+        status:
+          type: string
+          description: The fetch status of the source
+          enum:
+            - OK
+            - UNAVAILABLE
+          examples:
+            - OK
+    Address:
+      type: object
+      description: Address of a contact
+      properties:
+        visitingAddress:
+          type: string
+          description: Visiting address
+          examples:
+            - Storgatan 1
+        streetAddress:
+          type: string
+          description: Street address
+          examples:
+            - Storgatan 1
+        postalCode:
+          type: string
+          description: Postal code
+          examples:
+            - "85185"
+        postalAddress:
+          type: string
+          description: Postal address
+          examples:
+            - Sundsvall
+    Contact:
+      type: object
+      description: A contact (e.g. caseworker) attached to a person in Lifecare family
+        care
+      properties:
+        id:
+          type: string
+          description: Id of the contact
+          examples:
+            - "12345"
+        name:
+          type: string
+          description: Name of the contact
+          examples:
+            - Bo Bosson
+        employmentTitle:
+          type: string
+          description: Employment title of the contact
+          examples:
+            - Socialsekreterare
+        organizationName:
+          type: string
+          description: Organization name of the contact
+          examples:
+            - Ekonomiskt bistånd
+        phone:
+          type: string
+          description: Phone number
+          examples:
+            - 060-123456
+        email:
+          type: string
+          description: Email address
+          examples:
+            - bo.bosson@example.com
+        address:
+          $ref: "#/components/schemas/Address"
+          description: Address of the contact
+        typeOfContact:
+          type: string
+          description: Type of contact
+          examples:
+            - Handläggare
+    Calculation:
+      type: object
+      description: "A calculation from Lifecare Family Care, re-modelled to a common\
+        \ shape"
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The calculation id in the source system
+          examples:
+            - 12345
+        norm:
+          type: string
+          description: The norm the calculation is based on
+          examples:
+            - Riksnorm
+        fromDate:
+          type: string
+          format: date
+          description: The date the calculation is valid from
+          examples:
+            - 2026-05-01
+        toDate:
+          type: string
+          format: date
+          description: The date the calculation is valid to
+          examples:
+            - 2026-05-31
+        incomeSum:
+          type: number
+          description: The sum of all incomes
+          examples:
+            - 15000.0
+        expenseSum:
+          type: number
+          description: The sum of all expenses
+          examples:
+            - 8000.0
+        specialExpenseSum:
+          type: number
+          description: The sum of all special expenses
+          examples:
+            - 1500.0
+        normSum:
+          type: number
+          description: The norm sum
+          examples:
+            - 6320.0
+        commonHouseholdCost:
+          type: number
+          description: The common household cost
+          examples:
+            - 2000.0
+        familyCost:
+          type: number
+          description: The family cost
+          examples:
+            - 4000.0
+        balance:
+          type: number
+          description: The calculation balance
+          examples:
+            - -2820.0
+        totalSum:
+          type: number
+          description: The calculation total sum
+          examples:
+            - 2820.0
+        investigationId:
+          type: integer
+          format: int32
+          description: The id of the investigation connected to the calculation
+          examples:
+            - 456
+        serviceId:
+          type: integer
+          format: int32
+          description: The id of the service connected to the calculation
+          examples:
+            - 789
+        finalCalculation:
+          type: boolean
+          description: Whether the calculation is final
+          examples:
+            - "true"
+        connectedApplication:
+          type: integer
+          format: int32
+          description: The id of the application connected to the calculation
+          examples:
+            - 1011
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/CalculationPerson"
+            description: The persons included in the calculation
+        incomes:
+          type: array
+          items:
+            $ref: "#/components/schemas/CalculationIncome"
+            description: The income rows of the calculation
+        expenses:
+          type: array
+          items:
+            $ref: "#/components/schemas/CalculationExpense"
+            description: The expense rows of the calculation
+        specialExpenses:
+          type: array
+          items:
+            $ref: "#/components/schemas/CalculationExpense"
+            description: The special expense rows of the calculation
+    CalculationExpense:
+      type: object
+      description: "An expense row in a calculation, used for both regular and special\
+        \ expenses"
+      properties:
+        type:
+          type: string
+          description: The expense type
+          examples:
+            - Hyra
+        appliedAmount:
+          type: number
+          description: The applied amount
+          examples:
+            - 8000.0
+        approvedAmount:
+          type: number
+          description: The approved amount
+          examples:
+            - 7500.0
+    CalculationIncome:
+      type: object
+      description: An income row in a calculation
+      properties:
+        type:
+          type: string
+          description: The income type
+          examples:
+            - Lön
+        amountApplicant:
+          type: number
+          description: The income amount for the applicant
+          examples:
+            - 15000.0
+        applicantSearchDate:
+          type: string
+          format: date
+          description: The date the applicant income was searched
+          examples:
+            - 2026-05-01
+        amountCoApplicant:
+          type: number
+          description: The income amount for the co-applicant
+          examples:
+            - 12000.0
+        coApplicantSearchDate:
+          type: string
+          format: date
+          description: The date the co-applicant income was searched
+          examples:
+            - 2026-05-01
+    CalculationPerson:
+      type: object
+      description: A person included in a calculation
+      properties:
+        name:
+          type: string
+          description: Name of the person
+          examples:
+            - Kalle Karlsson
+        amount:
+          type: number
+          description: The amount for the person
+          examples:
+            - 3160.0
+        deviationFromDate:
+          type: string
+          format: date
+          description: The date any deviation is valid from
+          examples:
+            - 2026-05-01
+        deviationToDate:
+          type: string
+          format: date
+          description: The date any deviation is valid to
+          examples:
+            - 2026-05-31
+    PagedCalculationResponse:
+      type: object
+      description: A paged list of calculations from the Lifecare family care system
+      properties:
+        calculations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Calculation"
+            description: The calculations on this page
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          readOnly: true
+    ActualisationReference:
+      type: object
+      description: An existing actualisation that a calculation can be linked to
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The id of the actualisation
+          examples:
+            - 12345
+        type:
+          type: string
+          description: The type of the actualisation
+          examples:
+            - Ansökan
+        date:
+          type: string
+          format: date
+          description: The date of the actualisation
+          examples:
+            - 2026-05-01
+    CalculationProposal:
+      type: object
+      description: A proposal with the valid values needed to create a calculation
+        in Lifecare FC
+      properties:
+        investigations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProposalCase"
+            description: The investigations that can be linked to
+        services:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProposalCase"
+            description: The services that can be linked to
+        norms:
+          type: array
+          items:
+            $ref: "#/components/schemas/Norm"
+            description: The norms a calculation can be based on
+        householdMembers:
+          type: array
+          items:
+            $ref: "#/components/schemas/HouseholdMember"
+            description: The members of the household
+        incomeTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lookup"
+            description: The valid income types
+        expenseTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lookup"
+            description: The valid expense types
+        specialExpenseTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lookup"
+            description: The valid special expense types
+        actualisationMandatory:
+          type: boolean
+          description: Whether a calculation must be linked to an actualisation
+          examples:
+            - "true"
+        numberOfFamilyMembersNotInHousehold:
+          type: integer
+          format: int32
+          description: The number of family members not in the household
+          examples:
+            - 0
+        actualisations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActualisationReference"
+            description: The existing actualisations that a calculation can be linked
+              to
+    HouseholdMember:
+      type: object
+      description: A member of the household
+      properties:
+        partyId:
+          type:
+            - string
+            - "null"
+          description: The party id of the household member; may be null when the
+            member could not be resolved
+          examples:
+            - 81471222-5798-11e9-ae24-57fa13b361e1
+        name:
+          type: string
+          description: The name of the household member
+          examples:
+            - Anna Andersson
+        childFromOtherHousehold:
+          type: boolean
+          description: Whether the member is a child from another household
+          examples:
+            - "false"
+    Lookup:
+      type: object
+      description: A lookup value from a code list
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The id of the lookup value
+          examples:
+            - 1
+        name:
+          type: string
+          description: The display name of the lookup value
+          examples:
+            - Ansökan
+    Norm:
+      type: object
+      description: A norm that a calculation can be based on
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The id of the norm
+          examples:
+            - 1
+        name:
+          type: string
+          description: The name of the norm
+          examples:
+            - Riksnorm 2026
+        validFrom:
+          type: string
+          format: date
+          description: The date the norm is valid from
+          examples:
+            - 2026-01-01
+        validTo:
+          type: string
+          format: date
+          description: The date the norm is valid to
+          examples:
+            - 2026-12-31
+    ProposalCase:
+      type: object
+      description: An investigation or service that can be linked to in a proposal
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The id of the investigation or service
+          examples:
+            - 12345
+        type:
+          type: integer
+          format: int32
+          description: The type of the investigation or service
+          examples:
+            - 1
+        name:
+          type: string
+          description: The name of the investigation or service
+          examples:
+            - Utredning ekonomiskt bistånd
+        startDate:
+          type: string
+          format: date
+          description: The start date of the investigation or service
+          examples:
+            - 2026-05-01
+        organisationId:
+          type: integer
+          format: int32
+          description: The id of the organization the investigation or service belongs
+            to
+          examples:
+            - 1
+        organisationUnitId:
+          type: string
+          description: The id of the organization unit the investigation or service
+            belongs to
+          examples:
+            - "100"
+        caseworkerId:
+          type: string
+          description: The id of the caseworker responsible for the investigation
+            or service
+          examples:
+            - abc123
+    Actualisation:
+      type: object
+      description: "An actualisation (aktualisering) from Lifecare Family Care, re-modelled\
+        \ to a common shape"
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The actualisation id in the source system
+          examples:
+            - 12345
+        type:
+          type: string
+          description: The actualisation type
+          examples:
+            - Ansökan
+        name:
+          type: string
+          description: Name of the person the actualisation concerns
+          examples:
+            - Kalle Karlsson
+        date:
+          type: string
+          format: date
+          description: The date of the actualisation
+          examples:
+            - 2026-05-01
+        reason:
+          type: string
+          description: The reason for the actualisation
+          examples:
+            - Ansökan om ekonomiskt bistånd
+        regards:
+          type: string
+          description: What the actualisation regards
+          examples:
+            - Ekonomiskt bistånd
+        fromWho:
+          type: string
+          description: Who initiated the actualisation
+          examples:
+            - Den enskilde
+        caseworker:
+          type: string
+          description: Name of the caseworker handling the actualisation
+          examples:
+            - Anna Andersson
+        organization:
+          type: string
+          description: The organization handling the actualisation
+          examples:
+            - Vuxen försörjningsstöd
+        status:
+          type: string
+          description: The actualisation status
+          examples:
+            - Inledd utredning
+        investigationId:
+          type: integer
+          format: int32
+          description: The id of the investigation connected to the actualisation
+          examples:
+            - 456
+        serviceId:
+          type: integer
+          format: int32
+          description: The id of the service connected to the actualisation
+          examples:
+            - 789
+        decisionId:
+          type: integer
+          format: int32
+          description: The id of the decision connected to the actualisation
+          examples:
+            - 1011
+    PagedActualisationResponse:
+      type: object
+      description: A paged list of actualisations from the Lifecare family care system
+      properties:
+        actualisations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Actualisation"
+            description: The actualisations on this page
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          readOnly: true
+    ActualisationProposal:
+      type: object
+      description: A proposal with the valid values needed to create an actualisation
+        in Lifecare FC
+      properties:
+        actualisationTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActualisationType"
+            description: The valid actualisation types
+        specifyTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lookup"
+            description: The valid specify types
+        workingStatus:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lookup"
+            description: The valid working statuses
+        organizations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Organization"
+            description: The valid organizations
+        investigations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProposalCase"
+            description: The investigations that can be linked to
+        services:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProposalCase"
+            description: The services that can be linked to
+        attachmentTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttachmentType"
+            description: The valid attachment types
+    ActualisationType:
+      type: object
+      description: An actualisation type with its valid sub-code-lists
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The id of the actualisation type
+          examples:
+            - 1
+        name:
+          type: string
+          description: The name of the actualisation type
+          examples:
+            - Ansökan
+        specifyTypeMandatory:
+          type: boolean
+          description: Whether a specify type must be given for this actualisation
+            type
+          examples:
+            - "true"
+        workingStatus:
+          type: boolean
+          description: Whether a working status must be given for this actualisation
+            type
+          examples:
+            - "false"
+        reasons:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lookup"
+            description: The valid reasons for this actualisation type
+        fromWho:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lookup"
+            description: The valid from-who values for this actualisation type
+        investigationTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lookup"
+            description: The valid investigation types for this actualisation type
+        serviceTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lookup"
+            description: The valid service types for this actualisation type
+    AttachmentType:
+      type: object
+      description: An attachment type with its valid sender types
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The id of the attachment type
+          examples:
+            - 1
+        name:
+          type: string
+          description: The name of the attachment type
+          examples:
+            - Ansökan
+        senderTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Lookup"
+            description: The valid sender types for this attachment type
+    Organization:
+      type: object
+      description: An organization entry
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The id of the organization
+          examples:
+            - 1
+        unitId:
+          type: string
+          description: The id of the organization unit
+          examples:
+            - "100"
+        name:
+          type: string
+          description: The name of the organization
+          examples:
+            - Vuxenenheten
+  securitySchemes: { }

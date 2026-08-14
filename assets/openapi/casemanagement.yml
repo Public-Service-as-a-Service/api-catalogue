@@ -1,0 +1,1190 @@
+openapi: 3.1.0
+info:
+  title: ms-casemanagementservice
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "8.4"
+servers:
+- url: http://localhost:60088
+  description: Generated server url
+tags:
+- name: Status
+  description: Status operations
+- name: CaseMappings
+  description: CaseMapping operations
+- name: Attachments
+  description: Attachment operations
+- name: Cases
+  description: Cases operations
+paths:
+  /{municipalityId}/cases/{externalCaseId}:
+    put:
+      tags:
+      - Cases
+      description: Update a case.
+      operationId: putCase
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: externalCaseId
+        in: path
+        description: External case id
+        required: true
+        schema:
+          type: string
+        example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaseDTO"
+        required: true
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/cases:
+    post:
+      tags:
+      - Cases
+      description: "Creates a case in ByggR, Ecos, CaseData, EDPFuture based on caseType.\
+        \ Also persists a connection between externalCaseId and the created case."
+      operationId: postCases
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaseDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseResourceResponseDTO"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/cases/{externalCaseId}/attachments:
+    post:
+      tags:
+      - Attachments
+      description: Post attachments to a case
+      operationId: postAttachmentsToCase
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: externalCaseId
+        in: path
+        description: External case id
+        required: true
+        schema:
+          type: string
+        example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/AttachmentDTO"
+        required: true
+      responses:
+        "204":
+          description: No content - Successful request
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{partyId}/statuses:
+    get:
+      tags:
+      - Status
+      description: Returns the case status for all cases where the specified party
+        is involved.
+      operationId: getStatusesByPartyId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: partyId
+        in: path
+        description: Party id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK - Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseStatusDTO"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/organization/{organizationNumber}/cases/status:
+    get:
+      tags:
+      - Status
+      description: Returns the latest status for each of the cases where the specified
+        organization has the role "applicant".
+      operationId: getStatusByOrgNr
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: organizationNumber
+        in: path
+        description: OrganizationNumber
+        required: true
+        schema:
+          type: string
+          description: Organization number with 10 or 12 digits.
+          examples:
+          - 20220622-2396
+          pattern: "^((18|19|20|21)\\d{6}|\\d{6})-(\\d{4})$"
+      responses:
+        "200":
+          description: OK - Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseStatusDTO"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/cases/{externalCaseId}/status:
+    get:
+      tags:
+      - Status
+      description: Returns the latest status for the case in the underlying system
+        connected to the specified externalCaseId.
+      operationId: getStatusByExternalCaseId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: externalCaseId
+        in: path
+        description: External case id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK - Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseStatusDTO"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/cases/case-mappings:
+    get:
+      tags:
+      - CaseMappings
+      description: Returns the connection between externalCaseId and the case in the
+        underlying system.
+      operationId: getCaseMapping
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: external-case-id
+        in: query
+        description: External case id
+        required: false
+        schema:
+          type: string
+        example: 2281
+      responses:
+        "200":
+          description: OK - Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseMapping"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    AddressDTO:
+      type: object
+      description: Address model
+      properties:
+        addressCategories:
+          type: array
+          description: "An address can have one or more address categories. For example,\
+            \ it can be the same address that is to be used for mail and invoices."
+          items:
+            type: string
+            description: Address category
+            enum:
+            - POSTAL_ADDRESS
+            - INVOICE_ADDRESS
+            - VISITING_ADDRESS
+          minItems: 1
+        street:
+          type: string
+          examples:
+          - Testargatan
+        houseNumber:
+          type: string
+          examples:
+          - "18"
+        postalCode:
+          type: string
+          examples:
+          - 123 45
+        city:
+          type: string
+          examples:
+          - Sundsvall
+        country:
+          type: string
+          examples:
+          - Sverige
+        careOf:
+          type: string
+          description: c/o
+          examples:
+          - Test Testorsson
+        attention:
+          type: string
+          examples:
+          - Test Testorsson
+        propertyDesignation:
+          type: string
+          examples:
+          - SUNDSVALL BALDER 7:2
+        appartmentNumber:
+          type: string
+          examples:
+          - LGH 1001
+        location:
+          $ref: "#/components/schemas/CoordinatesDTO"
+          description: The address coordinates
+        isZoningPlanArea:
+          type: boolean
+          description: Is the address in zoning plan area?
+        invoiceMarking:
+          type: string
+          description: "Only in combination with addressCategory: INVOICE_ADDRESS"
+        extraParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Extra parameters for the address.
+      required:
+      - addressCategories
+    AttachmentDTO:
+      type: object
+      description: Attachment model
+      properties:
+        category:
+          type: string
+          description: The attachment category
+          examples:
+          - DOCUMENT
+        name:
+          type: string
+          description: The attachment name
+          examples:
+          - Attachment name
+          minLength: 1
+        note:
+          type: string
+          description: A note on an attachment
+          examples:
+          - A note on an attachment.
+        extension:
+          type: string
+          description: The file extension
+          examples:
+          - .pdf
+          minLength: 1
+        mimeType:
+          type: string
+          description: the mime type of the attachment
+          examples:
+          - application/pdf
+          minLength: 1
+        file:
+          type: string
+          format: byte
+          description: Base64-encoded file (plain text)
+          examples:
+          - dGVzdA==
+          minLength: 1
+        extraParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Extra parameters for the attachment
+      required:
+      - extension
+      - file
+      - mimeType
+      - name
+    ByggRCaseDTO:
+      type: object
+      description: ByggR-cases
+      properties:
+        externalCaseId:
+          type: string
+          description: Case ID from the client.
+          examples:
+          - caa230c6-abb4-4592-ad9a-34e263c2787b
+          minLength: 1
+        caseType:
+          type: string
+          description: The case type
+          examples:
+          - NYBYGGNAD_ANSOKAN_OM_BYGGLOV
+        description:
+          type: string
+          description: Some description of the case.
+          examples:
+          - En fritextbeskrivning av case.
+        caseTitleAddition:
+          type: string
+          description: "Additions to the case title. Right now only applicable to\
+            \ cases of CaseType: NYBYGGNAD_ANSOKAN_OM_BYGGLOV."
+          examples:
+          - "Eldstad/rökkanal, Skylt"
+        stakeholders:
+          type: array
+          description: The stakeholders in the case
+          items:
+            oneOf:
+            - $ref: "#/components/schemas/OrganizationDTO"
+            - $ref: "#/components/schemas/PersonDTO"
+          minItems: 1
+          oneOf:
+          - $ref: "#/components/schemas/PersonDTO"
+          - $ref: "#/components/schemas/OrganizationDTO"
+        attachments:
+          type: array
+          description: The attachments in the case
+          items:
+            $ref: "#/components/schemas/AttachmentDTO"
+        extraParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Extra parameters for the case.
+        diaryNumber:
+          type: string
+          description: The case diary number
+          examples:
+          - 2021-1234
+        facilities:
+          type: array
+          description: The facilities in the case
+          items:
+            $ref: "#/components/schemas/FacilityDTO"
+        municipalityId:
+          type: string
+          description: The municipality ID for the case
+          examples:
+          - "1234"
+          readOnly: true
+      required:
+      - caseType
+      - externalCaseId
+      - stakeholders
+    CaseDTO:
+      type: object
+      description: Base case model
+      examples:
+      - externalCaseId: e19981ad-34b2-4e14-88f5-133f61ca85aa
+        caseType: NYBYGGNAD_ANSOKAN_OM_BYGGLOV
+        facilities:
+        - facilityType: STOREHOUSE
+          address:
+            addressCategories:
+            - VISITING_ADDRESS
+            propertyDesignation: SUNDSVALL BALDER 2
+        stakeholders:
+        - type: ORGANIZATION
+          roles:
+          - APPLICANT
+          - PAYMENT_PERSON
+          organizationName: Testorganisationen
+          organizationNumber: 123456-1234
+        - type: PERSON
+          roles:
+          - CONTACT_PERSON
+          firstName: Test
+          lastName: Testsson
+          personId: e19981ad-34b2-4e14-88f5-133f61ca85aa
+        attachments:
+        - category: ANS
+          name: Some_name_2022-03-07
+          extension: .pdf
+          file: dGVzdA==
+      oneOf:
+      - $ref: "#/components/schemas/ByggRCaseDTO"
+      - $ref: "#/components/schemas/EcosCaseDTO"
+      - $ref: "#/components/schemas/OtherCaseDTO"
+      - $ref: "#/components/schemas/FutureCaseDTO"
+      properties:
+        externalCaseId:
+          type: string
+          description: Case ID from the client.
+          examples:
+          - caa230c6-abb4-4592-ad9a-34e263c2787b
+          minLength: 1
+        caseType:
+          type: string
+          description: The case type
+          examples:
+          - NYBYGGNAD_ANSOKAN_OM_BYGGLOV
+        description:
+          type: string
+          description: Some description of the case.
+          examples:
+          - En fritextbeskrivning av case.
+        caseTitleAddition:
+          type: string
+          description: "Additions to the case title. Right now only applicable to\
+            \ cases of CaseType: NYBYGGNAD_ANSOKAN_OM_BYGGLOV."
+          examples:
+          - "Eldstad/rökkanal, Skylt"
+        stakeholders:
+          type: array
+          description: The stakeholders in the case
+          items:
+            oneOf:
+            - $ref: "#/components/schemas/OrganizationDTO"
+            - $ref: "#/components/schemas/PersonDTO"
+          minItems: 1
+          oneOf:
+          - $ref: "#/components/schemas/PersonDTO"
+          - $ref: "#/components/schemas/OrganizationDTO"
+        attachments:
+          type: array
+          description: The attachments in the case
+          items:
+            $ref: "#/components/schemas/AttachmentDTO"
+        extraParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Extra parameters for the case.
+      required:
+      - caseType
+      - externalCaseId
+      - stakeholders
+    CoordinatesDTO:
+      type: object
+      description: Coordinates model
+      properties:
+        latitude:
+          type: number
+          format: double
+          description: Decimal Degrees (DD)
+          examples:
+          - 62.390205
+        longitude:
+          type: number
+          format: double
+          description: Decimal Degrees (DD)
+          examples:
+          - 17.306616
+    EcosCaseDTO:
+      type: object
+      description: Ecos2-case model class
+      properties:
+        externalCaseId:
+          type: string
+          description: Case ID from the client.
+          examples:
+          - caa230c6-abb4-4592-ad9a-34e263c2787b
+          minLength: 1
+        caseType:
+          type: string
+          description: The case type
+          examples:
+          - NYBYGGNAD_ANSOKAN_OM_BYGGLOV
+        description:
+          type: string
+          description: Some description of the case.
+          examples:
+          - En fritextbeskrivning av case.
+        caseTitleAddition:
+          type: string
+          description: "Additions to the case title. Right now only applicable to\
+            \ cases of CaseType: NYBYGGNAD_ANSOKAN_OM_BYGGLOV."
+          examples:
+          - "Eldstad/rökkanal, Skylt"
+        stakeholders:
+          type: array
+          description: The stakeholders in the case
+          items:
+            oneOf:
+            - $ref: "#/components/schemas/OrganizationDTO"
+            - $ref: "#/components/schemas/PersonDTO"
+          minItems: 1
+          oneOf:
+          - $ref: "#/components/schemas/PersonDTO"
+          - $ref: "#/components/schemas/OrganizationDTO"
+        attachments:
+          type: array
+          description: The attachments in the case
+          items:
+            $ref: "#/components/schemas/AttachmentDTO"
+        extraParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Extra parameters for the case.
+        startDate:
+          type: string
+          format: date
+          description: Start date for the business.
+          examples:
+          - 2022-01-01
+        endDate:
+          type: string
+          format: date
+          description: End date of the business if it is time-limited.
+          examples:
+          - 2022-06-01
+        facilities:
+          type: array
+          description: The facilities in the case
+          items:
+            $ref: "#/components/schemas/FacilityDTO"
+          maxItems: 1
+          minItems: 1
+      required:
+      - caseType
+      - externalCaseId
+      - facilities
+      - stakeholders
+    FacilityDTO:
+      type: object
+      description: Facility model
+      properties:
+        facilityType:
+          type: string
+          description: The type of facility
+          examples:
+          - GARAGE
+        description:
+          type: string
+          description: Description of the facility
+          examples:
+          - En fritextbeskrivning av facility.
+        address:
+          $ref: "#/components/schemas/AddressDTO"
+          description: The facility address
+        facilityCollectionName:
+          type: string
+          description: The name on the sign.
+          examples:
+          - Sundsvalls testfabrik
+        mainFacility:
+          type: boolean
+          description: Is it a main facility?
+          examples:
+          - "true"
+        extraParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Extra parameters for the facility
+    FutureCaseDTO:
+      type: object
+      description: EDPFuture case model
+      properties:
+        externalCaseId:
+          type: string
+          description: Case ID from the client.
+          examples:
+          - caa230c6-abb4-4592-ad9a-34e263c2787b
+          minLength: 1
+        caseType:
+          type: string
+          description: The case type
+          examples:
+          - NYBYGGNAD_ANSOKAN_OM_BYGGLOV
+        description:
+          type: string
+          description: Some description of the case.
+          examples:
+          - En fritextbeskrivning av case.
+        caseTitleAddition:
+          type: string
+          description: "Additions to the case title. Right now only applicable to\
+            \ cases of CaseType: NYBYGGNAD_ANSOKAN_OM_BYGGLOV."
+          examples:
+          - "Eldstad/rökkanal, Skylt"
+        stakeholders:
+          type: array
+          description: The stakeholders in the case
+          items:
+            oneOf:
+            - $ref: "#/components/schemas/OrganizationDTO"
+            - $ref: "#/components/schemas/PersonDTO"
+          minItems: 1
+          oneOf:
+          - $ref: "#/components/schemas/PersonDTO"
+          - $ref: "#/components/schemas/OrganizationDTO"
+        extraParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Extra parameters for the case.
+        facilities:
+          type: array
+          description: The facilities in the case
+          items:
+            $ref: "#/components/schemas/FacilityDTO"
+          maxItems: 1
+          minItems: 1
+      required:
+      - caseType
+      - externalCaseId
+      - facilities
+      - stakeholders
+    OrganizationDTO:
+      allOf:
+      - $ref: "#/components/schemas/StakeholderDTO"
+      - type: object
+        properties:
+          organizationName:
+            type: string
+            description: Organization name
+            examples:
+            - Sundsvalls testfabrik
+            minLength: 1
+          organizationNumber:
+            type: string
+            description: Organization number with 10 or 12 digits.
+            examples:
+            - 20220622-2396
+            minLength: 1
+          authorizedSignatory:
+            type: string
+            description: The authorized signatory
+            examples:
+            - Test Testorsson
+      description: Organization model
+      required:
+      - organizationName
+      - organizationNumber
+      - type
+    OtherCaseDTO:
+      type: object
+      description: Other case model
+      properties:
+        externalCaseId:
+          type: string
+          description: Case ID from the client.
+          examples:
+          - caa230c6-abb4-4592-ad9a-34e263c2787b
+          minLength: 1
+        caseType:
+          type: string
+          description: The case type
+          examples:
+          - NYBYGGNAD_ANSOKAN_OM_BYGGLOV
+        description:
+          type: string
+          description: Some description of the case.
+          examples:
+          - En fritextbeskrivning av case.
+        caseTitleAddition:
+          type: string
+          description: "Additions to the case title. Right now only applicable to\
+            \ cases of CaseType: NYBYGGNAD_ANSOKAN_OM_BYGGLOV."
+          examples:
+          - "Eldstad/rökkanal, Skylt"
+        stakeholders:
+          type: array
+          description: The stakeholders in the case
+          items:
+            oneOf:
+            - $ref: "#/components/schemas/OrganizationDTO"
+            - $ref: "#/components/schemas/PersonDTO"
+          minItems: 1
+          oneOf:
+          - $ref: "#/components/schemas/PersonDTO"
+          - $ref: "#/components/schemas/OrganizationDTO"
+        attachments:
+          type: array
+          description: The attachments in the case
+          items:
+            $ref: "#/components/schemas/AttachmentDTO"
+        extraParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Extra parameters for the case.
+        facilities:
+          type: array
+          description: The facilities in the case
+          items:
+            $ref: "#/components/schemas/FacilityDTO"
+      required:
+      - caseType
+      - externalCaseId
+      - facilities
+      - stakeholders
+    PersonDTO:
+      allOf:
+      - $ref: "#/components/schemas/StakeholderDTO"
+      - type: object
+        properties:
+          firstName:
+            type: string
+            description: The person's first name
+            examples:
+            - Test
+            minLength: 1
+          lastName:
+            type: string
+            description: The person's last name
+            examples:
+            - Testorsson
+            minLength: 1
+          personId:
+            type: string
+            description: The person's id
+            examples:
+            - 3ed5bc30-6308-4fd5-a5a7-78d7f96f4438
+          personalNumber:
+            type: string
+            description: The person's personal number
+            examples:
+            - 20000101-1234
+            readOnly: true
+      description: Person model
+      required:
+      - firstName
+      - lastName
+      - type
+    StakeholderDTO:
+      type: object
+      description: Stakeholder model
+      discriminator:
+        propertyName: type
+      properties:
+        type:
+          type: string
+          description: The type of stakeholder
+          enum:
+          - PERSON
+          - ORGANIZATION
+          examples:
+          - PERSON
+        roles:
+          type: array
+          description: A stakeholder can have one or more roles.
+          items:
+            type: string
+        phoneNumber:
+          type: string
+          description: Stakeholder phone number
+          examples:
+          - "060123456"
+        emailAddress:
+          type: string
+          format: email
+          description: Stakeholder emailaddress
+          examples:
+          - test.testorsson@sundsvall.se
+        cellphoneNumber:
+          type: string
+          description: Stakeholder cellphone number
+          examples:
+          - "0701740605"
+        addresses:
+          type: array
+          description: A stakeholder may have one or more addresses. For example one
+            POSTAL_ADDRESS and another INVOICE_ADDRESS.
+          items:
+            $ref: "#/components/schemas/AddressDTO"
+        extraParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: The stakeholder's billing address
+      required:
+      - type
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    CaseResourceResponseDTO:
+      type: object
+      description: Case resource response
+      properties:
+        caseId:
+          type: string
+          description: The case id
+          examples:
+          - "1234"
+    CaseStatusDTO:
+      type: object
+      description: Case status model
+      properties:
+        system:
+          type: string
+          description: The system type
+          enum:
+          - BYGGR
+          - ECOS
+          - CASE_DATA
+          - ALKT
+          - EDPFUTURE
+          examples:
+          - BYGGR
+        caseType:
+          type: string
+          description: The case type
+          examples:
+          - BYGGLOV
+        externalCaseId:
+          type: string
+          description: The external case id
+          examples:
+          - "123456"
+        caseId:
+          type: string
+          description: The case id
+          examples:
+          - caa230c6-abb4-4592-ad9a-34e263c2787d
+        status:
+          type: string
+          description: Case status
+          examples:
+          - Pågående
+        serviceName:
+          type: string
+          description: Service name
+          examples:
+          - Nybyggnad - Ansökan om bygglov
+        timestamp:
+          type: string
+          format: date-time
+          description: The timestamp
+          examples:
+          - 2022-01-01T12:00:00
+        namespace:
+          type: string
+          description: The namespace
+          examples:
+          - NAMESPACE
+        errandNumber:
+          type: string
+          description: The errand number
+          examples:
+          - BYGG 2022-000003
+    CaseMapping:
+      type: object
+      properties:
+        externalCaseId:
+          type: string
+        caseId:
+          type: string
+        municipalityId:
+          type: string
+        system:
+          type: string
+          description: System type
+          enum:
+          - BYGGR
+          - ECOS
+          - CASE_DATA
+          - ALKT
+          - EDPFUTURE
+        caseType:
+          type: string
+        serviceName:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+      required:
+      - caseType
+      - system
+  securitySchemes: {}

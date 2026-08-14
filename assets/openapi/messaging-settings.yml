@@ -1,0 +1,538 @@
+openapi: 3.1.0
+info:
+  title: api-service-messaging-settings
+  contact: { }
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "3.0"
+servers:
+  - url: http://localhost:64806
+    description: Generated server url
+paths:
+  /{municipalityId}:
+    get:
+      tags:
+        - Messaging Settings
+      summary: Get messaging settings
+      description: Get all messaging settings or the ones that matches provided filter
+      operationId: fetchMessagingSettings
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality ID
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: filter
+          in: query
+          description: "Syntax description: [spring-filter](https://github.com/turkraft/spring-filter/blob/85730f950a5f8623159cc0eb4d737555f9382bb7/README.md#syntax)"
+          required: false
+          schema:
+            type: string
+          example: "created > '2022-09-08T12:00:00.000+02:00' and values.key: 'namespace'\
+          \ and values.value: 'NS1'"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MessagingSettings"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+        - Messaging Settings
+      summary: Create messaging setting
+      description: Create a new messaging setting
+      operationId: createMessagingSetting
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality ID
+          required: true
+          schema:
+            type: string
+          example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessagingSettingsRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{id}:
+    get:
+      tags:
+        - Messaging Settings
+      summary: Get messaging setting by ID
+      description: Get a specific messaging setting by ID
+      operationId: getMessagingSettingById
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality ID
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: id
+          in: path
+          description: Messaging setting ID
+          required: true
+          schema:
+            type: string
+          example: c9383d10-6fb5-4fc1-bd0a-50bf5a24d5b7
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessagingSettings"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+        - Messaging Settings
+      summary: Delete messaging setting
+      description: Delete a messaging setting by ID
+      operationId: deleteMessagingSetting
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality ID
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: id
+          in: path
+          description: Messaging setting ID
+          required: true
+          schema:
+            type: string
+          example: c9383d10-6fb5-4fc1-bd0a-50bf5a24d5b7
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    patch:
+      tags:
+        - Messaging Settings
+      summary: Update messaging setting
+      description: Update an existing messaging setting
+      operationId: updateMessagingSetting
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality ID
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: id
+          in: path
+          description: Messaging setting ID
+          required: true
+          schema:
+            type: string
+          example: c9383d10-6fb5-4fc1-bd0a-50bf5a24d5b7
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessagingSettingsRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessagingSettings"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/user:
+    get:
+      tags:
+        - Messaging Settings
+      summary: Get messaging settings for organization connected to a user
+      description: Get messaging settings for the organization connected to the provided
+        user.
+      operationId: getMessagingSettingsForUser
+      parameters:
+        - name: filter
+          in: query
+          description: "Syntax description: [spring-filter](https://github.com/turkraft/spring-filter/blob/85730f950a5f8623159cc0eb4d737555f9382bb7/README.md#syntax)"
+          required: false
+          schema:
+            type: string
+          example: "created > '2022-09-08T12:00:00.000+02:00' and values.key: 'namespace'\
+          \ and values.value: 'NS1'"
+        - name: X-Sent-By
+          in: header
+          description: User identity
+          required: true
+          schema:
+            type: string
+          example: joe01doe;type=adAccount
+        - name: municipalityId
+          in: path
+          description: Municipality ID
+          required: true
+          schema:
+            type: string
+          example: 2281
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MessagingSettings"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+        - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+  /{municipalityId}/{id}/key/{key}:
+    delete:
+      tags:
+        - Messaging Settings
+      summary: Delete messaging setting key
+      description: Delete a specific key from a messaging setting
+      operationId: deleteMessagingSettingKey
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality ID
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: id
+          in: path
+          description: Messaging setting ID
+          required: true
+          schema:
+            type: string
+          example: c9383d10-6fb5-4fc1-bd0a-50bf5a24d5b7
+        - name: key
+          in: path
+          description: Key to delete
+          required: true
+          schema:
+            type: string
+          example: department_name
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: { }
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    MessagingSettingValueRequest:
+      type: object
+      description: Messaging setting value request model
+      properties:
+        key:
+          type: string
+          description: Identifier key for the value setting
+          examples:
+            - department_name
+          minLength: 1
+        value:
+          type: string
+          description: Stored value for the value setting
+          examples:
+            - Department 44
+          minLength: 1
+        type:
+          type: string
+          description: "Type of data for the stored value. Can be one of [STRING|NUMERIC|BOOLEAN]"
+          examples:
+            - STRING
+          minLength: 1
+      required:
+        - key
+        - type
+        - value
+    MessagingSettingsRequest:
+      type: object
+      description: Messaging settings request model
+      properties:
+        values:
+          type: array
+          description: Values for the messaging setting
+          items:
+            $ref: "#/components/schemas/MessagingSettingValueRequest"
+          minItems: 1
+      required:
+        - values
+    MessagingSettingValue:
+      type: object
+      description: Messaging setting value model
+      properties:
+        key:
+          type: string
+          description: Identifier key for the value setting
+          examples:
+            - department_name
+          readOnly: true
+        value:
+          type: string
+          description: Stored value for the value setting
+          examples:
+            - Department 44
+          readOnly: true
+        type:
+          type: string
+          description: "Type of data for the stored value. Can be one of [STRING|NUMERIC|BOOLEAN]"
+          examples:
+            - STRING
+          readOnly: true
+    MessagingSettings:
+      type: object
+      description: Messaging settings response model
+      properties:
+        id:
+          type: string
+          description: Id for the messaging setting instance
+          examples:
+            - c9383d10-6fb5-4fc1-bd0a-50bf5a24d5b7
+          readOnly: true
+        municipalityId:
+          type: string
+          description: Municipality id for municipality that the messaging setting
+            instance belongs to
+          examples:
+            - "2281"
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          description: Timestamp when the instance was created
+          examples:
+            - 2025-10-24T15:30:00+02:00
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          description: Timestamp when the instance was last updated. Null if instance
+            has never been updated.
+          examples:
+            - 2025-10-25T16:30:00+02:00
+          readOnly: true
+        values:
+          type: array
+          description: Values connected to the messaging setting instance
+          items:
+            $ref: "#/components/schemas/MessagingSettingValue"
+          readOnly: true
+  securitySchemes: { }

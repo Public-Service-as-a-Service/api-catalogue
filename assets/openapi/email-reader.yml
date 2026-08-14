@@ -1,0 +1,916 @@
+openapi: 3.1.0
+info:
+  title: api-email-reader
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "4.3"
+servers:
+- url: http://localhost:64564
+  description: Generated server url
+tags:
+- name: Email
+  description: Email
+- name: Graph Credentials
+  description: Credentials for Microsoft Graph
+- name: Credentials
+  description: Credentials
+paths:
+  /{municipalityId}/credentials/{id}:
+    put:
+      tags:
+      - Credentials
+      description: Update credentials
+      operationId: update
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Email message ID
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Credentials"
+        required: true
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - Credentials
+      description: Delete credentials by id
+      operationId: delete
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Email message ID
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/credentials/graph/{id}:
+    get:
+      tags:
+      - Graph Credentials
+      description: Get Graph credentials by id
+      operationId: getByMunicipalityIdAndId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Email message ID
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphCredentials"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    put:
+      tags:
+      - Graph Credentials
+      description: Update Graph credentials
+      operationId: update_1
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Email message ID
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GraphCredentials"
+        required: true
+      responses:
+        "204":
+          description: No content
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - Graph Credentials
+      description: Delete Graph credentials by id
+      operationId: delete_1
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Email message ID
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "204":
+          description: No content
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/credentials:
+    get:
+      tags:
+      - Credentials
+      description: Get a list of credentials
+      operationId: getAllByMunicipalityId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Credentials"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - Credentials
+      description: Create credentials
+      operationId: create
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Credentials"
+        required: true
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/credentials/graph:
+    get:
+      tags:
+      - Graph Credentials
+      description: Get a list of Graph credentials
+      operationId: getAllByMunicipalityId_1
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GraphCredentials"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - Graph Credentials
+      description: Create Graph credentials
+      operationId: create_1
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GraphCredentials"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/email/{namespace}:
+    get:
+      tags:
+      - Email
+      description: Get a list of emails
+      operationId: getAllEmails
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: namespace
+        in: path
+        description: A specific namespace
+        required: true
+        schema:
+          type: string
+        example: CONTACTCENTER
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Email"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/email/attachments/{attachmentId}:
+    get:
+      tags:
+      - Email
+      summary: Get a messageAttachment
+      description: Returns a messageAttachment as a stream for the specified attachmentId
+      operationId: getAttachment
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality Id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: attachmentId
+        in: path
+        description: MessageId to fetch attachment for
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      responses:
+        "200":
+          description: Successful Operation
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+  /{municipalityId}/email/{id}:
+    delete:
+      tags:
+      - Email
+      description: Delete an email by id
+      operationId: deleteEmail
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Email message ID
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+components:
+  schemas:
+    Credentials:
+      type: object
+      description: Email credentials to use for authentication against the email server
+      properties:
+        id:
+          type: string
+          description: Credentials id
+          examples:
+          - 74531aac-ffea-42cc-8a0a-52715bb27850
+          readOnly: true
+        username:
+          type: string
+          description: username to use for authentication against the email server
+          examples:
+          - joe01doe
+          minLength: 1
+        password:
+          type: string
+          description: password to use for authentication against the email server
+          examples:
+          - mySecretPassword
+          minLength: 1
+          writeOnly: true
+        emailAddress:
+          type: array
+          description: List of email addresses to check for new emails. The provided
+            user must have access to these email addresses.
+          examples:
+          - - myothersupportemail@sundsvall.se
+            - mysupportemail@sundsvall.se
+          items:
+            type: string
+          minItems: 1
+        domain:
+          type: string
+          description: domain for the email server
+          examples:
+          - https://mail.examples.com/EWS/Exchange.asmx
+          minLength: 1
+        namespace:
+          type: string
+          description: Namespace
+          examples:
+          - my.namespace
+          minLength: 1
+        action:
+          type: string
+          description: Action to take for new emails
+          examples:
+          - PERSIST
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Metadata to add to the email
+          examples:
+          - casetype: myCaseType
+            key2: value2
+        destinationFolder:
+          type: string
+          description: The folder to move emails to after processing
+          examples:
+          - Processed
+          minLength: 1
+        enabled:
+          type: boolean
+          description: If this configuration is active and should fetch emails
+      required:
+      - destinationFolder
+      - domain
+      - emailAddress
+      - namespace
+      - password
+      - username
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    GraphCredentials:
+      type: object
+      description: Email credentials to use for authentication against a Microsoft
+        Graph server.
+      properties:
+        id:
+          type: string
+          description: Credentials id
+          examples:
+          - 74531aac-ffea-42cc-8a0a-52715bb27850
+          readOnly: true
+        clientSecret:
+          type: string
+          description: Client secret to use for authentication against the Microsoft
+            Graph server. Do note it should be the secret value and not the Secret
+            ID.
+          examples:
+          - mySecretClientSecret
+          minLength: 1
+          writeOnly: true
+        tenantId:
+          type: string
+          description: Tenant ID to use for authentication against the Microsoft Graph
+            server.
+          examples:
+          - myTenantId
+          minLength: 1
+          writeOnly: true
+        clientId:
+          type: string
+          description: Client ID to use for authentication against the Microsoft Graph
+            server.
+          examples:
+          - myClientId
+          minLength: 1
+          writeOnly: true
+        emailAddress:
+          type: array
+          description: List of email addresses to check for new emails. The provided
+            graph application must have access to these email addresses.
+          examples:
+          - - myothersupportemail@sundsvall.se
+            - mysupportemail@sundsvall.se
+          items:
+            type: string
+          minItems: 1
+        namespace:
+          type: string
+          description: Namespace
+          examples:
+          - my.namespace
+          minLength: 1
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Metadata to add to the email.
+          examples:
+          - casetype: myCaseType
+            key2: value2
+        destinationFolder:
+          type: string
+          description: The folder to move emails to after processing.
+          examples:
+          - Processed
+          minLength: 1
+        enabled:
+          type: boolean
+          description: If this configuration is active and should fetch emails
+      required:
+      - clientId
+      - clientSecret
+      - destinationFolder
+      - emailAddress
+      - metadata
+      - namespace
+      - tenantId
+    Email:
+      type: object
+      description: Email
+      properties:
+        recipients:
+          type: array
+          description: Recipient E-Mail addresses
+          examples:
+          - - myothersupportemail@sundsvall.se
+            - mysupportemail@sundsvall.se
+          items:
+            type: string
+        ccRecipients:
+          type: array
+          description: CC E-Mail addresses
+          examples:
+          - - cc1@sundsvall.se
+            - cc2@sundsvall.se
+          items:
+            type: string
+        sender:
+          type: string
+          description: Sender E-Mail address
+          examples:
+          - sender@sundsvall.se
+        subject:
+          type: string
+          description: E-mail subject
+          examples:
+          - E-mail subject
+        message:
+          type: string
+          description: E-mail plain-text body
+          examples:
+          - E-mail body
+        htmlMessage:
+          type: string
+          description: E-mail HTML body
+          examples:
+          - <p>E-mail body</p>
+        id:
+          type: string
+          description: E-mail message id
+          examples:
+          - 74531aac-ffea-42cc-8a0a-52715bb27850
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Metadata for the email
+          examples:
+          - casetype: myCaseType
+            key2: value2
+        receivedAt:
+          type: string
+          format: date-time
+          description: The date and time the email was received
+          examples:
+          - 2021-09-01T12:00:00+02:00
+        headers:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: The email headers
+          examples:
+          - IN_REPLY_TO:
+            - reply-to@examples.com
+            REFERENCES:
+            - reference1
+            - reference2
+            MESSAGE_ID:
+            - "123456789"
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmailAttachment"
+      readOnly: true
+    EmailAttachment:
+      type: object
+      description: Attachment
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The attachment id
+          examples:
+          - 1
+        name:
+          type: string
+          description: The attachment filename
+          examples:
+          - test.txt
+        contentType:
+          type: string
+          description: The attachment content type
+          examples:
+          - text/plain
+  securitySchemes: {}

@@ -1,0 +1,1253 @@
+openapi: 3.1.0
+info:
+  title: api-supportcenter
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.3"
+servers:
+- url: http://localhost:56226
+  description: Generated server url
+tags:
+- name: Configuration
+  description: Configuration operations
+- name: Cases
+  description: Case operations
+- name: Asset
+  description: Asset operations
+paths:
+  /{municipalityId}/cases:
+    post:
+      tags:
+      - Cases
+      summary: Create a new case
+      operationId: createCase
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality Id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: pobKey
+        in: header
+        description: The POB API-key
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCaseRequest"
+        required: true
+      responses:
+        "201":
+          description: Successful Operation
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/assets:
+    get:
+      tags:
+      - Asset
+      summary: Get assets
+      operationId: getAssets
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality Id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: pobKey
+        in: header
+        description: The POB API-key
+        required: true
+        schema:
+          type: string
+      - name: serialNumber
+        in: query
+        description: The serial number of the asset
+        required: true
+        schema:
+          type: string
+        example: 4VV3RN2
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Asset"
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - Asset
+      summary: Create asset
+      operationId: createAsset
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality Id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: pobKey
+        in: header
+        description: The POB API-key
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAssetRequest"
+        required: true
+      responses:
+        "201":
+          description: Successful Operation
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateAssetResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/cases/{caseId}:
+    get:
+      tags:
+      - Cases
+      summary: Get a case by caseId
+      operationId: getCase
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality Id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: pobKey
+        in: header
+        description: The POB API-key
+        required: true
+        schema:
+          type: string
+      - name: caseId
+        in: path
+        description: The Case-ID
+        required: true
+        schema:
+          type: string
+        example: 81471222
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    patch:
+      tags:
+      - Cases
+      summary: Update existing case
+      operationId: updateCase
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality Id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: pobKey
+        in: header
+        description: The POB API-key
+        required: true
+        schema:
+          type: string
+      - name: caseId
+        in: path
+        description: The Case-ID
+        required: true
+        schema:
+          type: string
+        example: 81471222
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCaseRequest"
+        required: true
+      responses:
+        "204":
+          description: Successful Operation
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/assets/{serialNumber}:
+    patch:
+      tags:
+      - Asset
+      summary: Update existing asset
+      operationId: updateAsset
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality Id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: pobKey
+        in: header
+        description: The POB API-key
+        required: true
+        schema:
+          type: string
+      - name: serialNumber
+        in: path
+        description: The serial number of the asset
+        required: true
+        schema:
+          type: string
+        example: 4VV3RN2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAssetRequest"
+        required: true
+      responses:
+        "204":
+          description: Successful Operation
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/configuration/closureCodes:
+    get:
+      tags:
+      - Configuration
+      summary: Return all available closureCodes
+      operationId: getClosureCodeList
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality Id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: pobKey
+        in: header
+        description: The POB API-key
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/configuration/caseCategories:
+    get:
+      tags:
+      - Configuration
+      summary: Return all available caseCategories
+      operationId: getCaseCategoryList
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality Id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: pobKey
+        in: header
+        description: The POB API-key
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    Address:
+      type: object
+      description: Address model
+      properties:
+        street:
+          type: string
+          description: Street address
+          examples:
+          - Street 1
+          minLength: 1
+        postalCode:
+          type: string
+          description: Postal code
+          examples:
+          - 851 86
+          minLength: 1
+        city:
+          type: string
+          description: City
+          examples:
+          - Sundsvall
+          minLength: 1
+      required:
+      - city
+      - postalCode
+      - street
+    CreateCaseRequest:
+      type: object
+      description: CreateCaseRequest model
+      properties:
+        note:
+          $ref: "#/components/schemas/Note"
+        description:
+          type: string
+          description: Description
+          examples:
+          - Beställning av tjänst Test4
+          minLength: 1
+        caseType:
+          type: string
+          description: Case type
+          examples:
+          - Service Request
+          minLength: 1
+        caseCategory:
+          type: string
+          description: Case category
+          examples:
+          - IT Användarhantering
+          minLength: 1
+        customerContact:
+          type: string
+          description: Customer contact
+          examples:
+          - test02test
+          minLength: 1
+        externalArticleNumber:
+          type: string
+          description: External article number
+          examples:
+          - "4343434"
+          minLength: 1
+        managementCompany:
+          type: string
+          description: ManagementCompany
+          examples:
+          - BoU
+          minLength: 1
+        priority:
+          type: string
+          description: Priority
+          examples:
+          - IT4
+          minLength: 1
+        personal:
+          type: boolean
+          description: Personal
+          examples:
+          - "true"
+        responsibleGroup:
+          type: string
+          description: Responsible group
+          examples:
+          - First Line IT
+          minLength: 1
+        externalServiceId:
+          type: string
+          description: External service id
+          examples:
+          - "123"
+          minLength: 1
+        office:
+          type: boolean
+          description: Office
+          examples:
+          - "true"
+        freeText:
+          type: string
+          description: Free text
+          examples:
+          - leverans fredagar
+          minLength: 1
+        joinContact:
+          type: string
+          description: Join contact
+          examples:
+          - test01test
+          minLength: 1
+        responsibilityNumber:
+          type: string
+          description: Responsibility number
+          examples:
+          - "15220100"
+          minLength: 1
+        subaccount:
+          type: string
+          description: Subaccount
+          examples:
+          - "974310"
+          minLength: 1
+        businessNumber:
+          type: string
+          description: Business number
+          examples:
+          - "920350"
+          minLength: 1
+        activityNumber:
+          type: string
+          description: Activity number
+          examples:
+          - "5662"
+          minLength: 1
+        projectNumber:
+          type: string
+          description: Project number
+          examples:
+          - "17071"
+          minLength: 1
+        objectNumber:
+          type: string
+          description: Object number
+          examples:
+          - "6310000"
+          minLength: 1
+        counterPart:
+          type: string
+          description: Counterpart
+          examples:
+          - "115"
+          minLength: 1
+        ciDescription:
+          type: string
+          description: CI description
+          examples:
+          - Tydlig och bra CI beskrivning
+          minLength: 1
+        contactPerson:
+          type: string
+          description: Contact person
+          examples:
+          - Test Testsson
+          minLength: 1
+        phoneNumber:
+          type: string
+          description: Phone number
+          examples:
+          - 070-11111111
+          minLength: 1
+        email:
+          type: string
+          description: Email
+          examples:
+          - test.testsson@sundsvall.se
+          minLength: 1
+        imeiNumber:
+          type: string
+          description: IMEI number
+          examples:
+          - "123456789012345"
+        modelName:
+          type: string
+          description: Model name
+          examples:
+          - iPhone 14 Pro
+        address:
+          $ref: "#/components/schemas/Address"
+      required:
+      - activityNumber
+      - businessNumber
+      - caseCategory
+      - caseType
+      - ciDescription
+      - contactPerson
+      - counterPart
+      - customerContact
+      - description
+      - email
+      - externalArticleNumber
+      - externalServiceId
+      - freeText
+      - joinContact
+      - managementCompany
+      - objectNumber
+      - office
+      - personal
+      - phoneNumber
+      - priority
+      - projectNumber
+      - responsibilityNumber
+      - responsibleGroup
+      - subaccount
+    Note:
+      type: object
+      description: Note model
+      properties:
+        type:
+          $ref: "#/components/schemas/NoteType"
+        text:
+          type: string
+          description: Note text
+          examples:
+          - This is a note
+          minLength: 1
+      required:
+      - text
+      - type
+    NoteType:
+      type: string
+      description: NoteType model
+      enum:
+      - PROBLEM
+      - SOLUTION
+      - WORKNOTE
+      - SUPPLIERNOTE
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    CreateAssetRequest:
+      type: object
+      description: CreateAssetRequest model
+      properties:
+        manufacturer:
+          type: string
+          description: Manufacturer
+          examples:
+          - x_dell
+        modelName:
+          type: string
+          description: Model name
+          examples:
+          - Latitude 9000
+          minLength: 1
+        modelDescription:
+          type: string
+          description: Description of asset
+          examples:
+          - Latitude 9000
+        serialNumber:
+          type: string
+          description: Serial number
+          examples:
+          - CD23456
+          minLength: 1
+        macAddress:
+          type: string
+          description: MAC address for the unit
+          examples:
+          - 00:00:0a:bb:28:fc
+        warrantyEndDate:
+          type: string
+          format: date
+          description: Warranty end date
+          examples:
+          - 2022-01-01
+        supplierStatus:
+          type: string
+          description: Supplier status
+          examples:
+          - "0"
+        hardwareStatus:
+          type: string
+          description: Hardware status
+          examples:
+          - "0"
+        deliveryDate:
+          type: string
+          format: date
+          description: Delivery date
+          examples:
+          - 2022-01-01
+        leaseStatus:
+          type: string
+          description: Lease status
+          examples:
+          - status1
+        leaseStart:
+          type: string
+          format: date
+          description: Lease start date
+          examples:
+          - 2022-01-01
+        leaseEnd:
+          type: string
+          format: date
+          description: Lease end date
+          examples:
+          - 2022-01-01
+      required:
+      - modelName
+      - serialNumber
+    CreateAssetResponse:
+      type: object
+      description: CreateAssetResponse model
+      properties:
+        id:
+          type: string
+          description: Id of asset in Pob
+          examples:
+          - "111222"
+    UpdateCaseRequest:
+      type: object
+      description: UpdateCaseRequest model
+      properties:
+        note:
+          $ref: "#/components/schemas/Note"
+        externalCaseId:
+          type: string
+          description: External case-ID
+          examples:
+          - INC232323
+        caseStatus:
+          type: string
+          description: Case status
+          examples:
+          - In Process
+        caseCategory:
+          type: string
+          description: Case category
+          examples:
+          - IT Användarhantering
+        closureCode:
+          type: string
+          description: Closure code
+          examples:
+          - IT Byte/uppgradering av hårdvara
+        hardwareName:
+          type: string
+          description: Hardware name
+        responsibleGroup:
+          type: string
+          description: Responsible group
+          examples:
+          - First Line IT
+        serialNumber:
+          type: string
+          description: Serial number
+          examples:
+          - FRGDZ1J
+        imeiNumber:
+          type: string
+          description: IMEI number
+          examples:
+          - "123456789012345"
+        modelName:
+          type: string
+          description: Model name
+          examples:
+          - iPhone 14 Pro
+    UpdateAssetRequest:
+      type: object
+      description: UpdateAssetRequest model
+      properties:
+        note:
+          $ref: "#/components/schemas/Note"
+        hardwareName:
+          type: string
+          description: Hardware name
+          examples:
+          - Latitude 9000
+        macAddress:
+          type: string
+          description: MAC address for the unit
+          examples:
+          - 00:00:0a:bb:28:fc
+        supplierStatus:
+          type: string
+          description: Supplier status
+          examples:
+          - "0"
+        hardwareStatus:
+          type: string
+          description: Hardware status
+          examples:
+          - "0"
+        warrantyEndDate:
+          type: string
+          format: date
+          description: Warranty end date
+          examples:
+          - 2022-01-01
+        deliveryDate:
+          type: string
+          format: date
+          description: Delivery date
+          examples:
+          - 2022-01-01
+        leaseStatus:
+          type: string
+          description: Lease status
+          examples:
+          - status1
+        leaseStart:
+          type: string
+          format: date
+          description: Lease start date
+          examples:
+          - 2022-01-01
+        leaseEnd:
+          type: string
+          format: date
+          description: Lease end date
+          examples:
+          - 2022-01-01
+    Case:
+      type: object
+      description: Case model
+      properties:
+        caseId:
+          type: string
+          description: Case id
+          examples:
+          - "81471222"
+        note:
+          $ref: "#/components/schemas/Note"
+        description:
+          type: string
+          description: Description
+          examples:
+          - Beställning av tjänst Test4
+        caseType:
+          type: string
+          description: Case type
+          examples:
+          - Service Request
+        caseCategory:
+          type: string
+          description: Case category
+          examples:
+          - IT Användarhantering
+        customerContact:
+          type: string
+          description: Customer contact
+          examples:
+          - test02test
+        externalArticleNumber:
+          type: string
+          description: External article number
+        managementCompany:
+          type: string
+          description: ManagementCompany
+          examples:
+          - BoU
+        priority:
+          type: string
+          description: Priority
+          examples:
+          - IT4
+        personal:
+          type: boolean
+          description: Personal
+          examples:
+          - "true"
+        responsibleGroup:
+          type: string
+          description: Responsible group
+          examples:
+          - First Line IT
+        externalServiceId:
+          type: string
+          description: External service id
+          examples:
+          - "123"
+        office:
+          type: boolean
+          description: Office
+          examples:
+          - "true"
+        freeText:
+          type: string
+          description: Free text
+          examples:
+          - leverans fredagar
+        joinContact:
+          type: string
+          description: Join contact
+          examples:
+          - test01test
+        responsibilityNumber:
+          type: string
+          description: Responsibility number
+          examples:
+          - "15220100"
+        subaccount:
+          type: string
+          description: Subaccount
+          examples:
+          - "974310"
+        businessNumber:
+          type: string
+          description: Business number
+          examples:
+          - "920350"
+        activityNumber:
+          type: string
+          description: Activity number
+          examples:
+          - "5662"
+        projectNumber:
+          type: string
+          description: Project number
+          examples:
+          - "17071"
+        objectNumber:
+          type: string
+          description: Object number
+          examples:
+          - "6310000"
+        counterPart:
+          type: string
+          description: Counterpart
+          examples:
+          - "115"
+        ciDescription:
+          type: string
+          description: CI description
+          examples:
+          - Tydlig och bra CI beskrivning
+        contactPerson:
+          type: string
+          description: Contact person
+          examples:
+          - Test Testsson
+        phoneNumber:
+          type: string
+          description: Phone number
+          examples:
+          - 070-11111111
+        email:
+          type: string
+          description: Email
+          examples:
+          - test.testsson@sundsvall.se
+        imeiNumber:
+          type: string
+          description: IMEI number
+          examples:
+          - "123456789012345"
+        modelName:
+          type: string
+          description: Model name
+          examples:
+          - iPhone 14 Pro
+        address:
+          $ref: "#/components/schemas/Address"
+    Asset:
+      type: object
+      description: Asset model
+      properties:
+        id:
+          type: string
+          description: Id of asset
+          examples:
+          - "123456"
+        serialNumber:
+          type: string
+          description: Serial-number
+          examples:
+          - 4VVRN2
+        hardwareName:
+          type: string
+          description: Hardware-name
+          examples:
+          - WB12345NY
+        hardwareDescription:
+          type: string
+          description: Description of hardware
+          examples:
+          - Computer
+        macAddress:
+          type: string
+          description: MAC address for the unit
+          examples:
+          - 00:00:0a:bb:28:fc
+        supplierStatus:
+          type: string
+          description: Supplier status
+        hardwareStatus:
+          type: string
+          description: Hardware status
+        manufacturer:
+          type: string
+          description: Manufacturer
+          examples:
+          - x_dell
+        modelName:
+          type: string
+          description: Model name
+          examples:
+          - Latitude 9000
+        modelDescription:
+          type: string
+          description: Description of model
+          examples:
+          - Latitude 9000
+        warrantyEndDate:
+          type: string
+          format: date
+          description: Warranty end date
+          examples:
+          - 2022-01-01
+        deliveryDate:
+          type: string
+          format: date
+          description: Delivery date
+          examples:
+          - 2022-01-01
+        municipalityId:
+          type: string
+          description: Municipality id
+          examples:
+          - "2281"
+        leaseStatus:
+          type: string
+          description: Lease status
+          examples:
+          - status1
+        leaseStart:
+          type: string
+          format: date
+          description: Lease start date
+          examples:
+          - 2022-01-01
+        leaseEnd:
+          type: string
+          format: date
+          description: Lease end date
+          examples:
+          - 2022-01-01
+  securitySchemes: {}

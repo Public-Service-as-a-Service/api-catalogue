@@ -1,0 +1,671 @@
+openapi: 3.1.0
+info:
+  title: api-myrepresentatives
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "4.4"
+servers:
+- url: http://localhost:57548
+  description: Generated server url
+paths:
+  /{municipalityId}/{namespace}/mandates:
+    get:
+      tags:
+      - MyRepresentatives
+      summary: Search mandates
+      operationId: searchMandates
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: namespace
+        in: path
+        description: Namespace
+        required: true
+        schema:
+          type: string
+        example: MY_NAMESPACE
+      - name: searchParameters
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/SearchMandateParameters"
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Mandates"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - MyRepresentatives
+      summary: Create mandates
+      operationId: createMandate
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: namespace
+        in: path
+        description: Namespace
+        required: true
+        schema:
+          type: string
+        example: MY_NAMESPACE
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateMandate"
+        required: true
+      responses:
+        "201":
+          description: Successful Operation
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "403":
+          description: Forbidden
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "409":
+          description: Conflict
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{namespace}/mandates/{id}:
+    get:
+      tags:
+      - MyRepresentatives
+      summary: "Get mandate by id, also returns BankID signing information"
+      operationId: getMandateById
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: namespace
+        in: path
+        description: Namespace
+        required: true
+        schema:
+          type: string
+        example: MY_NAMESPACE
+      - name: id
+        in: path
+        description: Id of the mandate
+        required: true
+        schema:
+          type: string
+        example: 2facc7a8-69e1-4988-9b3d-4da6cefab704
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MandateDetails"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - MyRepresentatives
+      summary: "Delete mandate, performs a soft delete"
+      operationId: deleteMandate
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: namespace
+        in: path
+        description: Namespace
+        required: true
+        schema:
+          type: string
+        example: MY_NAMESPACE
+      - name: id
+        in: path
+        description: Id of the mandate
+        required: true
+        schema:
+          type: string
+        example: 2facc7a8-69e1-4988-9b3d-4da6cefab704
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    CompletionData:
+      type: object
+      properties:
+        bankIdIssueDate:
+          type: string
+          format: date
+          description: When the BankID was issued
+          examples:
+          - 2020-01-02
+        signature:
+          type: string
+          description: The signature made by the receiving party
+          examples:
+          - YmFzZTY0LWVuY29kZWQgZGF0YQ==
+          minLength: 1
+        ocspResponse:
+          type: string
+          description: Online certificate status protocol for the signing order
+          examples:
+          - YmFzZTY0LWVuY29kZWQgZGF0YQ==
+        risk:
+          type: string
+          description: Indicates the risk level of the order based on data available
+            in the order
+          examples:
+          - low
+        user:
+          $ref: "#/components/schemas/User"
+          description: Information regarding the signing party
+        device:
+          $ref: "#/components/schemas/Device"
+          description: Information regarding the device used for the signing order
+        stepUp:
+          $ref: "#/components/schemas/StepUp"
+          description: Information about possible additional verifications that were
+            part of the signing order
+      required:
+      - device
+      - signature
+      - user
+    CreateMandate:
+      type: object
+      description: CreateMandate model
+      properties:
+        grantorDetails:
+          $ref: "#/components/schemas/GrantorDetails"
+          description: Mandate grantor information
+        granteeDetails:
+          $ref: "#/components/schemas/GranteeDetails"
+          description: List of grantees
+        activeFrom:
+          type: string
+          format: date
+          description: The date when the mandate becomes effective
+          examples:
+          - 2025-08-01
+        inactiveAfter:
+          type: string
+          format: date
+          description: "The date after which the mandate is no longer valid, if not\
+            \ provided it will be set to activeFrom + 36 months"
+          examples:
+          - 2025-12-31
+        signingInfo:
+          $ref: "#/components/schemas/SigningInfo"
+          description: Signing information related to the mandate
+      required:
+      - activeFrom
+      - granteeDetails
+      - grantorDetails
+    Device:
+      type: object
+      properties:
+        ipAddress:
+          type: string
+          description: Ip address used when the letter was signed
+          examples:
+          - 192.168.1.1
+          minLength: 1
+        uhi:
+          type: string
+          description: The Unique Hardware Identifier for the user’s device holding
+            the BankID
+          examples:
+          - OZvYM9VvyiAmG7NA5jU5zqGcVpo=
+      required:
+      - ipAddress
+    GranteeDetails:
+      type: object
+      description: GranteeDetails model
+      properties:
+        partyId:
+          type: string
+          description: PartyId of the grantee
+          examples:
+          - fb2f0290-3820-11ed-a261-0242ac120004
+      required:
+      - partyId
+    GrantorDetails:
+      type: object
+      description: GrantorDetails model
+      properties:
+        name:
+          type: string
+          description: The name of the granting organization or person
+          examples:
+          - Ankeborgs Margarinfabrik
+        grantorPartyId:
+          type: string
+          description: The partyId of the issuing organization or person
+          examples:
+          - fb2f0290-3820-11ed-a261-0242ac120002
+        signatoryPartyId:
+          type: string
+          description: PartyId of the issuing person / signatory
+          examples:
+          - fb2f0290-3820-11ed-a261-0242ac120003
+      required:
+      - grantorPartyId
+      - signatoryPartyId
+    SigningInfo:
+      type: object
+      description: SigningInfo model
+      properties:
+        orderRef:
+          type: string
+          description: Reference for the signing order
+          examples:
+          - 131daac9-16c6-4618-beb0-365768f37288
+          minLength: 1
+        externalTransactionId:
+          type: string
+          description: External transactionId
+          examples:
+          - 87b53852-df66-4eab-bed1-873f927a2dcc
+          minLength: 1
+        status:
+          type: string
+          description: Status of the signing order
+          examples:
+          - complete
+          minLength: 1
+        completionData:
+          $ref: "#/components/schemas/CompletionData"
+          description: Information about the user and the completed order
+      required:
+      - completionData
+      - externalTransactionId
+      - orderRef
+      - status
+    StepUp:
+      type: object
+      properties:
+        mrtd:
+          type: boolean
+          description: Whether an MRTD check was performed before the order was completed
+          examples:
+          - "true"
+    User:
+      type: object
+      properties:
+        personalNumber:
+          type: string
+          description: Personal identity number for the signing party
+          examples:
+          - "200001012384"
+          minLength: 1
+        name:
+          type: string
+          description: Full name of the signing party
+          examples:
+          - John Wick
+        givenName:
+          type: string
+          description: First name of the signing party
+          examples:
+          - John
+          minLength: 1
+        surname:
+          type: string
+          description: Last name of the signing party
+          examples:
+          - Wick
+          minLength: 1
+      required:
+      - givenName
+      - personalNumber
+      - surname
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    SearchMandateParameters:
+      type: object
+      description: SearchMandateParameters model
+      properties:
+        page:
+          type: integer
+          format: int32
+          default: 1
+          description: Page number
+          examples:
+          - 1
+          minimum: 1
+        limit:
+          type: integer
+          format: int32
+          description: Result size per page. Maximum allowed value is dynamically
+            configured
+          examples:
+          - 15
+          minimum: 1
+        grantorPartyId:
+          type: string
+          description: The partyId of the issuing organization or person
+          examples:
+          - fb2f0290-3820-11ed-a261-0242ac120002
+        granteePartyId:
+          type: string
+          description: PartyId of the grantee
+          examples:
+          - fb2f0290-3820-11ed-a261-0242ac120004
+        signatoryPartyId:
+          type: string
+          description: PartyId of the issuing person / signatory
+          examples:
+          - fb2f0290-3820-11ed-a261-0242ac120003
+        statuses:
+          type: array
+          description: List of mandate statuses
+          items:
+            type: string
+    Direction:
+      type: string
+      enum:
+      - ASC
+      - DESC
+    MandateDetails:
+      type: object
+      description: MandateDetails model
+      properties:
+        id:
+          type: string
+          description: Id of the mandate
+          examples:
+          - 123e4567-e89b-12d3-a456-426614174000
+          readOnly: true
+        grantorDetails:
+          $ref: "#/components/schemas/GrantorDetails"
+          description: Mandate grantor details
+          readOnly: true
+        granteeDetails:
+          $ref: "#/components/schemas/GranteeDetails"
+          description: Mandate grantee details
+          readOnly: true
+        municipalityId:
+          type: string
+          description: MunicipalityId where the mandate was created
+          examples:
+          - "2281"
+          readOnly: true
+        namespace:
+          type: string
+          description: The namespace in which the mandate is valid
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          description: The date and time when the mandate was created
+          examples:
+          - 2023-11-22T15:30:0+02:00
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          description: The date and time when the mandate was changed
+          examples:
+          - 2025-11-22T15:30:00+02:00
+          readOnly: true
+        activeFrom:
+          type: string
+          format: date
+          description: The date when the mandate becomes effective
+          examples:
+          - 2025-01-01
+          readOnly: true
+        inactiveAfter:
+          type: string
+          format: date
+          description: The date after which the mandate is no longer valid
+          examples:
+          - 2025-12-31
+          readOnly: true
+        status:
+          type: string
+          description: Indicates whether the mandate is active or not
+          examples:
+          - ACTIVE | INACTIVE | EXPIRED | DELETED
+          readOnly: true
+        signingInfo:
+          $ref: "#/components/schemas/SigningInfo"
+          description: Signing information related to the mandate
+          readOnly: true
+        whitelisted:
+          type: boolean
+          description: Indicates whether the mandate was created through a whitelisted
+            process
+          examples:
+          - true | false
+          readOnly: true
+    Mandates:
+      type: object
+      description: Paginated response containing a list of mandate details
+      properties:
+        mandateDetailsList:
+          type: array
+          description: List of mandates
+          items:
+            $ref: "#/components/schemas/MandateDetails"
+          readOnly: true
+        _meta:
+          $ref: "#/components/schemas/PagingAndSortingMetaData"
+          readOnly: true
+    PagingAndSortingMetaData:
+      type: object
+      description: PagingAndSortingMetaData model
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Current page
+          examples:
+          - 5
+          readOnly: true
+        limit:
+          type: integer
+          format: int32
+          description: Displayed objects per page
+          examples:
+          - 20
+          readOnly: true
+        count:
+          type: integer
+          format: int32
+          description: Displayed objects on current page
+          examples:
+          - 13
+          readOnly: true
+        totalRecords:
+          type: integer
+          format: int64
+          description: Total amount of hits based on provided search parameters
+          examples:
+          - 98
+          readOnly: true
+        totalPages:
+          type: integer
+          format: int32
+          description: Total amount of pages based on provided search parameters
+          examples:
+          - 23
+          readOnly: true
+        sortBy:
+          type: array
+          items:
+            type: string
+            description: The properties to sort by
+            examples:
+            - property
+            readOnly: true
+        sortDirection:
+          $ref: "#/components/schemas/Direction"
+          description: The sort order direction
+          examples:
+          - ASC
+  securitySchemes: {}
