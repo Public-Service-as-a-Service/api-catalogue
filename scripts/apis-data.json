@@ -1,0 +1,110 @@
+[
+  {
+    "repo": "api-service-messaging",
+    "namn": "Messaging",
+    "slug": "messaging",
+    "kategori": "Kommunikation",
+    "status": null,
+    "apiVersion": "7.12",
+    "ingress": "Gemensamt API för att skicka meddelanden till invånare, företag och medarbetare – via sms, e-post, digital brevlåda, webbmeddelanden och fysiska brev.",
+    "beskrivning": [
+      "Messaging är kommunens gemensamma väg ut för meddelanden. I stället för att varje applikation själv integrerar mot sms-leverantörer, e-postservrar och digitala brevlådor anropar de detta API, som tar hand om leveransen via rätt kanal. API:et används bland annat av kommunens ärendehanterings- och myndighetsutövningsapplikationer för att skicka beslut och notifieringar.",
+      "API:et stödjer enstaka utskick och batchutskick av sms och e-post, digital post och digitala fakturor till invånarnas digitala brevlådor, webbmeddelanden till kommunens e-tjänsteplattform samt fysiska brev. Meddelandetypen letter är särskilt kraftfull: den försöker först leverera till mottagarens digitala brevlåda och faller automatiskt tillbaka på fysisk post om digital leverans inte är möjlig.",
+      "Varje utskick registreras med leveransstatus som kan följas upp per meddelande, batch eller leverans. API:et erbjuder även statistik per meddelandetyp och avdelning, konversationshistorik per part samt en meddelandevy per användare."
+    ],
+    "malgrupp": "Kommunens applikationer och verksamhetssystem",
+    "funktioner": [
+      {
+        "titel": "Sms och e-post",
+        "text": "Enstaka utskick och batchutskick av sms och e-post till en eller flera mottagare."
+      },
+      {
+        "titel": "Digital brevlåda",
+        "text": "Digital post och digitala fakturor levereras till invånarnas digitala brevlådor, med uppslag av vilka mottagare som kan nås digitalt."
+      },
+      {
+        "titel": "Brev med automatisk kanalväxling",
+        "text": "Meddelandetypen letter levereras i första hand digitalt och skickas annars automatiskt som fysisk post."
+      },
+      {
+        "titel": "Kanalval utifrån kontaktinställningar",
+        "text": "Meddelandetypen message slår upp mottagarens registrerade kontaktinställningar och väljer kanal därefter."
+      },
+      {
+        "titel": "Webbmeddelanden",
+        "text": "Meddelanden till mottagarens sidor på kommunens e-tjänsteplattform (Open ePlatform)."
+      },
+      {
+        "titel": "Leveransstatus och statistik",
+        "text": "Status per meddelande, leverans och batch samt statistik per meddelandetyp, avdelning och ursprung."
+      },
+      {
+        "titel": "Historik",
+        "text": "Konversationshistorik per part och meddelandehistorik per användare."
+      }
+    ],
+    "beroenden": [
+      {
+        "name": "SmsSender",
+        "version": "2.0",
+        "usage": "Skickar sms."
+      },
+      {
+        "name": "EmailSender",
+        "version": "2.0",
+        "usage": "Skickar e-post."
+      },
+      {
+        "name": "DigitalMailSender",
+        "version": "4.1",
+        "usage": "Levererar digital post och digitala fakturor till digitala brevlådor."
+      },
+      {
+        "name": "SnailMailSender",
+        "version": "3.3",
+        "usage": "Skickar fysiska brev; batchas per utskick."
+      },
+      {
+        "name": "OepIntegrator",
+        "version": "1.5",
+        "usage": "Levererar webbmeddelanden till e-tjänsteplattformen (Open ePlatform)."
+      },
+      {
+        "name": "ContactSettings",
+        "version": "2.0",
+        "usage": "Slår upp mottagarens valda kontaktvägar för meddelandetypen message."
+      },
+      {
+        "name": "Party",
+        "version": "2.0",
+        "usage": "Översätter partyId till person- eller organisationsnummer."
+      },
+      {
+        "name": "Citizen",
+        "version": "3.0",
+        "usage": "Hämtar folkbokföringsuppgifter, bland annat adresser för brevutskick."
+      }
+    ],
+    "integrationer": [
+      "Slack"
+    ],
+    "databas": "MariaDB med Flyway-migrationer; alla utskick och leveranser lagras för status, historik och statistik",
+    "teknik": {
+      "sprak": "Java 25",
+      "ramverk": "Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven",
+      "ovrigt": "Resilience4j (circuit breakers mot beroende tjänster), Logbook för anropsloggning"
+    },
+    "konfiguration": [
+      "application.yml med URL och OAuth2-klientuppgifter (client-id/client-secret) för varje beroende mikrotjänst",
+      "MariaDB-anslutning; databasschemat versionshanteras med Flyway",
+      "Slack-token för meddelandetypen slack",
+      "Anrop görs per kommun – municipalityId ingår i alla API-vägar"
+    ],
+    "anteckningar": [
+      "Brev (letter) levereras i första hand till digital brevlåda och faller automatiskt tillbaka på fysisk post – verifierat i tjänstelagrets routningslogik.",
+      "Utskick sker asynkront som standard; med parametern async=false kan anroparen vänta in leveransresultatet.",
+      "Bilagors base64-innehåll maskeras i anropsloggarna via Logbook-filter.",
+      "README:ts beroendelista nämner Web Message Sender, men koden anropar numera OepIntegrator för webbmeddelanden – koden är sanningskällan."
+    ]
+  }
+]

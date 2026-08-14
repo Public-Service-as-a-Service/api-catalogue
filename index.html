@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>API-katalogen – Öppen källkod från Sundsvalls kommun</title>
+  <meta name="description" content="En katalog över de API:er som Sundsvalls kommun publicerar som öppen källkod på GitHub, med dokumentation via Swagger UI.">
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="#om-katalogen">Om katalogen</a>
+      <a href="#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="container">
+      <p class="hero-kicker">Öppen källkod från Sundsvalls kommun</p>
+      <h1>En katalog över kommunens öppna API:er</h1>
+      <p class="hero-lead">
+        Sundsvalls kommun bygger sina digitala tjänster på en gemensam plattform av
+        mikrotjänster – och delar dem öppet med omvärlden. Här hittar du en samlad
+        översikt över de API:er som kommunen publicerar som öppen källkod, med
+        interaktiv API-dokumentation via Swagger UI.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="#apier">Utforska API:erna</a>
+        <a class="button button-secondary" href="https://github.com/Sundsvallskommun" rel="external">Besök Sundsvalls kommun på GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="om-katalogen" class="section">
+    <div class="container">
+      <h2>Vad innehåller katalogen?</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            Sundsvalls kommun arbetar enligt principen <em>öppen källkod först</em> och
+            tillgängliggör sina mikrotjänster på GitHub, där de kan användas,
+            granskas och vidareutvecklas av andra kommuner, organisationer och intresserade.
+          </p>
+          <p>
+            Varje API presenteras på en egen sida med två delar: en verksamhetsnära
+            beskrivning av vad API:et gör och vilken nytta det skapar, samt en teknisk
+            dokumentation för dig som vill förstå hur tjänsten är byggd eller vill
+            återanvända den i din egen organisation. Dessutom kan varje API:s samtliga
+            resurser och datamodeller utforskas interaktivt i Swagger UI, direkt ur
+            tjänstens OpenAPI-specifikation.
+          </p>
+          <p>
+            Katalogen byggs ut successivt med fler API:er ur kommunens utbud.
+          </p>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li><strong>Ett 30-tal</strong> öppna API:er</li>
+            <li>Mikrotjänster bakom kommunens <strong>digitala tjänster</strong></li>
+            <li>Interaktiv dokumentation via <strong>Swagger UI</strong></li>
+            <li>Publiceras öppet på <strong>GitHub</strong></li>
+            <li>Fritt att <strong>återanvända och vidareutveckla</strong></li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="apier" class="section section-alt">
+    <div class="container">
+      <h2>API:er i katalogen</h2>
+      <p class="section-intro">
+        Katalogen omfattar de mikrotjänster som Sundsvalls kommun publicerar som öppen
+        källkod, grupperade per område. Alla API:er nås i produktion via kommunens
+        gemensamma API-plattform. Välj ett API för att läsa mer och utforska dess
+        dokumentation.
+      </p>
+
+      <!-- BEGIN:API-CARDS -->
+      <h3 class="card-group-title">Kommunikation</h3>
+      <div class="card-grid">
+
+        <a class="teaser-card" href="api/messaging.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>Messaging</h3>
+          <p>
+            Gemensamt API för att skicka meddelanden till invånare, företag och medarbetare – via sms, e-post, digital brevlåda, webbmeddelanden och fysiska brev.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+      </div>
+      <!-- END:API-CARDS -->
+
+      <div class="coming-soon" role="note">
+        <p>Katalogen omfattar på sikt samtliga repon som börjar med <code>api-service</code> hos Sundsvalls kommun på GitHub. Första versionen beskriver Messaging; fler API:er läggs till efter hand.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
