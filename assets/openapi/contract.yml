@@ -1,0 +1,1646 @@
+openapi: 3.1.0
+info:
+  title: Contracts
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "10.0"
+servers:
+- url: http://localhost:39725
+  description: Generated server url
+tags:
+- name: Contract attachments
+  description: Contract attachment resources
+- name: Contracts
+  description: Contract resources
+paths:
+  /{municipalityId}/contracts/{contractId}:
+    get:
+      tags:
+      - Contracts
+      summary: Get a contract
+      operationId: getContractById
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: Contract id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contract"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    put:
+      tags:
+      - Contracts
+      summary: Update a contract
+      operationId: updateContract
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: Contract id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contract"
+        required: true
+      responses:
+        "200":
+          description: Ok
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - Contracts
+      summary: Delete a contract
+      operationId: deleteContract
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: Contract id
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    patch:
+      tags:
+      - Contracts
+      summary: Patch a contract
+      description: Applies only the non-null fields from the payload onto the existing
+        contract.
+      operationId: patchContract
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: Contract id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchContract"
+        required: true
+      responses:
+        "200":
+          description: Ok
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/contracts/{contractId}/attachments/{attachmentId}:
+    get:
+      tags:
+      - Contract attachments
+      summary: Get a contracts attachment(s) and its metadata
+      operationId: getAttachmentById
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: Contract id
+        required: true
+        schema:
+          type: string
+      - name: attachmentId
+        in: path
+        description: Attachment id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Attachment"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    put:
+      tags:
+      - Contract attachments
+      summary: Update a contract attachment
+      operationId: updateAttachment
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: Contract id
+        required: true
+        schema:
+          type: string
+      - name: attachmentId
+        in: path
+        description: Attachment id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Attachment"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttachmentMetadata"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - Contract attachments
+      summary: Delete a contract attachment
+      operationId: deleteAttachment
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: Contract id
+        required: true
+        schema:
+          type: string
+      - name: attachmentId
+        in: path
+        description: Attachment id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/contracts:
+    get:
+      tags:
+      - Contracts
+      summary: Get a list of contracts
+      operationId: getContracts
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+      - name: filter
+        in: query
+        description: "Syntax: [spring-filter](https://github.com/turkraft/spring-filter/blob/85730f950a5f8623159cc0eb4d737555f9382bb7/README.md#syntax)"
+        required: false
+        schema:
+          $ref: "#/components/schemas/SpecificationContractEntity"
+        example: type:'LEASE_AGREEMENT' and status:'ACTIVE'
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageContract"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - Contracts
+      summary: Create contract
+      operationId: createContract
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contract"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              description: Location of the created resource.
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/contracts/{contractId}/attachments:
+    post:
+      tags:
+      - Contract attachments
+      summary: Create a contract attachment
+      operationId: createAttachment
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+      - name: contractId
+        in: path
+        description: Contract id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Attachment"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              description: Location of the uploaded attachment.
+              style: simple
+              schema:
+                type: string
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        detail:
+          type: string
+        status:
+          type: integer
+          format: int32
+    Address:
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/AddressType"
+          description: Address type
+          examples:
+          - POSTAL_ADDRESS
+        streetAddress:
+          type: string
+          examples:
+          - Testvägen 18
+        careOf:
+          type: string
+          examples:
+          - c/o Test Testorsson
+        postalCode:
+          type: string
+          examples:
+          - 123 45
+        town:
+          type: string
+          examples:
+          - Sundsvall
+        country:
+          type: string
+          examples:
+          - Sverige
+        attention:
+          type: string
+          examples:
+          - Test Testorsson
+    AddressType:
+      type: string
+      description: Address type
+      enum:
+      - POSTAL_ADDRESS
+      - BILLING_ADDRESS
+      - VISITING_ADDRESS
+    AttachmentCategory:
+      type: string
+      description: Attachment category
+      enum:
+      - CONTRACT
+      - OTHER
+    AttachmentMetadata:
+      type: object
+      description: Attachment metadata
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The attachment id
+          examples:
+          - 1234
+          readOnly: true
+        category:
+          $ref: "#/components/schemas/AttachmentCategory"
+        filename:
+          type: string
+          description: The attachment filename
+          examples:
+          - LeaseContract12.pdf
+          minLength: 1
+        mimeType:
+          type: string
+          description: The attachment mime-type
+          examples:
+          - application/pdf
+          minLength: 1
+        note:
+          type: string
+          description: Notes on the attachment
+          examples:
+          - The contract was a little wrinkled when scanned
+        created:
+          type: string
+          format: date-time
+          description: Date when the attachment was created
+          examples:
+          - 2023-01-01T00:00:00.000Z
+          readOnly: true
+      required:
+      - filename
+      - mimeType
+    Contract:
+      type: object
+      description: Contract
+      properties:
+        contractId:
+          type: string
+          description: Contract id
+          examples:
+          - 2024-12345
+          readOnly: true
+        description:
+          type: string
+          description: A description of the contract
+          examples:
+          - A simple description of the contract
+        externalReferenceId:
+          type: string
+          description: External referenceId
+          examples:
+          - "123"
+        leaseType:
+          $ref: "#/components/schemas/LeaseType"
+        municipalityId:
+          type: string
+          description: Municipality id for the contract
+          examples:
+          - "1984"
+          readOnly: true
+        objectIdentity:
+          type: string
+          description: Object identity (from Lantmäteriet)
+          examples:
+          - 909a6a80-d1a4-90ec-e040-ed8f66444c3f
+        status:
+          $ref: "#/components/schemas/Status"
+        type:
+          $ref: "#/components/schemas/ContractType"
+        leasehold:
+          $ref: "#/components/schemas/Leasehold"
+          description: Type of leasehold
+        attachmentMetaData:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttachmentMetadata"
+            description: Metadata for all attachments
+            readOnly: true
+        additionalTerms:
+          type: array
+          items:
+            $ref: "#/components/schemas/TermGroup"
+            description: Additional terms for the contract
+        extraParameters:
+          type: array
+          description: Extra parameters
+          items:
+            $ref: "#/components/schemas/ExtraParameterGroup"
+        indexTerms:
+          type: array
+          items:
+            $ref: "#/components/schemas/TermGroup"
+            description: Index terms for the contract
+        propertyDesignations:
+          type: array
+          items:
+            $ref: "#/components/schemas/PropertyDesignation"
+            description: Property designations
+        stakeholders:
+          type: array
+          items:
+            $ref: "#/components/schemas/Stakeholder"
+            description: List of stakeholders
+        extension:
+          $ref: "#/components/schemas/Extension"
+        fees:
+          $ref: "#/components/schemas/Fees"
+        invoicing:
+          $ref: "#/components/schemas/Invoicing"
+          description: Invoicing details
+        startDate:
+          type: string
+          format: date
+          description: Start date of the contract
+          examples:
+          - 2020-01-01
+        endDate:
+          type: string
+          format: date
+          description: End date of the contract. Set when the contract is terminated
+          examples:
+          - 2022-12-31
+        notice:
+          $ref: "#/components/schemas/Notice"
+        currentPeriod:
+          $ref: "#/components/schemas/Period"
+          description: Current contract period
+        area:
+          type: integer
+          format: int32
+          description: Leased area (m2)
+          examples:
+          - 150
+        signedByWitness:
+          type: boolean
+          description: Whether the contract is signed by a witness
+        areaData:
+          $ref: "#/components/schemas/FeatureCollection"
+          description: Part(s) of property covered by the lease. Described by GeoJSON
+            using polygon(s)
+          examples:
+          - features:
+            - geometry:
+                coordinates:
+                - - - 1730072021484375
+                    - 6238137830626575
+                  - - 17297286987304688
+                    - 6238050291927199
+                  - - 17297801971435547
+                    - 6237922958346664
+                  - - 17301406860351562
+                    - 62378194958300895
+                  - - 17303810119628906
+                    - 62379149998183046
+                  - - 17303638458251953
+                    - 6238066208244492
+                  - - 1730072021484375
+                    - 6238137830626575
+                type: Polygon
+              properties: {}
+              type: Feature
+            type: FeatureCollection
+      required:
+      - status
+      - type
+    ContractType:
+      type: string
+      description: Contract type
+      enum:
+      - LEASE_AGREEMENT
+      - PURCHASE_AGREEMENT
+      - LAND_LEASE_PUBLIC
+      - SHORT_TERM_LEASE_AGREEMENT
+      - OBJECT_LEASE
+      - LEASEHOLD
+      - MAINTENANCE_AGREEMENT
+    Crs:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - name
+          - link
+        properties:
+          type: object
+          additionalProperties: {}
+    Extension:
+      type: object
+      description: Extension
+      properties:
+        autoExtend:
+          type: boolean
+          default: true
+          description: Marker for whether an agreement should be extended automatically
+            or not
+          examples:
+          - "true"
+        leaseExtension:
+          type: integer
+          format: int32
+          description: The lease extension value
+          examples:
+          - 2
+          minimum: 0
+        unit:
+          $ref: "#/components/schemas/TimeUnit"
+          description: The unit of the extension value
+          examples:
+          - MONTHS
+    ExtraParameterGroup:
+      type: object
+      description: Extra parameter group
+      properties:
+        name:
+          type: string
+          description: The group name
+          examples:
+          - Fees
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: Parameters
+          examples:
+          - key1: value1
+            key2: value2
+    Feature:
+      type: object
+      properties:
+        properties:
+          type: object
+          additionalProperties: {}
+        geometry:
+          oneOf:
+          - $ref: "#/components/schemas/Feature"
+          - $ref: "#/components/schemas/FeatureCollection"
+          - $ref: "#/components/schemas/GeometryCollection"
+          - $ref: "#/components/schemas/LineString"
+          - $ref: "#/components/schemas/MultiLineString"
+          - $ref: "#/components/schemas/MultiPoint"
+          - $ref: "#/components/schemas/MultiPolygon"
+          - $ref: "#/components/schemas/Point"
+          - $ref: "#/components/schemas/Polygon"
+        crs:
+          $ref: "#/components/schemas/Crs"
+        bbox:
+          type: array
+          items:
+            type: number
+            format: double
+        id:
+          type: string
+    FeatureCollection:
+      type: object
+      properties:
+        crs:
+          $ref: "#/components/schemas/Crs"
+        bbox:
+          type: array
+          items:
+            type: number
+            format: double
+        features:
+          type: array
+          items:
+            $ref: "#/components/schemas/Feature"
+    Fees:
+      type: object
+      description: Fees
+      properties:
+        currency:
+          type: string
+          description: The currency of the lease fees
+          examples:
+          - SEK
+        yearly:
+          type: number
+          description: Yearly fee
+          examples:
+          - 1000.5
+        monthly:
+          type: number
+          description: Monthly fee
+          examples:
+          - 100.5
+        total:
+          type: number
+          description: Total fee
+          examples:
+          - 1200.5
+        totalAsText:
+          type: string
+          description: Total fee as text
+          examples:
+          - One thousand two hundred
+        indexType:
+          type: string
+          description: Index type
+          example: KPI 80
+        indexYear:
+          type: integer
+          format: int32
+          description: Index year
+          examples:
+          - 2021
+        indexNumber:
+          type: number
+          description: Index number
+          examples:
+          - 1.0
+        indexationRate:
+          type: number
+          description: Specifies what proportion of the consumer price index should
+            be used for invoicing.
+          examples:
+          - 0.5
+          maximum: 1.0
+          minimum: 0.0
+        additionalInformation:
+          type: array
+          description: Additional information. Each entry must be non-blank and between
+            1 and 30 characters (used as invoice row descriptions).
+          items:
+            type: string
+            maxLength: 30
+            minLength: 1
+    GeoJsonObject:
+      type: object
+      discriminator:
+        propertyName: type
+      properties:
+        crs:
+          $ref: "#/components/schemas/Crs"
+        bbox:
+          type: array
+          items:
+            type: number
+            format: double
+        type:
+          type: string
+      required:
+      - type
+    GeometryCollection:
+      allOf:
+      - $ref: "#/components/schemas/GeoJsonObject"
+      - type: object
+        properties:
+          geometries:
+            type: array
+            items:
+              oneOf:
+              - $ref: "#/components/schemas/Feature"
+              - $ref: "#/components/schemas/FeatureCollection"
+              - $ref: "#/components/schemas/GeometryCollection"
+              - $ref: "#/components/schemas/LineString"
+              - $ref: "#/components/schemas/MultiLineString"
+              - $ref: "#/components/schemas/MultiPoint"
+              - $ref: "#/components/schemas/MultiPolygon"
+              - $ref: "#/components/schemas/Point"
+              - $ref: "#/components/schemas/Polygon"
+    IntervalType:
+      type: string
+      description: Interval type
+      enum:
+      - YEARLY
+      - HALF_YEARLY
+      - QUARTERLY
+      - MONTHLY
+    InvoicedIn:
+      type: string
+      description: Invoiced in
+      enum:
+      - ADVANCE
+      - ARREARS
+    Invoicing:
+      type: object
+      description: Invoicing details
+      properties:
+        invoiceInterval:
+          $ref: "#/components/schemas/IntervalType"
+          description: How often the lease is invoiced
+          examples:
+          - QUARTERLY
+        invoicedIn:
+          $ref: "#/components/schemas/InvoicedIn"
+      required:
+      - invoiceInterval
+      - invoicedIn
+    LeaseType:
+      type: string
+      description: Lease type
+      enum:
+      - LAND_LEASE_RESIDENTIAL
+      - SITE_LEASE_COMMERCIAL
+      - USUFRUCT_HUNTING
+      - USUFRUCT_FARMING
+      - USUFRUCT_MISC
+      - LAND_LEASE_MISC
+      - LAND_LEASE_LICENSE
+      - LAND_LEASE_MUNICIPALITY
+      - OTHER_FEE
+    Leasehold:
+      type: object
+      description: Leasehold
+      properties:
+        purpose:
+          $ref: "#/components/schemas/LeaseholdType"
+        description:
+          type: string
+          description: Description of the leasehold
+          examples:
+          - A simple description of the leasehold
+        additionalInformation:
+          type: array
+          items:
+            type: string
+            description: Additional information
+            examples:
+            - Some additional information
+    LeaseholdType:
+      type: string
+      description: Leasehold type
+      enum:
+      - AGRICULTURE
+      - APARTMENT
+      - BOATING_PLACE
+      - BUILDING
+      - DEPOT
+      - DWELLING
+      - LAND_COMPLEMENT
+      - LINEUP
+      - OTHER
+      - PARKING
+      - RECYCLING_STATION
+      - ROAD
+      - SIGNBOARD
+      - SNOW_DUMP
+      - SPORTS_PURPOSE
+      - SURFACE_HEAT
+      - TRAIL
+    LineString:
+      allOf:
+      - $ref: "#/components/schemas/GeoJsonObject"
+      - type: object
+        properties:
+          coordinates:
+            type: array
+            items:
+              $ref: "#/components/schemas/LngLatAlt"
+    LngLatAlt:
+      type: object
+      properties:
+        longitude:
+          type: number
+          format: double
+        latitude:
+          type: number
+          format: double
+        altitude:
+          type: number
+          format: double
+        additionalElements:
+          type: array
+          items:
+            type: number
+            format: double
+    MultiLineString:
+      allOf:
+      - $ref: "#/components/schemas/GeoJsonObject"
+      - type: object
+        properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/LngLatAlt"
+    MultiPoint:
+      allOf:
+      - $ref: "#/components/schemas/GeoJsonObject"
+      - type: object
+        properties:
+          coordinates:
+            type: array
+            items:
+              $ref: "#/components/schemas/LngLatAlt"
+    MultiPolygon:
+      allOf:
+      - $ref: "#/components/schemas/GeoJsonObject"
+      - type: object
+        properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LngLatAlt"
+    Notice:
+      type: object
+      description: Notice information
+      properties:
+        terms:
+          type: array
+          items:
+            $ref: "#/components/schemas/NoticeTerm"
+            description: Notice terms per party
+        noticeDate:
+          type: string
+          format: date
+          description: Date when notice was given
+          examples:
+          - 2025-01-29
+        noticeGivenBy:
+          $ref: "#/components/schemas/Party"
+          description: Party that initiated the notice
+          examples:
+          - LESSOR
+    NoticeTerm:
+      type: object
+      description: Notice term
+      properties:
+        party:
+          $ref: "#/components/schemas/Party"
+          description: The party type
+          examples:
+          - LESSOR
+        periodOfNotice:
+          type: integer
+          format: int32
+          description: The period of notice
+          examples:
+          - 3
+          minimum: 0
+        unit:
+          $ref: "#/components/schemas/TimeUnit"
+          description: The unit of the periodOfNotice value
+          examples:
+          - MONTHS
+      required:
+      - party
+      - periodOfNotice
+      - unit
+    Parameter:
+      type: object
+      description: Parameter model
+      properties:
+        key:
+          type: string
+          description: Parameter key
+          minLength: 1
+        displayName:
+          type: string
+          description: Parameter display name
+        values:
+          type: array
+          description: Parameter values
+          items:
+            type: string
+      required:
+      - key
+    Party:
+      type: string
+      description: Party
+      enum:
+      - LESSOR
+      - LESSEE
+      - ALL
+    Period:
+      type: object
+      description: Contract period
+      properties:
+        startDate:
+          type: string
+          format: date
+          description: Period start date
+          examples:
+          - 2021-07-01
+        endDate:
+          type: string
+          format: date
+          description: Period end date
+          examples:
+          - 2030-06-30
+    Point:
+      allOf:
+      - $ref: "#/components/schemas/GeoJsonObject"
+      - type: object
+        properties:
+          coordinates:
+            $ref: "#/components/schemas/LngLatAlt"
+    Polygon:
+      allOf:
+      - $ref: "#/components/schemas/GeoJsonObject"
+      - type: object
+        properties:
+          coordinates:
+            type: array
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/LngLatAlt"
+    PropertyDesignation:
+      type: object
+      description: PropertyDesignation
+      properties:
+        name:
+          type: string
+          description: Name of property designation
+          example: SUNDSVALL BALDER 5:1
+          maxLength: 255
+          minLength: 0
+        district:
+          type: string
+          description: District of property designation
+          example: Sundsvall
+          maxLength: 255
+          minLength: 0
+    Stakeholder:
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/StakeholderType"
+          description: Type of stakeholder
+          examples:
+          - ASSOCIATION
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/StakeholderRole"
+            examples:
+            - BUYER
+        organizationName:
+          type: string
+          description: Name of the organization
+          examples:
+          - Sundsvalls kommun
+          maxLength: 255
+          minLength: 0
+        organizationNumber:
+          type: string
+          description: Swedish organization number
+          examples:
+          - 212000-2411
+          maxLength: 255
+          minLength: 0
+        firstName:
+          type: string
+          description: Stakeholders first name
+          examples:
+          - Test
+          maxLength: 255
+          minLength: 0
+        lastName:
+          type: string
+          description: Stakeholders last name
+          examples:
+          - Testorsson
+          maxLength: 255
+          minLength: 0
+        partyId:
+          type: string
+          description: PartyId
+          examples:
+          - 40f14de9-815d-44a5-a34d-b1d38b628e07
+        phoneNumber:
+          type: string
+          description: Phone number for stakeholder
+          examples:
+          - "0701231212"
+          maxLength: 255
+          minLength: 0
+        emailAddress:
+          type: string
+          description: Email adress for stakeholder
+          examples:
+          - test.testorsson@test.se
+          maxLength: 255
+          minLength: 0
+        address:
+          $ref: "#/components/schemas/Address"
+          description: Address for stakeholder
+        parameters:
+          type: array
+          description: Parameters for the stakeholder
+          items:
+            $ref: "#/components/schemas/Parameter"
+    StakeholderRole:
+      type: string
+      description: Stakeholder role
+      enum:
+      - BUYER
+      - CONTACT_PERSON
+      - GRANTOR
+      - LAND_RIGHT_OWNER
+      - LEASEHOLDER
+      - PROPERTY_OWNER
+      - POWER_OF_ATTORNEY_CHECK
+      - POWER_OF_ATTORNEY_ROLE
+      - SELLER
+      - SIGNATORY
+      - PRIMARY_BILLING_PARTY
+      - LESSOR
+      - LESSEE
+    StakeholderType:
+      type: string
+      description: Stakeholder type
+      enum:
+      - PERSON
+      - ORGANIZATION
+      - ASSOCIATION
+      - MUNICIPALITY
+      - REGION
+      - OTHER
+    Status:
+      type: string
+      description: Status
+      enum:
+      - ACTIVE
+      - DRAFT
+      - TERMINATED
+    Term:
+      type: object
+      description: Term
+      properties:
+        description:
+          type: string
+          description: Term description
+          examples:
+          - The parties involved in the lease agreement
+        term:
+          type: string
+          description: Term (name)
+          examples:
+          - Parties
+    TermGroup:
+      type: object
+      description: Term group
+      properties:
+        header:
+          type: string
+          description: The term group header
+          examples:
+          - Basic Terms
+        terms:
+          type: array
+          items:
+            $ref: "#/components/schemas/Term"
+            description: Terms
+    TimeUnit:
+      type: string
+      description: Time unit
+      enum:
+      - DAYS
+      - MONTHS
+      - YEARS
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        instance:
+          type: string
+          format: uri
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Attachment:
+      type: object
+      description: Attachment
+      properties:
+        attachmentData:
+          $ref: "#/components/schemas/AttachmentData"
+          description: "Attachment data, i.e. the file"
+        metadata:
+          $ref: "#/components/schemas/AttachmentMetadata"
+          description: Attachment metadata
+      required:
+      - attachmentData
+      - metadata
+    AttachmentData:
+      type: object
+      description: Attachment content
+      properties:
+        content:
+          type: string
+          format: base64
+          description: BASE64-encoded attachment file content
+          examples:
+          - QkFTRTY0LWVuY29kZWQgZGF0YQ==
+    PatchContract:
+      type: object
+      description: Partial contract payload used for PATCH. Only the fields present
+        in the payload are applied to the existing contract.
+      properties:
+        description:
+          type: string
+          description: A description of the contract
+          examples:
+          - A simple description of the contract
+        externalReferenceId:
+          type: string
+          description: External referenceId
+          examples:
+          - "123"
+        leaseType:
+          $ref: "#/components/schemas/LeaseType"
+          description: Type of lease
+        objectIdentity:
+          type: string
+          description: Object identity (from Lantmäteriet)
+          examples:
+          - 909a6a80-d1a4-90ec-e040-ed8f66444c3f
+        status:
+          $ref: "#/components/schemas/Status"
+          description: Contract status
+        type:
+          $ref: "#/components/schemas/ContractType"
+          description: Contract type
+        leasehold:
+          $ref: "#/components/schemas/Leasehold"
+          description: Type of leasehold
+        additionalTerms:
+          type: array
+          items:
+            $ref: "#/components/schemas/TermGroup"
+            description: Additional terms for the contract
+        extraParameters:
+          type: array
+          description: Extra parameters
+          items:
+            $ref: "#/components/schemas/ExtraParameterGroup"
+        indexTerms:
+          type: array
+          items:
+            $ref: "#/components/schemas/TermGroup"
+            description: Index terms for the contract
+        propertyDesignations:
+          type: array
+          items:
+            $ref: "#/components/schemas/PropertyDesignation"
+            description: Property designations
+        stakeholders:
+          type: array
+          items:
+            $ref: "#/components/schemas/Stakeholder"
+            description: List of stakeholders
+        extension:
+          $ref: "#/components/schemas/Extension"
+          description: Lease extension
+        fees:
+          $ref: "#/components/schemas/Fees"
+          description: Fee details
+        invoicing:
+          $ref: "#/components/schemas/Invoicing"
+          description: Invoicing details
+        startDate:
+          type: string
+          format: date
+          description: Start date of the contract
+          examples:
+          - 2020-01-01
+        endDate:
+          type: string
+          format: date
+          description: End date of the contract. Set when the contract is terminated
+          examples:
+          - 2022-12-31
+        notice:
+          $ref: "#/components/schemas/Notice"
+          description: Notice details
+        currentPeriod:
+          $ref: "#/components/schemas/Period"
+          description: Current contract period
+        area:
+          type: integer
+          format: int32
+          description: Leased area (m2)
+          examples:
+          - 150
+        signedByWitness:
+          type: boolean
+          description: Whether the contract is signed by a witness
+        areaData:
+          $ref: "#/components/schemas/FeatureCollection"
+          description: Part(s) of property covered by the lease. Described by GeoJSON
+            using polygon(s)
+    SpecificationContractEntity: {}
+    PageContract:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Contract"
+        number:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        paged:
+          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        unpaged:
+          type: boolean
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+  securitySchemes: {}

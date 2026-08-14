@@ -1,0 +1,250 @@
+openapi: 3.1.0
+info:
+  title: api-manager-responsibility
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "1.0"
+servers:
+- url: http://localhost:53749
+  description: Generated server url
+paths:
+  /{municipalityId}/persons/{personId}/manager-responsibilities:
+    get:
+      tags:
+      - Person
+      summary: Get manager responsibilities
+      operationId: getManagerResponsibilitiesByPersonId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: personId
+        in: path
+        description: Person ID
+        required: true
+        schema:
+          type: string
+        example: 35532a17-26a0-4438-970c-375465ff1aff
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ManagerResponsibility"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/organizations/{orgId}/manager-responsibilities:
+    get:
+      tags:
+      - Organization
+      summary: Get manager responsibilities
+      operationId: getManagerResponsibilitiesByOrganizationId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: orgId
+        in: path
+        description: Organization ID
+        required: true
+        schema:
+          type: string
+          pattern: "^[0-9]+$"
+        example: 123
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ManagerResponsibility"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/logins/{loginName}/manager-responsibilities:
+    get:
+      tags:
+      - Login
+      summary: Get manager responsibilities
+      operationId: getManagerResponsibilitiesByLoginName
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: loginName
+        in: path
+        description: Login name
+        required: true
+        schema:
+          type: string
+          pattern: "^[a-zA-Z0-9_]+$"
+        example: joe01doe
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ManagerResponsibility"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    ManagerResponsibility:
+      type: object
+      description: ManagerResponsibility model
+      properties:
+        personId:
+          type: string
+          description: The manager person ID
+          examples:
+          - 35532a17-26a0-4438-970c-375465ff1aff
+          readOnly: true
+        loginName:
+          type: string
+          description: The manager login name
+          examples:
+          - joe01doe
+          readOnly: true
+        orgList:
+          type: array
+          description: The list of organisations that the manager is responsible of
+          items:
+            type: string
+          readOnly: true
+      readOnly: true
+  securitySchemes: {}

@@ -1,0 +1,371 @@
+openapi: 3.1.0
+info:
+  title: api-installation
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+servers:
+- url: http://localhost:60804
+  description: Generated server url
+paths:
+  /{municipalityId}/installations:
+    get:
+      tags:
+      - Installation
+      summary: Get uninstalled installations
+      description: Resource returns all installations matching provided search parameters
+      operationId: getInstallations
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: category
+        in: query
+        description: Category
+        required: false
+        schema:
+          type: string
+          description: Category
+          examples:
+          - ELECTRICITY
+      - name: facilityId
+        in: query
+        description: Facility id
+        required: false
+        schema:
+          type: string
+          description: Facility id
+          examples:
+          - "123456789132456789"
+      - name: installed
+        in: query
+        description: Is the installation installed
+        required: false
+        schema:
+          type: boolean
+          description: Is the installation installed
+          examples:
+          - "true"
+      - name: dateFrom
+        in: query
+        description: Last changed date. Format is YYYY-MM-DD.
+        required: false
+        schema:
+          type: string
+          format: date
+          description: Last changed date. Format is YYYY-MM-DD.
+          examples:
+          - 2022-01-01
+      - name: sortBy
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            description: The properties to sort on
+            examples:
+            - propertyName
+      - name: sortDirection
+        in: query
+        description: The sort order direction
+        required: false
+        schema:
+          $ref: "#/components/schemas/Direction"
+      - name: page
+        in: query
+        description: Page number
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          description: Page number
+          examples:
+          - 1
+          minimum: 1
+      - name: limit
+        in: query
+        description: Result size per page. Maximum allowed value is dynamically configured
+        required: false
+        schema:
+          type: integer
+          format: int32
+          description: Result size per page. Maximum allowed value is dynamically
+            configured
+          examples:
+          - 15
+          minimum: 1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstallationsResponse"
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/InstallationsResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Direction:
+      type: string
+      description: The sort order direction
+      enum:
+      - ASC
+      - DESC
+      examples:
+      - ASC
+    Installation:
+      type: object
+      properties:
+        company:
+          type: string
+          description: Company name
+          readOnly: true
+        type:
+          type: string
+          description: Type
+          readOnly: true
+        facilityId:
+          type: string
+          description: Facility id
+          readOnly: true
+        placementId:
+          type: integer
+          format: int32
+          description: Placement id
+          readOnly: true
+        careOf:
+          type: string
+          description: Care of address
+          readOnly: true
+        street:
+          type: string
+          description: Street
+          readOnly: true
+        postCode:
+          type: string
+          description: Postal code
+          readOnly: true
+        city:
+          type: string
+          description: City
+          readOnly: true
+        propertyDesignation:
+          type: string
+          description: Property designation
+          readOnly: true
+        dateFrom:
+          type: string
+          format: date
+          description: From date
+          readOnly: true
+        dateTo:
+          type: string
+          format: date
+          description: To date
+          readOnly: true
+        dateLastModified:
+          type: string
+          format: date
+          description: Date when object was last modified
+          readOnly: true
+        metaData:
+          type: array
+          description: Meta data
+          items:
+            $ref: "#/components/schemas/MetaData"
+          readOnly: true
+    InstallationsResponse:
+      type: object
+      properties:
+        installationDetails:
+          type: array
+          items:
+            $ref: "#/components/schemas/Installation"
+            readOnly: true
+        _meta:
+          $ref: "#/components/schemas/PagingAndSortingMetaData"
+          description: Paging and sorting metadata
+          readOnly: true
+    MetaData:
+      type: object
+      properties:
+        company:
+          type: string
+          description: Company name
+          readOnly: true
+        key:
+          type: string
+          description: Key
+          readOnly: true
+        value:
+          type: string
+          description: Value
+          readOnly: true
+        type:
+          type: string
+          description: Type
+          readOnly: true
+        displayName:
+          type: string
+          description: Display Name
+          readOnly: true
+    PagingAndSortingMetaData:
+      type: object
+      description: PagingAndSortingMetaData model
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Current page
+          examples:
+          - 5
+          readOnly: true
+        limit:
+          type: integer
+          format: int32
+          description: Displayed objects per page
+          examples:
+          - 20
+          readOnly: true
+        count:
+          type: integer
+          format: int32
+          description: Displayed objects on current page
+          examples:
+          - 13
+          readOnly: true
+        totalRecords:
+          type: integer
+          format: int64
+          description: Total amount of hits based on provided search parameters
+          examples:
+          - 98
+          readOnly: true
+        totalPages:
+          type: integer
+          format: int32
+          description: Total amount of pages based on provided search parameters
+          examples:
+          - 23
+          readOnly: true
+        sortBy:
+          type: array
+          items:
+            type: string
+            description: The properties to sort by
+            examples:
+            - property
+            readOnly: true
+        sortDirection:
+          $ref: "#/components/schemas/Direction"
+          description: The sort order direction
+          examples:
+          - ASC
+  securitySchemes: {}

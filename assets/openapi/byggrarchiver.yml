@@ -1,0 +1,444 @@
+openapi: 3.1.0
+info:
+  title: ByggR Archiver
+  description: Application that archives documents from Byggr
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+servers:
+- url: http://localhost:62822
+  description: Generated server url
+paths:
+  /{municipalityId}/batch-jobs:
+    get:
+      tags:
+      - byggr-archiver-resource
+      operationId: getBatchHistory
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      responses:
+        "200":
+          description: OK - Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BatchHistoryResponse"
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BatchHistoryResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - byggr-archiver-resource
+      operationId: postBatchJob
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatchJob"
+        required: true
+      responses:
+        "200":
+          description: OK - Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatchHistoryResponse"
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/BatchHistoryResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/batch-jobs/{batchHistoryId}/rerun:
+    post:
+      tags:
+      - byggr-archiver-resource
+      operationId: reRunBatchJob
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: batchHistoryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK - Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BatchHistoryResponse"
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/BatchHistoryResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/batch-jobs/{batchHistoryId}/fallout:
+    get:
+      tags:
+      - byggr-archiver-resource
+      operationId: getFallout
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: batchHistoryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - FILE_TOO_LARGE
+          - ARCHIVE_REJECTED_FORMAT
+          - ARCHIVE_ERROR
+          - BYGGR_FETCH_ERROR
+          - METADATA_ERROR
+          - UNKNOWN
+      responses:
+        "200":
+          description: OK - Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArchiveFailureResponse"
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArchiveFailureResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/archived/attachments:
+    get:
+      tags:
+      - byggr-archiver-resource
+      operationId: getArchiveHistory
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: archiveStatus
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - COMPLETED
+          - NOT_COMPLETED
+          - NOT_COMPLETED_FILE_TO_LARGE
+      - name: batchHistoryId
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK - Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArchiveHistoryResponse"
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArchiveHistoryResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    BatchJob:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+          description: Startdatum på körningen.
+          examples:
+          - 2021-01-01
+        end:
+          type: string
+          format: date
+          description: Slutdatum på körningen.
+          examples:
+          - 2021-01-02
+      required:
+      - end
+      - start
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    BatchHistoryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        start:
+          type: string
+          format: date
+        end:
+          type: string
+          format: date
+        archiveStatus:
+          type: string
+          enum:
+          - COMPLETED
+          - NOT_COMPLETED
+          - NOT_COMPLETED_FILE_TO_LARGE
+        batchTrigger:
+          type: string
+          enum:
+          - MANUAL
+          - SCHEDULED
+        timestamp:
+          type: string
+          format: date-time
+    ArchiveFailureResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        batchHistoryId:
+          type: integer
+          format: int64
+        caseId:
+          type: string
+        documentId:
+          type: string
+        municipalityId:
+          type: string
+        documentName:
+          type: string
+        failureCategory:
+          type: string
+          enum:
+          - FILE_TOO_LARGE
+          - ARCHIVE_REJECTED_FORMAT
+          - ARCHIVE_ERROR
+          - BYGGR_FETCH_ERROR
+          - METADATA_ERROR
+          - UNKNOWN
+        message:
+          type: string
+        detail:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    ArchiveHistoryResponse:
+      type: object
+      properties:
+        documentId:
+          type: string
+        caseId:
+          type: string
+        documentName:
+          type: string
+        documentType:
+          type: string
+        archiveId:
+          type: string
+        archiveUrl:
+          type: string
+        archiveStatus:
+          type: string
+          enum:
+          - COMPLETED
+          - NOT_COMPLETED
+          - NOT_COMPLETED_FILE_TO_LARGE
+        timestamp:
+          type: string
+          format: date-time
+        batchHistory:
+          $ref: "#/components/schemas/BatchHistoryResponse"
+  securitySchemes: {}

@@ -1,0 +1,988 @@
+openapi: 3.1.0
+info:
+  title: api-education-finder
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "3.1"
+servers:
+- url: http://localhost:54005
+  description: Generated server url
+tags:
+- name: Courses
+  description: Find courses
+- name: Statistics
+  description: Get statistics
+paths:
+  /{municipalityId}/statistics:
+    get:
+      tags:
+      - Statistics
+      description: |
+        Find statistics based on the provided parameters.
+
+        Filter parameters:
+        - categories: Which categories to include in the statistics. Parameter filter strategy: IN-IGNORE-CASE. The parameter can be provided multiple times to specify multiple values. Example usage: ?categories=Teknik&categories=Bygg%20och%20anläggning
+        - subcategories: Which subcategories to include in the statistics. Parameter filter strategy: IN-IGNORE-CASE. The parameter can be provided multiple times to specify multiple values. Example usage: ?subcategories=fysik&subcategories=matematik
+        - levels: Which levels to include in the statistics. Parameter filter strategy: IN-IGNORE-CASE. The parameter can be provided multiple times to specify multiple values. Example usage: ?levels=gymnasial%20vuxenutbildning&levels=grundläggande%20vuxenutbildning
+        - studyLocations: Which study locations to include in the statistics. Parameter filter strategy: IN-IGNORE-CASE. The parameter can be provided multiple times to specify multiple values. Example usage: ?studyLocations=Sundsvall&studyLocations=Östersund
+        - scopes: Which scopes to include in the statistics. Parameter filter strategy: IN-IGNORE-CASE. The parameter can be provided multiple times to specify multiple values. Example usage: ?scopes=100&scopes=75
+        - startDate: The start date of the statistics. 'startDate' is used in parallel with 'endDate' to form a period. Parameter filter strategy: WITHIN-OR-EQUAL. Example usage: ?startDate=2025-01-01
+        - endDate: The end date of the statistics. 'endDate' is used in parallel with 'startDate' to form a period. Parameter filter strategy: WITHIN-OR-EQUAL. Example usage: ?endDate=2025-12-31
+
+        Parameter filter strategies:
+        - IN-IGNORE-CASE: Accepts a list of values separated by comma. The parameter value must have an exact match, case insensitive.
+        - WITHIN-OR-EQUAL: The parameter value must be within the range of the searched attribute or equal to it. Example - startDate=2025-01-01, endDate=2025-12-31: The statistics will include all courses that have a start date between(inclusive) 2025-01-01 and 2025-12-31.
+
+        Returned statistics:
+        - OnGoingCourses: Number of courses which pass the filter parameters and have a start date before the given 'startDate' and after the given 'endDate'.
+        - PlannedCourses: Number of courses which pass the filter parameters and have a start date after the given 'startDate' and before the given 'endDate'.
+        - FinishedCourses: Number of courses which pass the filter parameters and have an end date after the given 'startDate' and before the given 'endDate'.
+        - AvailableSeats: Number of available seats for all courses which pass the filter parameters and have a start date after the given 'startDate' and before the given 'endDate'.
+        - TotalCapacity: Total capacity for all courses which pass the filter parameters and have a start date after the given 'startDate' and before the given 'endDate'.
+
+        Important notes:
+        - All date parameters are expected to be on the format: yyyy-MM-dd (example value: '2025-01-01')
+      operationId: getStatistics
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: categories
+        in: query
+        description: List of categories
+        required: false
+        schema:
+          type: array
+          description: List of categories
+          examples:
+          - Medicin och vård
+          items:
+            type: string
+            description: List of categories
+            examples:
+            - Medicin och vård
+      - name: subCategories
+        in: query
+        description: List of sub categories
+        required: false
+        schema:
+          type: array
+          description: List of sub categories
+          examples:
+          - PSYKOTERAPI
+          items:
+            type: string
+            description: List of sub categories
+            examples:
+            - PSYKOTERAPI
+      - name: levels
+        in: query
+        description: List of levels
+        required: false
+        schema:
+          type: array
+          description: List of levels
+          examples:
+          - gymnasial vuxenutbildning
+          items:
+            type: string
+            description: List of levels
+            examples:
+            - gymnasial vuxenutbildning
+      - name: studyLocations
+        in: query
+        description: List of study locations
+        required: false
+        schema:
+          type: array
+          description: List of study locations
+          examples:
+          - Sundsvall
+          items:
+            type: string
+            description: List of study locations
+            examples:
+            - Sundsvall
+      - name: scopes
+        in: query
+        description: List of scopes
+        required: false
+        schema:
+          type: array
+          description: List of scopes
+          examples:
+          - "25, 50, 75"
+          items:
+            type: integer
+            format: int32
+            description: List of scopes
+            examples:
+            - "25, 50, 75"
+      - name: startDate
+        in: query
+        description: Start date
+        required: true
+        schema:
+          type: string
+          format: date
+          description: Start date
+          examples:
+          - 2024-01-01
+      - name: endDate
+        in: query
+        description: End date
+        required: true
+        schema:
+          type: string
+          format: date
+          description: End date
+          examples:
+          - 2024-12-31
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Statistics"
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Statistics"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/statistics/filters/{filterAttribute}/values:
+    get:
+      tags:
+      - Statistics
+      summary: Find available filter values
+      operationId: findFilterValues
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: filterAttribute
+        in: path
+        description: The attribute name to get available values from
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/courses:
+    get:
+      tags:
+      - Courses
+      summary: Find course
+      description: |
+        Find courses and apply filters to narrow the result.
+
+        Pagination parameters:
+        - page: One-based page index (1..N)
+        - limit: The size of the page to be returned
+        - sortBy: Accepts a list of values separated by comma. The result is firstly sorted by the first values, followed by the next value.
+        - sortDirection: The sort direction. Possible values: 'ASC' or 'DESC'. Case sensitive.
+        - Example usage: ?page=1&limit=10&sortBy=credits,category&sortDirection=ASC
+        - Example explanation: The example will return the first page with 10 courses sorted by credits in ascending order, followed by category in ascending order.
+
+        Filter parameters:
+        - studyLocations: The course study location. Parameter filter strategy: 'IN-IGNORE-CASE'. The parameter can be provided multiple times to specify multiple values. Example usage: ?studyLocations=Sundsvall&studyLocations=Östersund
+        - scopes: The course scope in percent. Parameter filter strategy: 'IN-IGNORE-CASE'. The parameter can be provided multiple times to specify multiple values. Example usage: ?scopes=100&scopes=75
+        - levels: The course level. Parameter filter strategy: 'IN-IGNORE-CASE'. The parameter can be provided multiple times to specify multiple values. Example usage: ?levels=gymnasial%20vuxenutbildning&levels=grundläggande%20vuxenutbildning
+        - categories: The course category. Parameter filter strategy: 'IN-IGNORE-CASE'. The parameter can be provided multiple times to specify multiple values. Example usage: ?categories=Teknik&categories=Bygg%20och%20anläggning
+        - code: The course code. Parameter filter strategy: 'EQUAL-IGNORE-CASE'. Example value: 'PRRPRR02'
+        - name: The course name. Parameter filter strategy: 'EQUAL-IGNORE-CASE'. Example value: 'Programmering'
+        - provider: The course provider. Parameter filter strategy: 'EQUAL-IGNORE-CASE'. Example value: 'Sundsvalls Kommun'
+        - credits: The course credits. Parameter filter strategy: 'EQUAL'. Example value: '150'
+        - start: The course start date. Parameter filter strategy: 'EQUAL'. Example value: '2025-01-01'
+        - startBefore: A date that occurs before the course start date. Parameter filter strategy: 'EQUAL-OR-LESS-THAN'. Example value: '2020-01-01'
+        - startAfter: A date that occurs after the course start date. Parameter filter strategy: 'EQUAL-OR-GREATER-THAN'. Example value: '2020-12-31'
+        - end: The course end date. Parameter filter strategy: 'EQUAL'. Example value: '2025-01-01'
+        - endBefore: A date that occurs before the course end date. Parameter filter strategy: 'EQUAL-OR-LESS-THAN'. Example value: '2020-01-01'
+        - endAfter: A date that occurs after the course end date. Parameter filter strategy: 'EQUAL-OR-GREATER-THAN'. Example value: '2020-12-31'
+        - earliestApplication: The course 'earliest application' date. Parameter filter strategy: 'EQUAL'. Example value: '2025-01-01'
+        - earliestApplicationBefore: A date that occurs before the course 'earliest application' date. Parameter filter strategy: 'EQUAL-OR-LESS-THAN'. Example value: '2020-01-01'
+        - earliestApplicationAfter: A date that occurs after the course 'earliest application' date. Parameter filter strategy: 'EQUAL-OR-GREATER-THAN'. Example value: '2020-12-31'
+        - latestApplication: The course 'latest application' date. Parameter filter strategy: 'EQUAL-OR-NULL'. Example value: '2025-01-01'
+        - latestApplicationBefore: A date that occurs before the course 'latest application' date. Parameter filter strategy: 'EQUAL-OR-LESS-THAN-OR-NULL'. Example value: '2020-01-01'
+        - latestApplicationAfter: A date that occurs after the course 'latest application' date. Parameter filter strategy: 'EQUAL-OR-GREATER-THAN-OR-NULL'. Example value: '2020-12-31'
+        - information: The course information. Parameter filter strategy: 'LIKE-IGNORE-CASE'. Example value: 'utbildning till affärsutvecklare'
+        - searchString: Search for the parameter value in code, name, category and information attributes. Parameter filter strategy: 'LIKE-IGNORE-CASE'. Example value: 'Programmering'
+
+        Parameter filter strategies:
+        - IN-IGNORE-CASE: Accepts a list of values separated by comma. The parameter value must have an exact match, case insensitive.
+        - EQUAL: The parameter must have an exact match, case sensitive.
+        - EQUAL-OR-NULL: The parameter must have an exact match, case sensitive or be null.
+        - EQUAL-IGNORE-CASE: The parameter must have an exact match, case insensitive.
+        - LIKE-IGNORE-CASE: The parameter value must occur somewhere in the searched attribute, case insensitive.
+        - EQUAL-OR-GREATER-THAN: The parameter value must be equal or greater than the searched attribute.
+        - EQUAL-OR-GREATER-THAN-OR-NULL: The parameter value must be equal or greater than the searched attribute or be null.
+        - EQUAL-OR-LESS-THAN: The parameter value must be equal or less than the searched attribute.
+        - EQUAL-OR-LESS-THAN-OR-NULL: The parameter value must be equal or less than the searched attribute or be null.
+
+
+        Important notes:
+        - All date parameters are expected to be on the format: yyyy-MM-dd (example value: '2025-01-01')
+      operationId: find
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: parameters
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/CourseParameters"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedCoursesResponse"
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/PagedCoursesResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/courses/{courseId}:
+    get:
+      tags:
+      - Courses
+      summary: Find course by id
+      operationId: findCourseById
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: courseId
+        in: path
+        description: The id of the course
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1234
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Course"
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Course"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/courses/filters/{filterAttribute}/values:
+    get:
+      tags:
+      - Courses
+      summary: Find available filter values
+      description: Find available filter values (for use in the 'find'-resource)
+      operationId: findFilterValues_1
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: filterAttribute
+        in: path
+        description: The attribute name to get available values from
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/problem+json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Statistics:
+      type: object
+      description: Statistics model
+      properties:
+        onGoingCourses:
+          type: integer
+          format: int32
+          description: Number of on-going courses
+          examples:
+          - 10
+          readOnly: true
+        plannedCourses:
+          type: integer
+          format: int32
+          description: Number of planned courses
+          examples:
+          - 10
+          readOnly: true
+        finishedCourses:
+          type: integer
+          format: int32
+          description: Number of finished courses
+          examples:
+          - 10
+          readOnly: true
+        availableSeats:
+          type: integer
+          format: int32
+          description: Number of available seats
+          examples:
+          - 10
+          readOnly: true
+        totalCapacity:
+          type: integer
+          format: int32
+          description: Total capacity
+          examples:
+          - 10
+          readOnly: true
+        studyLocations:
+          type: array
+          description: Study locations used for filtering
+          items:
+            type: string
+          readOnly: true
+        scopes:
+          type: array
+          description: Scopes used for filtering
+          items:
+            type: integer
+            format: int32
+          readOnly: true
+        levels:
+          type: array
+          description: Levels used for filtering
+          items:
+            type: string
+          readOnly: true
+        categories:
+          type: array
+          description: Categories used for filtering
+          items:
+            type: string
+          readOnly: true
+        subCategories:
+          type: array
+          description: Category ids used for filtering
+          items:
+            type: string
+          readOnly: true
+        startDate:
+          type: string
+          format: date
+          description: Start date used for filtering
+          readOnly: true
+        endDate:
+          type: string
+          format: date
+          description: End date used for filtering
+          readOnly: true
+      readOnly: true
+    CourseParameters:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          default: 1
+          description: Page number
+          examples:
+          - 1
+          minimum: 1
+        limit:
+          type: integer
+          format: int32
+          description: Result size per page. Maximum allowed value is dynamically
+            configured
+          examples:
+          - 15
+          minimum: 1
+        sortBy:
+          type: array
+          items:
+            type: string
+            description: The properties to sort on
+            examples:
+            - propertyName
+        sortDirection:
+          $ref: "#/components/schemas/Direction"
+          description: The sort order direction
+          examples:
+          - ASC
+        code:
+          type: string
+          description: Course code
+          examples:
+          - KEMKEM02
+        name:
+          type: string
+          description: Name of the course
+          examples:
+          - Etnicitet och kulturmöten
+        provider:
+          type: string
+          description: Provider of the course
+          examples:
+          - Sundsvalls Kommun
+        credits:
+          type: string
+          description: Course credits
+          examples:
+          - "100"
+        information:
+          type: string
+          description: Information about the course
+          examples:
+          - This is course information
+        languageOfInstruction:
+          type: string
+          description: Language of instruction
+          examples:
+          - Swedish
+        searchString:
+          type: string
+          description: Search string
+          examples:
+          - searchString
+        start:
+          type: string
+          format: date
+          description: Start date of the course
+          examples:
+          - 2022-12-31
+        startAfter:
+          type: string
+          format: date
+          description: Start date of the course is after
+          examples:
+          - 2022-12-31
+        startBefore:
+          type: string
+          format: date
+          description: Start date of the course is before
+          examples:
+          - 2022-12-31
+        end:
+          type: string
+          format: date
+          description: End date of the course
+          examples:
+          - 2022-12-31
+        endAfter:
+          type: string
+          format: date
+          description: End date of the course is after
+          examples:
+          - 2022-12-31
+        endBefore:
+          type: string
+          format: date
+          description: End date of the course is before
+          examples:
+          - 2022-12-31
+        earliestApplication:
+          type: string
+          format: date
+          description: Earliest application date
+          examples:
+          - 2022-12-31
+        earliestApplicationAfter:
+          type: string
+          format: date
+          description: Earliest application date is after
+          examples:
+          - 2022-12-31
+        earliestApplicationBefore:
+          type: string
+          format: date
+          description: Earliest application date is before
+          examples:
+          - 2022-12-31
+        latestApplication:
+          type: string
+          format: date
+          description: Latest application date
+          examples:
+          - 2022-12-31
+        latestApplicationAfter:
+          type: string
+          format: date
+          description: Latest application date is after
+          examples:
+          - 2022-12-31
+        latestApplicationBefore:
+          type: string
+          format: date
+          description: Latest application date is before
+          examples:
+          - 2022-12-31
+        scopes:
+          type: array
+          description: Scope of the course
+          examples:
+          - 75
+          items:
+            type: integer
+            format: int32
+        studyLocations:
+          type: array
+          description: Study location
+          examples:
+          - Sundsvall
+          items:
+            type: string
+        levels:
+          type: array
+          description: Level of the course
+          examples:
+          - gymnasial vuxenutbildning
+          items:
+            type: string
+        categories:
+          type: array
+          description: Category
+          examples:
+          - Naturvetenskap
+          items:
+            type: string
+        subcategories:
+          type: array
+          description: Subcategory
+          examples:
+          - Kemi
+          items:
+            type: string
+        visitingAddressMunicipalityId:
+          type: string
+          description: Visiting address municipality ID
+          examples:
+          - "2281"
+        placeOfStudyMunicipalityId:
+          type: string
+          description: Study location municipality ID
+          examples:
+          - "2281"
+    Direction:
+      type: string
+      enum:
+      - ASC
+      - DESC
+    Course:
+      type: object
+      description: Course model
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Course ID
+          examples:
+          - 1
+          readOnly: true
+        code:
+          type: string
+          description: Course code
+          examples:
+          - PRRPRR02
+          readOnly: true
+        name:
+          type: string
+          description: Course name
+          examples:
+          - Programmering 2
+          readOnly: true
+        provider:
+          type: string
+          description: Course provider
+          examples:
+          - Sundsvalls Kommun
+          readOnly: true
+        providerUrl:
+          type: string
+          description: Course provider URL
+          examples:
+          - http://sundsvall.se/vuxenutbildning
+          readOnly: true
+        level:
+          type: string
+          description: Course level
+          examples:
+          - gymnasial vuxenutbildning
+          readOnly: true
+        url:
+          type: string
+          description: Course URL
+          examples:
+          - https://sundsvall.alvis.se/hittakurser/kurs/38837
+          readOnly: true
+        credits:
+          type: number
+          format: double
+          description: Course credits
+          examples:
+          - 150
+          readOnly: true
+        scope:
+          type: number
+          format: double
+          description: Course scope in percent
+          examples:
+          - 100
+          readOnly: true
+        studyLocation:
+          type: string
+          description: Study location
+          examples:
+          - Sundsvall
+          readOnly: true
+        subjectCode:
+          type: string
+          description: Subject code
+          examples:
+          - PRRPRR02
+          readOnly: true
+        numberOfSeats:
+          type: integer
+          format: int32
+          description: Number of seats
+          examples:
+          - 10
+          readOnly: true
+        category:
+          type: string
+          description: Course category
+          examples:
+          - "Ekonomi, marknadsföring och administration"
+          readOnly: true
+        subcategory:
+          type: string
+          description: Course subcategory
+          examples:
+          - Administration
+          readOnly: true
+        languageOfInstruction:
+          type: string
+          description: Language of instruction
+          examples:
+          - Swedish
+          readOnly: true
+        start:
+          type: string
+          format: date
+          description: Course start date
+          examples:
+          - 2020-08-31
+          readOnly: true
+        end:
+          type: string
+          format: date
+          description: Course end date
+          examples:
+          - 2020-12-20
+          readOnly: true
+        earliestApplication:
+          type: string
+          format: date
+          description: Earliest application date
+          examples:
+          - 2020-01-01
+          readOnly: true
+        latestApplication:
+          type: string
+          format: date
+          description: Latest application date
+          examples:
+          - 2020-04-15
+          readOnly: true
+        information:
+          type: string
+          description: Course information
+          examples:
+          - "<![CDATA[ <p><a href=https://sundsvall.se/utbildning-och-forskola/vuxenutbildning/gymnasial--niva/studieformer-och-schema\
+            \ target=_blank>Läs&nbsp;om våra studieformer</a></p><p><br /><a href=https://www.csn.se/\
+            \ target=_blank>Läs om studiemedel på&nbsp;www.csn.se</a><br />&nbsp;<br\
+            \ />Ditt antagningsbesked<br />Antagningsbesked skickas via e-post cirka\
+            \ två veckor före kursstart.&nbsp;<a href=https://sundsvall.alvis.se/>Se\
+            \ ditt antagningsbesked och följ din ansökan via Mina sidor</a>.</p> ]]>"
+          readOnly: true
+        studyLocationMunicipalityId:
+          type: string
+          description: Study location municipality ID
+          examples:
+          - "2301"
+          readOnly: true
+        visitingAddressMunicipalityId:
+          type: string
+          description: Visiting address municipality ID
+          examples:
+          - "2301"
+          readOnly: true
+      readOnly: true
+    PagedCoursesResponse:
+      type: object
+      description: Paged course response model
+      properties:
+        courses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Course"
+            readOnly: true
+        _meta:
+          $ref: "#/components/schemas/PagingMetaData"
+          readOnly: true
+      readOnly: true
+    PagingMetaData:
+      type: object
+      description: PagingMetaData model
+      properties:
+        page:
+          type: integer
+          format: int32
+          description: Current page
+          examples:
+          - 5
+          readOnly: true
+        limit:
+          type: integer
+          format: int32
+          description: Displayed objects per page
+          examples:
+          - 20
+          readOnly: true
+        count:
+          type: integer
+          format: int32
+          description: Displayed objects on current page
+          examples:
+          - 13
+          readOnly: true
+        totalRecords:
+          type: integer
+          format: int64
+          description: Total amount of hits based on provided search parameters
+          examples:
+          - 98
+          readOnly: true
+        totalPages:
+          type: integer
+          format: int32
+          description: Total amount of pages based on provided search parameters
+          examples:
+          - 23
+          readOnly: true
+  securitySchemes: {}

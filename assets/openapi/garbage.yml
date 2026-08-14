@@ -1,0 +1,332 @@
+openapi: 3.1.0
+info:
+  title: Garbage
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.1"
+servers:
+- url: http://localhost:64017
+  description: Generated server url
+paths:
+  /{municipalityId}/schedules:
+    get:
+      tags:
+      - GarbageSchedule
+      summary: Get garbage schedule for an address
+      operationId: getGarbage
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: street
+        in: query
+        description: Address
+        required: false
+        schema:
+          type: string
+          description: Address
+          examples:
+          - Testgatan
+      - name: houseNumber
+        in: query
+        description: Address
+        required: false
+        schema:
+          type: string
+          description: Address
+          examples:
+          - "12"
+      - name: postalCode
+        in: query
+        description: Zipcode
+        required: false
+        schema:
+          type: string
+          description: Zipcode
+          examples:
+          - "85731"
+      - name: city
+        in: query
+        description: City
+        required: false
+        schema:
+          type: string
+          description: City
+          example: Sundsvall
+        example: Sundsvall
+      - name: additionalInformation
+        in: query
+        description: Any other identifier. Example HouseLetter or building clarification
+        required: false
+        schema:
+          type: string
+          description: Any other identifier. Example HouseLetter or building clarification
+          examples:
+          - A
+      - name: page
+        in: query
+        description: Page number
+        required: false
+        schema:
+          type: integer
+          format: int32
+          description: Page number
+          examples:
+          - 1
+          minimum: 1
+      - name: limit
+        in: query
+        description: "Result size per page. If omitted, all results are returned."
+        required: false
+        schema:
+          type: integer
+          format: int32
+          description: "Result size per page. If omitted, all results are returned."
+          examples:
+          - 100
+          minimum: 1
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GarbageScheduleResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    put:
+      tags:
+      - GarbageSchedule
+      summary: Trigger a garbage schedule update
+      operationId: updateGarbageSchedules
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      responses:
+        "202":
+          description: Successful Operation
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          description: Address
+          examples:
+          - Testgatan
+          minLength: 1
+        houseNumber:
+          type: string
+          description: Address
+          examples:
+          - "12"
+          minLength: 1
+        postalCode:
+          type: string
+          description: Zipcode
+          examples:
+          - "85731"
+          minLength: 1
+        city:
+          type: string
+          description: City
+          examples:
+          - Sundsvall
+      required:
+      - houseNumber
+      - postalCode
+      - street
+    GarbageScheduleResponse:
+      type: object
+      properties:
+        address:
+          $ref: "#/components/schemas/Address"
+          description: Address
+        additionalInformation:
+          type: string
+          description: Any other identifier. Example HouseLetter or building clarification
+          examples:
+          - A
+        garbageScheduledDay:
+          type: string
+          description: 'What weekday garbage is collected '
+          enum:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          examples:
+          - MONDAY
+        garbageScheduledWeek:
+          type: string
+          description: 'What week garbage is collected. Odd/even numbers '
+          enum:
+          - ODD
+          - EVEN
+          examples:
+          - ODD
+        facilityCategory:
+          type: string
+          description: 'Which type of facility '
+          enum:
+          - VILLA
+          - FRITIDSHUS
+          examples:
+          - VILLA
+        schedules:
+          type: array
+          description: Waste schedules with type and next pickup date
+          items:
+            $ref: "#/components/schemas/WasteSchedule"
+    WasteSchedule:
+      type: object
+      description: Waste schedule entry
+      properties:
+        wasteType:
+          type: string
+          description: Type of waste
+          enum:
+          - WASTE
+          - FOOD
+          - PLASTIC
+          - PAPER
+          examples:
+          - WASTE
+        nextPickupDate:
+          type: string
+          format: date
+          description: Next scheduled pickup date
+          examples:
+          - 2026-03-31
+  securitySchemes: {}

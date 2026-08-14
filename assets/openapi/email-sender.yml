@@ -1,0 +1,234 @@
+openapi: 3.1.0
+info:
+  title: EmailSender
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.1"
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+tags:
+- name: Email resources
+  description: Resources for sending emails
+paths:
+  /{municipalityId}/send/email:
+    post:
+      tags:
+      - Email resources
+      summary: Send an e-mail
+      operationId: sendMail
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendEmailRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful Operation
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Attachment:
+      type: object
+      description: Attachment
+      properties:
+        content:
+          type: string
+          description: The attachment (file) content as a BASE64-encoded string
+          examples:
+          - aGVsbG8gd29ybGQK
+        name:
+          type: string
+          description: The attachment filename
+          examples:
+          - test.txt
+          minLength: 1
+        contentType:
+          type: string
+          description: The attachment content type
+          examples:
+          - text/plain
+          minLength: 1
+      required:
+      - contentType
+      - name
+    SendEmailRequest:
+      type: object
+      description: The request class for sending an e-mail
+      properties:
+        emailAddress:
+          type: string
+          format: email
+          description: Recipient e-mail address. Deprecated, use 'recipients' instead
+          deprecated: true
+          examples:
+          - recipient@recipient.se
+        recipients:
+          type: array
+          items:
+            type: string
+            format: email
+            description: Recipient (To) e-mail address
+            examples:
+            - recipient@recipient.se
+        cc:
+          type: array
+          items:
+            type: string
+            format: email
+            description: Carbon-copy (CC) e-mail address
+            examples:
+            - cc-recipient@recipient.se
+        subject:
+          type: string
+          description: E-mail subject
+          minLength: 1
+        message:
+          type: string
+          description: E-mail plain-text body
+        htmlMessage:
+          type: string
+          description: E-mail HTML body (BASE64-encoded)
+        sender:
+          $ref: "#/components/schemas/Sender"
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+        headers:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+          description: Headers
+      required:
+      - sender
+      - subject
+    Sender:
+      type: object
+      description: E-mail sender
+      properties:
+        name:
+          type: string
+          description: The sender of the e-mail
+          minLength: 1
+        address:
+          type: string
+          format: email
+          description: Sender e-mail address
+          examples:
+          - sender@sender.se
+          minLength: 1
+        replyTo:
+          type: string
+          format: email
+          description: Reply-to e-mail address
+          examples:
+          - sender@sender.se
+      required:
+      - address
+      - name
+  securitySchemes: {}

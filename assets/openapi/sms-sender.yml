@@ -1,0 +1,129 @@
+openapi: 3.1.0
+info:
+  title: SmsSender
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+servers:
+- url: http://localhost:55668
+  description: Generated server url
+paths:
+  /{municipalityId}/send/sms:
+    post:
+      tags:
+      - SMS Resources
+      summary: Send an SMS
+      operationId: sendSms
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendSmsRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SendSmsResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    SendSmsRequest:
+      type: object
+      properties:
+        sender:
+          $ref: "#/components/schemas/Sender"
+        mobileNumber:
+          type: string
+          description: Mobile number incl. country code
+          examples:
+          - "+46701740605"
+        priority:
+          type: string
+          default: NORMAL
+          description: Priority - indicates whether the SMS may be sent between 20:00
+            and 08:00 or not
+          enum:
+          - HIGH
+          - NORMAL
+        message:
+          type: string
+          minLength: 1
+      required:
+      - message
+      - mobileNumber
+      - sender
+    Sender:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "The sender of the SMS, swedish letters(å,ä,ö) will be replaced\
+            \ by (a,a,o) respectively"
+          examples:
+          - sender
+          maxLength: 11
+          minLength: 3
+      required:
+      - name
+    SendSmsResponse:
+      type: object
+      properties:
+        sent:
+          type: boolean
+  securitySchemes: {}

@@ -1,0 +1,471 @@
+openapi: 3.1.0
+info:
+  title: api-case-status
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "4.3"
+servers:
+- url: http://localhost:51236
+  description: Generated server url
+paths:
+  /{municipalityId}/{organizationNumber}/statuses:
+    get:
+      tags:
+      - Status Resources
+      summary: Get organization statuses
+      operationId: getOrganisationStatuses
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: organizationNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseStatusResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{externalCaseId}/status:
+    get:
+      tags:
+      - Status Resources
+      summary: Get case status
+      operationId: getCaseStatus
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: externalCaseId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseStatusResponse"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{externalCaseId}/pdf:
+    get:
+      tags:
+      - Status Resources
+      summary: Get case PDF
+      operationId: getCasePdf
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: externalCaseId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CasePdfResponse"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{externalCaseId}/oepstatus:
+    get:
+      tags:
+      - Status Resources
+      summary: Get status in openE Platform format
+      operationId: getOepStatus
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: externalCaseId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OepStatusResponse"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/party/{partyId}/statuses:
+    get:
+      tags:
+      - Status Resources
+      summary: Get all statuses connected to a partyId
+      operationId: getPartyStatuses
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: partyId
+        in: path
+        description: PartyId to find cases for
+        required: true
+        schema:
+          type: string
+        example: 123e4567-e89b-12d3-a456-426614174000
+      - name: includeDrafts
+        in: query
+        description: Include draft statuses
+        required: false
+        schema:
+          type: boolean
+          default: false
+        example: true
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseStatusResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/errands/statuses:
+    get:
+      tags:
+      - Status Resources
+      summary: Get errand statuses by errandNumber or propertyDesignation
+      operationId: getErrandStatuses
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: propertyDesignation
+        in: query
+        description: Property designation to find cases for
+        required: false
+        schema:
+          type: string
+          maxLength: 255
+          minLength: 0
+          pattern: "[^*\\p{Cntrl}]*"
+        example: Körsbärsdalen 123
+      - name: errandNumber
+        in: query
+        description: Errand number to find cases for
+        required: false
+        schema:
+          type: string
+          maxLength: 255
+          minLength: 0
+          pattern: "[^*\\p{Cntrl}]*"
+        example: Number 123
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseStatusResponse"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    CaseStatusResponse:
+      type: object
+      description: Case status response
+      properties:
+        caseId:
+          type: string
+          description: Case id
+          examples:
+          - "1234567890"
+        externalCaseId:
+          type: string
+          description: External case id
+          examples:
+          - "1234567890"
+        caseType:
+          type: string
+          description: Case type
+          examples:
+          - Building permit
+        status:
+          type: string
+          description: Status
+          examples:
+          - In progress
+        externalStatus:
+          type: string
+          description: External status
+          examples:
+          - Handläggning pågår
+        firstSubmitted:
+          type: string
+          description: First submitted
+          examples:
+          - 2021-01-01
+        lastStatusChange:
+          type: string
+          description: Last status change
+          examples:
+          - 2021-01-01
+        system:
+          type: string
+          description: The system that the case is in
+          examples:
+          - BYGGR
+        namespace:
+          type: string
+          description: The namespace of the case
+          examples:
+          - Namespace
+        errandNumber:
+          type: string
+          description: Human readable identifier for the case
+          examples:
+          - BYGGR-2024-123456
+        propertyDesignations:
+          type: array
+          items:
+            type: string
+            description: List of property designations
+            examples:
+            - Residential
+    CasePdfResponse:
+      type: object
+      description: Case status response
+      properties:
+        externalCaseId:
+          type: string
+          description: External case id
+          examples:
+          - "1234567890"
+        base64:
+          type: string
+          description: Base64 encoded PDF
+          examples:
+          - JVBERi0x
+    OepStatusResponse:
+      type: object
+      description: Case status response
+      properties:
+        key:
+          type: string
+          description: Key
+          examples:
+          - status
+        value:
+          type: string
+          description: Value
+          examples:
+          - In progress
+  securitySchemes: {}

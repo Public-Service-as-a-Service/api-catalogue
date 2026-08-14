@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Invoices – API-katalogen</title>
+  <meta name="description" content="Samlad ingång för fakturauppgifter – hämtar kommersiella fakturor och offentliga förvaltningsfakturor från underliggande källor och levererar dem i ett gemensamt format.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">Invoices</span>
+      </nav>
+      <span class="app-tag app-tag-light">Ekonomi och fakturering</span>
+      <h1>Invoices</h1>
+      <p class="hero-lead">
+        Samlad ingång för fakturauppgifter – hämtar kommersiella fakturor och offentliga förvaltningsfakturor från underliggande källor och levererar dem i ett gemensamt format.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            Invoices ger kommunens applikationer en gemensam väg till fakturainformation, oavsett var fakturorna kommer ifrån. API:et delar upp fakturor i två ursprung: kommersiella fakturor (till exempel el- och fjärrvärmefakturor från de kommunala bolagen) som hämtas via DataWarehouseReader, och offentliga förvaltningsfakturor som hämtas från InvoiceCache.
+          </p>
+          <p>
+            Anroparen söker med partyId, fakturanummer, OCR-nummer, datumintervall eller anläggnings-id, och tjänsten översätter parametrarna till rätt fråga mot rätt källa. För kommersiella fakturor löses partyId först upp till kundnummer via kundengagemang i DataWarehouseReader. Fakturor kan även hämtas som PDF via InvoiceCache.
+          </p>
+          <p>
+            Tjänsten är ett rent aggregerings-API utan egen datalagring – all information hämtas i realtid från de underliggande tjänsterna, med circuit breakers som skydd mot störningar.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Fakturasökning per ursprung</strong> – Sökning av fakturor uppdelat på kommersiella fakturor och offentliga förvaltningsfakturor, med gemensamt svarsformat.</li>
+            <li><strong>Sökning via part</strong> – PartyId löses upp till kundnummer via kundengagemang i DataWarehouseReader innan kommersiella fakturor hämtas.</li>
+            <li><strong>Fakturadetaljer</strong> – Detaljerade fakturarader för en enskild kommersiell faktura.</li>
+            <li><strong>Faktura-PDF</strong> – Hämtning och nedladdning av fakturor i PDF-format via InvoiceCache.</li>
+            <li><strong>Kundfakturalistor</strong> – Fakturor för en eller flera kunder med filtrering på period, status och anläggning samt paginering och sortering.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>9.5</strong></li>
+            <li>Kategori: <strong>Ekonomi och fakturering</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="invoices-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-invoices" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="invoices-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/invoices.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/invoices.svg" alt="Arkitekturskiss för Invoices: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap.
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Övrigt:</strong> Resilience4j (circuit breakers mot båda beroende tjänsterna), Logbook för anropsloggning</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som Invoices anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>DataWarehouseReader</td><td>5.7</td><td>Hämtar kommersiella fakturor, fakturadetaljer och kundengagemang ur kommunkoncernens datalager.</td></tr>
+            <tr><td>InvoiceCache</td><td>4.1</td><td>Hämtar offentliga förvaltningsfakturor och faktura-PDF:er.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>application.yml med URL och OAuth2-klientuppgifter för DataWarehouseReader och InvoiceCache</li>
+        <li>Konfigurerbara timeout-värden per integration</li>
+        <li>Ingen databas – tjänsten är tillståndslös och hämtar allt i realtid</li>
+        <li>Anrop görs per kommun – municipalityId ingår i API-vägarna</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Vid sökning av kommersiella fakturor på partyId hämtas först kundengagemang från DataWarehouseReader; saknas engagemang svarar tjänsten 404 – verifierat i InvoicesService.</li>
+        <li>Tjänsten saknar helt egen datalagring – den mappar och vidarebefordrar frågor till DataWarehouseReader respektive InvoiceCache.</li>
+        <li>Den äldre sökvägen för kommersiella fakturor är markerad som utfasad i koden till förmån för kundfakturalistan (getInvoicesForCustomer).</li>
+        <li>PDF-innehåll maskeras i anropsloggarna via Logbook-filter, och 4xx-svar från de beroende tjänsterna öppnar inte circuit breakern.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-invoices" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

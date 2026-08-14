@@ -64,13 +64,14 @@
             tjänstens OpenAPI-specifikation.
           </p>
           <p>
-            Katalogen byggs ut successivt med fler API:er ur kommunens utbud.
+            Katalogen omfattar samtliga API:er som kommunen publicerar öppet och
+            uppdateras när nya tillkommer.
           </p>
         </div>
         <aside class="fact-box" aria-label="Snabbfakta">
           <h3>Snabbfakta</h3>
           <ul>
-            <li><strong>Ett 30-tal</strong> öppna API:er</li>
+            <li><strong>Ett 80-tal</strong> öppna API:er</li>
             <li>Mikrotjänster bakom kommunens <strong>digitala tjänster</strong></li>
             <li>Interaktiv dokumentation via <strong>Swagger UI</strong></li>
             <li>Publiceras öppet på <strong>GitHub</strong></li>
@@ -95,6 +96,51 @@
       <h3 class="card-group-title">Kommunikation</h3>
       <div class="card-grid">
 
+        <a class="teaser-card" href="api/digital-mail-sender.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>Digital Mail Sender</h3>
+          <p>
+            Levererar digital post och digitala fakturor till invånarnas digitala brevlådor, till exempel Kivra och Min myndighetspost.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/digital-registered-letter.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>DigitalRegisteredLetter</h3>
+          <p>
+            Skickar digitala rekommenderade brev till invånare via Kivra och följer upp signering, leveransstatus och kvitton.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/email-reader.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>EmailReader</h3>
+          <p>
+            Läser av verksamheternas e-postlådor, lagrar inkomna meddelanden och gör dem hämtbara för andra system – med möjlighet att omvandla särskilda mejl till sms.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/email-sender.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>EmailSender</h3>
+          <p>
+            Skickar e-post åt kommunens applikationer, via SMTP eller Microsoft Graph beroende på hur respektive kommun är konfigurerad.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/message-exchange.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>MessageExchange</h3>
+          <p>
+            Lagringstjänst för interna konversationer – trådade meddelanden med bilagor, lässtatus och sekvensnummer som andra system kan bygga meddelandefunktioner ovanpå.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
         <a class="teaser-card" href="api/messaging.html">
           <span class="app-tag">Kommunikation</span>
           <h3>Messaging</h3>
@@ -104,11 +150,740 @@
           <span class="teaser-more">Läs mer →</span>
         </a>
 
+        <a class="teaser-card" href="api/messaging-settings.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>MessagingSettings</h3>
+          <p>
+            Håller verksamheternas inställningar för meddelandeutskick – till exempel avsändaruppgifter och kanalval – per kommun och avdelning, med uppslag utifrån inloggad användare.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/notifier.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>Notifier</h3>
+          <p>
+            Skickar notifieringar via sms och Microsoft Teams till kommunens medarbetare, per organisation eller manuellt skapade grupper.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/postportalservice.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>Postportalservice</h3>
+          <p>
+            Backend för kommunens postportal – handläggare skickar brev, rekommenderade brev, sms och signeringsförfrågningar till invånare och företag, med automatiskt kanalval och uppföljning.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/remindandinform.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>RemindAndInform</h3>
+          <p>
+            Registrerar påminnelser kopplade till ärenden och skickar ut dem automatiskt vid önskad tidpunkt via kommunens meddelandetjänst.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/sms-sender.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>SmsSender</h3>
+          <p>
+            Skickar sms till invånare och medarbetare via externa sms-gateways, med automatisk växling mellan leverantörer om en av dem inte kan leverera.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/snailmail-sender.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>SnailMailSender</h3>
+          <p>
+            Samlar ihop fysiska brevförsändelser i batchar och lämnar över dem till tryck- och kuverteringsleverantör via filöverföring.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/teams-sender.html">
+          <span class="app-tag">Kommunikation</span> <span class="app-tag app-tag-status">Prototyp</span>
+          <h3>TeamsSender</h3>
+          <p>
+            Skickar chattmeddelanden i Microsoft Teams till enskilda medarbetare, som en kanal för meddelanden från kommunens meddelandetjänst.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/teams-sender-old.html">
+          <span class="app-tag">Kommunikation</span> <span class="app-tag app-tag-status">Avvecklad</span>
+          <h3>TeamsSender (äldre version)</h3>
+          <p>
+            Äldre variant av TeamsSender – tjänsten som skickar chattmeddelanden i Microsoft Teams – ersatt av det nyare repot api-service-teams-sender.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/web-message-collector.html">
+          <span class="app-tag">Kommunikation</span>
+          <h3>WebMessageCollector</h3>
+          <p>
+            Samlar in inkommande webbmeddelanden från kommunens e-tjänsteplattform och gör dem tillgängliga för verksamhetssystem som hanterar ärendena.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+      </div>
+
+      <h3 class="card-group-title">Ärendehantering</h3>
+      <div class="card-grid">
+
+        <a class="teaser-card" href="api/business-rules.html">
+          <span class="app-tag">Ärendehantering</span>
+          <h3>BusinessRules</h3>
+          <p>
+            Regelmotor som utvärderar verksamhetsregler – i dag för parkeringstillstånd för rörelsehindrade – och ger ärendehandläggningen ett maskinellt beslutsunderlag.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/caremanagement.html">
+          <span class="app-tag">Ärendehantering</span>
+          <h3>CareManagement</h3>
+          <p>
+            Ärendehantering för omsorgsverksamheten – lagrar ärenden med intressenter, parametrar, bilagor och beslut och driver dem framåt genom BPMN-processer i processmotorn Operaton.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/case-data.html">
+          <span class="app-tag">Ärendehantering</span>
+          <h3>CaseData</h3>
+          <p>
+            Ärendehanterings-API som lagrar och förvaltar myndighetsärenden – bland annat parkeringstillstånd, färdtjänst samt mark- och exploateringsärenden – åt kommunens handläggarapplikationer.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/case-status.html">
+          <span class="app-tag">Ärendehantering</span>
+          <h3>CaseStatus</h3>
+          <p>
+            Samlar ärendestatus från flera bakomliggande system och ger invånare och företag en aktuell bild av var deras ärenden befinner sig.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/checklist.html">
+          <span class="app-tag">Ärendehantering</span>
+          <h3>Checklist</h3>
+          <p>
+            Hanterar introduktionschecklistor för nyanställda – checklistemallar per organisation, automatisk tilldelning när nya medarbetare anställs och uppföljning av hur långt varje introduktion kommit.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/contract.html">
+          <span class="app-tag">Ärendehantering</span>
+          <h3>Contracts</h3>
+          <p>
+            Hanterar kommunens avtal om mark och nyttjanderätter – arrenden, köpeavtal och andra upplåtelser – med parter, villkor, bilagor och automatisk förlängning.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/notes.html">
+          <span class="app-tag">Ärendehantering</span>
+          <h3>Notes</h3>
+          <p>
+            Gemensam anteckningstjänst som lagrar anteckningar kopplade till parter eller ärenden, med full revisionshistorik för varje ändring.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/supportcenter.html">
+          <span class="app-tag">Ärendehantering</span>
+          <h3>SupportCenter</h3>
+          <p>
+            API för att skapa och uppdatera ärenden och tillgångar (assets) i IT-servicedesksystemet POB, med enhetlig statushantering ovanpå POB:s eget API.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/support-management.html">
+          <span class="app-tag">Ärendehantering</span>
+          <h3>SupportManagement</h3>
+          <p>
+            Ärendehanterings-API för supportärenden – skapar, uppdaterar och följer upp ärenden med kommunikation, revisioner och notifieringar åt kommunens kontaktcenter och verksamhetssystem.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+      </div>
+
+      <h3 class="card-group-title">Ekonomi och fakturering</h3>
+      <div class="card-grid">
+
+        <a class="teaser-card" href="api/billing-data-collector.html">
+          <span class="app-tag">Ekonomi och fakturering</span>
+          <h3>Billing Data Collector</h3>
+          <p>
+            Samlar in faktureringsunderlag från e-tjänsteformulär och avtal, omvandlar dem till fakturaposter och skickar dem vidare till Billing Preprocessor.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/billing-preprocessor.html">
+          <span class="app-tag">Ekonomi och fakturering</span>
+          <h3>Billing Preprocessor</h3>
+          <p>
+            Samlar in och lagrar fakturaunderlag från kommunens verksamhetssystem och genererar fakturafiler som förs över till ekonomisystemet Raindance.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/invoice-cache.html">
+          <span class="app-tag">Ekonomi och fakturering</span>
+          <h3>InvoiceCache</h3>
+          <p>
+            Cachar fakturainformation från ekonomisystemet Raindance i en lokal databas och tillhandahåller sökbara fakturauppgifter och faktura-PDF:er för kommunens applikationer.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/invoices.html">
+          <span class="app-tag">Ekonomi och fakturering</span>
+          <h3>Invoices</h3>
+          <p>
+            Samlad ingång för fakturauppgifter – hämtar kommersiella fakturor och offentliga förvaltningsfakturor från underliggande källor och levererar dem i ett gemensamt format.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/invoice-sender.html">
+          <span class="app-tag">Ekonomi och fakturering</span>
+          <h3>InvoiceSender</h3>
+          <p>
+            Hämtar fakturabatchar från ekonomisystemet Raindance och levererar fakturorna digitalt till invånarnas digitala brevlådor via Kivra.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/seab-loader.html">
+          <span class="app-tag">Ekonomi och fakturering</span>
+          <h3>SeabLoader</h3>
+          <p>
+            Tar emot fakturor från Sundsvall Energi (SEAB) i XML-format, sätter ihop faktura-PDF:er och läser in dem i InvoiceCache.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+      </div>
+
+      <h3 class="card-group-title">Dokument och arkiv</h3>
+      <div class="card-grid">
+
+        <a class="teaser-card" href="api/archive.html">
+          <span class="app-tag">Dokument och arkiv</span>
+          <h3>Archive</h3>
+          <p>
+            Tar emot arkivförfrågningar från bygglovssystemet ByggR och lämnar över handlingarna till kommunens långtidsarkiv Formpipe LTA.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/byggrarchiver.html">
+          <span class="app-tag">Dokument och arkiv</span>
+          <h3>ByggR Archiver</h3>
+          <p>
+            Batchtjänst som hämtar avslutade bygglovsärenden ur ByggR och arkiverar deras handlingar i kommunens långtidsarkiv.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/document.html">
+          <span class="app-tag">Dokument och arkiv</span>
+          <h3>Document</h3>
+          <p>
+            Central dokumenttjänst där kommunens applikationer lagrar, versionerar och söker dokument med tillhörande filer och metadata.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/e-signing.html">
+          <span class="app-tag">Dokument och arkiv</span>
+          <h3>ESigning</h3>
+          <p>
+            Gemensam ingång för elektronisk signering av dokument – startar, följer upp och avbryter signeringsärenden hos den signeringsleverantör som är konfigurerad för kommunen.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/memories.html">
+          <span class="app-tag">Dokument och arkiv</span>
+          <h3>Memories</h3>
+          <p>
+            Sök- och hämttjänst för Sundsvallsminnens digitala arkiv – filmer, fotografier, ljudinspelningar, texter och publikationer.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/templating.html">
+          <span class="app-tag">Dokument och arkiv</span>
+          <h3>Templating</h3>
+          <p>
+            Mallbaserad dokumentgenerering – lagrar versionshanterade mallar och renderar dem till HTML eller PDF åt kommunens applikationer.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+      </div>
+
+      <h3 class="card-group-title">Parts- och kunddata</h3>
+      <div class="card-grid">
+
+        <a class="teaser-card" href="api/agreement.html">
+          <span class="app-tag">Parts- och kunddata</span>
+          <h3>Agreement</h3>
+          <p>
+            Uppslag av en parts avtal med kommunkoncernens leverantörsbolag – el, fjärrvärme, vatten, avfall med mera – kopplade till anläggningar.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/business-engagements.html">
+          <span class="app-tag">Parts- och kunddata</span> <span class="app-tag app-tag-status">Avvecklad</span>
+          <h3>BusinessEngagements</h3>
+          <p>
+            Hämtar en persons företagsengagemang och företags grunduppgifter från Bolagsverket, uppslaget på partyId.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/contactsettings.html">
+          <span class="app-tag">Parts- och kunddata</span>
+          <h3>ContactSettings</h3>
+          <p>
+            Register över invånares och företags valda kontaktvägar – används av kommunens meddelandetjänster för att avgöra hur en mottagare vill bli nådd.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/customer.html">
+          <span class="app-tag">Parts- och kunddata</span>
+          <h3>Customer</h3>
+          <p>
+            Slår upp kundrelationer och kunduppgifter hos kommunkoncernens leverantörer – till exempel el- och fjärrvärmebolagen – utifrån en parts identitet.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/datawarehousereader.html">
+          <span class="app-tag">Parts- och kunddata</span>
+          <h3>DataWarehouseReader</h3>
+          <p>
+            Läs-API mot Stadsbackenkoncernens datalager – kunder, avtal, anläggningar, fakturor och mätvärden för el, fjärrvärme, vatten och andra nyttigheter.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/installation.html">
+          <span class="app-tag">Parts- och kunddata</span>
+          <h3>Installation</h3>
+          <p>
+            Uppslag av anläggningar (installationer) hos kommunens leverantörsbolag – till exempel el- och fjärrvärmeanläggningar – ur kommunens datalager.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/installedbase.html">
+          <span class="app-tag">Parts- och kunddata</span>
+          <h3>InstalledBase</h3>
+          <p>
+            Visar en parts engagemang och anläggningar (installerad bas) hos kommunens leverantörsbolag, och hanterar delegering av anläggningar mellan parter.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/manager-responsibility.html">
+          <span class="app-tag">Parts- och kunddata</span>
+          <h3>ManagerResponsibility</h3>
+          <p>
+            Läsande API som svarar på vilka organisationer en chef ansvarar för – och vem som är chef för en viss organisation.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/my-representative.html">
+          <span class="app-tag">Parts- och kunddata</span>
+          <h3>MyRepresentative</h3>
+          <p>
+            Registrerar och håller ordning på fullmakter (mandat) mellan parter, så att kommunens tjänster vet vem som får företräda vem.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/party.html">
+          <span class="app-tag">Parts- och kunddata</span>
+          <h3>Party</h3>
+          <p>
+            Översätter mellan person-/organisationsnummer (legalId) och kommunens interna part-id (partyId) för privatpersoner och företag.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/party-assets.html">
+          <span class="app-tag">Parts- och kunddata</span>
+          <h3>PartyAssets</h3>
+          <p>
+            Register över tillstånd och andra tillgångar som en part – invånare eller företag – har hos kommunen, till exempel parkeringstillstånd.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/webapp-users.html">
+          <span class="app-tag">Parts- och kunddata</span> <span class="app-tag app-tag-status">Prototyp</span>
+          <h3>WebappUsers</h3>
+          <p>
+            Användarhantering för webbapplikationer – konton med roller, status och inloggning via JWT.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+      </div>
+
+      <h3 class="card-group-title">AI-tjänster</h3>
+      <div class="card-grid">
+
+        <a class="teaser-card" href="api/ai-data-collector.html">
+          <span class="app-tag">AI-tjänster</span>
+          <h3>AI Data Collector</h3>
+          <p>
+            Samlar in innehåll från Confluence och håller det synkroniserat som kunskapsunderlag i AI-plattformen Eneo, så att kommunens AI-assistenter alltid svarar utifrån aktuell dokumentation.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/ai-flow.html">
+          <span class="app-tag">AI-tjänster</span>
+          <h3>AiFlow</h3>
+          <p>
+            Kör konfigurerbara AI-flöden i flera steg – till exempel tjänsteskrivelser, bildtolkning och transkribering – där varje steg utförs av en assistent på AI-plattformen Eneo.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/self-service-ai.html">
+          <span class="app-tag">AI-tjänster</span>
+          <h3>SelfServiceAi</h3>
+          <p>
+            Driver en AI-assistent för kundservice i självbetjäningskanaler – assistenten laddas med kundens avtal, fakturor och mätvärden och kan sedan svara på frågor om kundens engagemang.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+      </div>
+
+      <h3 class="card-group-title">Integration</h3>
+      <div class="card-grid">
+
+        <a class="teaser-card" href="api/access-mapper.html">
+          <span class="app-tag">Integration</span>
+          <h3>AccessMapper</h3>
+          <p>
+            Översätter en medarbetares Active Directory-grupper till behörigheter i kommunens interna system, utifrån konfigurerbara åtkomstgrupper.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/byggr-integrator.html">
+          <span class="app-tag">Integration</span>
+          <h3>ByggrIntegrator</h3>
+          <p>
+            Hämtar byggärenden, grannhöranden och ärendehandlingar ur bygglovssystemet ByggR och gör dem tillgängliga för e-tjänster och andra applikationer.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/casemanagement.html">
+          <span class="app-tag">Integration</span>
+          <h3>CaseManagement</h3>
+          <p>
+            Integrationslager som tar emot ärenden från e-tjänster och skickar dem vidare till rätt verksamhetssystem – ByggR, Ecos, Alk-T, EDP Future eller CaseData – och ger en samlad statusbild tillbaka.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/contract-loader.html">
+          <span class="app-tag">Integration</span> <span class="app-tag app-tag-status">Avvecklad</span>
+          <h3>ContractLoader</h3>
+          <p>
+            Engångsladdare som migrerade kommunens arrendekontrakt från fastighetssystemet Xpand till det gemensamma Contract-API:et.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/csv-filereader.html">
+          <span class="app-tag">Integration</span>
+          <h3>CsvFileReader</h3>
+          <p>
+            Schemalagd tjänst som hämtar CSV-filer med organisations- och medarbetardata via SFTP och läser in dem i en databas som andra tjänster kan använda.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/datacatalog.html">
+          <span class="app-tag">Integration</span>
+          <h3>DataCatalog</h3>
+          <p>
+            Aggregerar kommunens öppna data-metadata till en samlad DCAT-AP-SE-katalog som skördas av Sveriges Dataportal.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/eventlog.html">
+          <span class="app-tag">Integration</span>
+          <h3>Eventlog</h3>
+          <p>
+            Gemensam händelselogg där kommunens applikationer registrerar och läser händelser kopplade till en resurs, till exempel historiken för ett ärende.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/financial-aid.html">
+          <span class="app-tag">Integration</span>
+          <h3>Financial Aid</h3>
+          <p>
+            Hämtar beslutsunderlag för ekonomiskt bistånd från Försäkringskassans sammansatta bastjänst SSBTEK och levererar det som JSON till socialtjänstens handläggningssystem.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/incident-mapper.html">
+          <span class="app-tag">Integration</span>
+          <h3>IncidentMapper</h3>
+          <p>
+            Synkroniserar supportärenden dubbelriktat mellan servicedesksystemet POB och utvecklingsteamens Jira, så att status och kommentarer hålls i takt i båda systemen.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/json-schema.html">
+          <span class="app-tag">Integration</span>
+          <h3>JsonSchema</h3>
+          <p>
+            Central lagring av versionshanterade JSON-scheman med validering av JSON-data mot schemana – för applikationer som behöver enhetliga datakontrakt.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/lifecare-integrator.html">
+          <span class="app-tag">Integration</span>
+          <h3>LifecareIntegrator</h3>
+          <p>
+            Läser och skapar socialtjänstinformation i verksamhetssystemet Lifecare – beslut, utredningar, verkställigheter, aktualiseringar och beräkningar – för kommunens applikationer.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/oep-integrator.html">
+          <span class="app-tag">Integration</span>
+          <h3>OepIntegrator</h3>
+          <p>
+            Gemensam ingång till kommunens e-tjänsteplattform Open ePlatform – för att hämta ärenden, sätta status och skicka webbmeddelanden till invånarnas sidor.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/operaton.html">
+          <span class="app-tag">Integration</span>
+          <h3>Operaton</h3>
+          <p>
+            Kommunens gemensamma BPMN-processmotor – kör verksamhetsprocesser modellerade i BPMN och DMN och erbjuder en självdokumenterande katalog av färdiga processbyggstenar som skicka e-post, skicka sms och skapa ärende.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/permit-loader.html">
+          <span class="app-tag">Integration</span>
+          <h3>PermitLoader</h3>
+          <p>
+            Läser in färdtjänst- och riksfärdtjänsttillstånd från en rådataexport ur Procapita och registrerar dem som tillgångar i PartyAssets.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/quotation-request.html">
+          <span class="app-tag">Integration</span>
+          <h3>QuotationRequest</h3>
+          <p>
+            Skapar offertförfrågningar som helpdeskärenden i Sundsvall Energis Lime CRM och exponerar tillhörande metadata om kategorier och kontor.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/relations.html">
+          <span class="app-tag">Integration</span>
+          <h3>Relations</h3>
+          <p>
+            Håller reda på relationer mellan objekt i olika verksamhetssystem, till exempel kopplingar mellan ärenden, så att applikationer kan länka samman resurser utan egna kopplingstabeller.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/sm-loader.html">
+          <span class="app-tag">Integration</span>
+          <h3>SmLoader</h3>
+          <p>
+            Bakgrundstjänst som hämtar inskickade ärenden från e-tjänsteplattformen Open ePlatform och skapar dem som supportärenden i SupportManagement.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/systemregister.html">
+          <span class="app-tag">Integration</span> <span class="app-tag app-tag-status">Prototyp</span>
+          <h3>Systemregistret</h3>
+          <p>
+            Register över kommunens IT-system med leverantörer, kritikalitet, informationsklassning, personuppgiftsbehandlingar och sårbarhetsuppföljning – ett stöd för IT-styrning och informationsförvaltning.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+      </div>
+
+      <h3 class="card-group-title">Samhällsservice</h3>
+      <div class="card-grid">
+
+        <a class="teaser-card" href="api/alkt.html">
+          <span class="app-tag">Samhällsservice</span>
+          <h3>Alkt</h3>
+          <p>
+            Läs-API mot verksamhetssystemet AlkT som ger tillståndshavare, deras serveringsställen och pågående ärenden om alkoholtillstånd.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/business-information.html">
+          <span class="app-tag">Samhällsservice</span>
+          <h3>BusinessInformation</h3>
+          <p>
+            Uppgifter om livsmedelsanläggningar – anläggningsdetaljer, livsmedelsverksamhet och faktureringsuppgifter – hämtade direkt ur miljösystemet Ecos.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/disturbance.html">
+          <span class="app-tag">Samhällsservice</span>
+          <h3>Disturbance</h3>
+          <p>
+            Hanterar driftstörningar i kommunal infrastruktur – el, fjärrvärme, vatten, fibernät med mera – och notifierar automatiskt berörda kunder via sms och e-post.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/garbage.html">
+          <span class="app-tag">Samhällsservice</span>
+          <h3>Garbage</h3>
+          <p>
+            Tillhandahåller uppgifter om när avfallshämtning sker på en viss adress eller inom ett område – för e-tjänster och applikationer som vill visa hämtschema för invånare.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/incident.html">
+          <span class="app-tag">Samhällsservice</span>
+          <h3>Incident</h3>
+          <p>
+            Tar emot felanmälningar från invånare, lagrar dem och skickar dem vidare till rätt mottagare – ett externt system för livbojsärenden eller e-post till kundtjänst och MSVA.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/measurement-data.html">
+          <span class="app-tag">Samhällsservice</span>
+          <h3>MeasurementData</h3>
+          <p>
+            Hämtar förbrukningsmätvärden – fjärrvärme, fjärrkyla, el, bredband och avfall – per kund och anläggning ur Stadsbackens datalager.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/precheck.html">
+          <span class="app-tag">Samhällsservice</span> <span class="app-tag app-tag-status">Avvecklad</span>
+          <h3>PreCheck</h3>
+          <p>
+            Kontrollerar om en kommunal infrastrukturtjänst – till exempel fjärrvärme – kan levereras till en viss adress. Repot är arkiverat och tjänsten vidareutvecklas inte.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/private-precheck.html">
+          <span class="app-tag">Samhällsservice</span>
+          <h3>PrivatePreCheck</h3>
+          <p>
+            Förkontroll för privatpersoner: svarar på om en person är folkbokförd i kommunen och vilka tillstånd personen redan har – till exempel innan en ansökan om parkeringstillstånd påbörjas.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+      </div>
+
+      <h3 class="card-group-title">Utbildning</h3>
+      <div class="card-grid">
+
+        <a class="teaser-card" href="api/citizen-changes.html">
+          <span class="app-tag">Utbildning</span>
+          <h3>CitizenChanges</h3>
+          <p>
+            Batchtjänst som bevakar flyttar och skickar påminnelser kopplade till ansökningar om skolskjuts, elevresor och förskoleplats.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/education-data.html">
+          <span class="app-tag">Utbildning</span>
+          <h3>EducationData</h3>
+          <p>
+            Samlar in nationell utbildningsdata från Skolverkets SUSA-navet och Planned Educations-API och lagrar den lokalt som grund för kommunens utbildningstjänster.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/education-finder.html">
+          <span class="app-tag">Utbildning</span>
+          <h3>EducationFinder</h3>
+          <p>
+            Sök- och statistik-API för kommunens vuxenutbildningsutbud – kurser kan filtreras på kategori, nivå, studieort med mera och sammanställas till statistik.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+      </div>
+
+      <h3 class="card-group-title">Utvecklingsverktyg</h3>
+      <div class="card-grid">
+
+        <a class="teaser-card" href="api/configuration.html">
+          <span class="app-tag">Utvecklingsverktyg</span>
+          <h3>Configuration</h3>
+          <p>
+            Enkel lagringstjänst för applikationskonfiguration – ger kommunens webbapplikationer ett standardiserat sätt att spara och hämta inställningar som nyckel-värdepar.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
+        <a class="teaser-card" href="api/simulator-server.html">
+          <span class="app-tag">Utvecklingsverktyg</span> <span class="app-tag app-tag-status">Verktyg</span>
+          <h3>SimulatorServer</h3>
+          <p>
+            Testverktyg som simulerar API-svar med valfri statuskod, svarskropp och fördröjning – för att testa hur anropande system hanterar fel och långsamma svar.
+          </p>
+          <span class="teaser-more">Läs mer →</span>
+        </a>
+
       </div>
       <!-- END:API-CARDS -->
 
       <div class="coming-soon" role="note">
-        <p>Katalogen omfattar på sikt samtliga repon som börjar med <code>api-service</code> hos Sundsvalls kommun på GitHub. Första versionen beskriver Messaging; fler API:er läggs till efter hand.</p>
+        <p>Katalogen omfattar samtliga repon som börjar med <code>api-service</code> hos Sundsvalls kommun på GitHub. Nya API:er läggs till efter hand som de publiceras.</p>
       </div>
     </div>
   </section>

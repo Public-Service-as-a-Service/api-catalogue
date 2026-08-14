@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SmsSender – API-katalogen</title>
+  <meta name="description" content="Skickar sms till invånare och medarbetare via externa sms-gateways, med automatisk växling mellan leverantörer om en av dem inte kan leverera.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">SmsSender</span>
+      </nav>
+      <span class="app-tag app-tag-light">Kommunikation</span>
+      <h1>SmsSender</h1>
+      <p class="hero-lead">
+        Skickar sms till invånare och medarbetare via externa sms-gateways, med automatisk växling mellan leverantörer om en av dem inte kan leverera.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            SmsSender är kommunens gemensamma utskickstjänst för sms. Applikationer som behöver nå mottagare via sms anropar detta API i stället för att själva teckna avtal och integrera mot sms-leverantörer. Tjänsten används i praktiken mest indirekt, via Messaging-API:et som routar sms-utskick hit.
+          </p>
+          <p>
+            Tjänsten har stöd för två externa sms-gateways – Telia och LinkMobility – och varje leverantör konfigureras med aktivering, prioritet och eventuell flash-sms-kapacitet. Vid utskick provas leverantörerna i prioritetsordning med inbyggda omförsök; misslyckas den första provas nästa automatiskt, vilket ger redundans om en leverantör har driftstörningar.
+          </p>
+          <p>
+            Utöver vanliga sms kan tjänsten skicka flash-sms (meddelanden som visas direkt på mottagarens skärm), förutsatt att en flash-kapabel leverantör är konfigurerad. Tjänsten är helt tillståndslös och lagrar ingenting om skickade meddelanden.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Skicka sms</strong> – Ett enkelt anrop med avsändarnamn, mottagarnummer och meddelandetext skickar ett sms via den högst prioriterade leverantören.</li>
+            <li><strong>Flash-sms</strong> – Separat resurs för flash-sms som visas direkt på mottagarens skärm; kräver att en flash-kapabel leverantör är aktiverad.</li>
+            <li><strong>Automatisk leverantörsväxling</strong> – Leverantörer ordnas i en prioritetskö – misslyckas utskicket hos en leverantör efter omförsök provas nästa i kön.</li>
+            <li><strong>Konfigurerbara leverantörer</strong> – Varje sms-gateway kan aktiveras/inaktiveras och ges prioritet och flash-kapacitet via konfiguration, utan kodändringar.</li>
+            <li><strong>Hälsokontroll av klientcertifikat</strong> – En schemalagd kontroll övervakar LinkMobility-integrationens certifikat och sätter tjänstens hälsostatus till RESTRICTED vid problem.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>2.0</strong></li>
+            <li>Kategori: <strong>Kommunikation</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="sms-sender-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-sms-sender" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="sms-sender-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/sms-sender.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/sms-sender.svg" alt="Arkitekturskiss för SmsSender: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Övriga integrationer som förekommer i koden: Telia (sms-gateway, OAuth2), LinkMobility (sms-gateway, basic auth och klientcertifikat).
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Övrigt:</strong> Spring Retry för omförsök, Feign-klienter via dept44, Lombok</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Inga anrop till andra mikrotjänster hittades i källkodens konfiguration.
+      </p>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>Per leverantör (telia/linkmobility): base-url, enabled, priority och flash-capable</li>
+        <li>Telia autentiseras med OAuth2 (token-url, client-id, client-secret)</li>
+        <li>LinkMobility autentiseras med basic auth (username/password) samt platform-id och platform-partner-id</li>
+        <li>Schemalagd certifikatkontroll för LinkMobility styrs med cron-uttryck (avstängd som standard)</li>
+        <li>Anrop görs per kommun – municipalityId ingår i API-vägen</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Routningen sker via en prioritetskö av leverantörer: varje utskick provas med omförsök (RetryTemplate) hos en leverantör i taget och faller vidare till nästa vid fel – verifierat i SmsProviderRouter.</li>
+        <li>Tjänsten vägrar starta om ingen leverantör är aktiverad, och kräver dessutom minst en flash-kapabel leverantör.</li>
+        <li>Flash-sms mot en leverantör som saknar flash-stöd avvisas med 400 Bad Request i stället för att skickas som vanligt sms.</li>
+        <li>Tjänsten saknar databas och interna mikrotjänstberoenden – katalogen under src/main/resources/integrations innehåller endast Telias klientspec (extern leverantör).</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-sms-sender" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

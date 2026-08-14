@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Archive – API-katalogen</title>
+  <meta name="description" content="Tar emot arkivförfrågningar från bygglovssystemet ByggR och lämnar över handlingarna till kommunens långtidsarkiv Formpipe LTA.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">Archive</span>
+      </nav>
+      <span class="app-tag app-tag-light">Dokument och arkiv</span>
+      <h1>Archive</h1>
+      <p class="hero-lead">
+        Tar emot arkivförfrågningar från bygglovssystemet ByggR och lämnar över handlingarna till kommunens långtidsarkiv Formpipe LTA.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            Archive är länken mellan kommunens verksamhetssystem och långtidsarkivet. API:et tar emot en arkivförfrågan med metadata (XML enligt arkivstandard) och en bilaga, paketerar den till ett importärende och skickar den vidare till Formpipe LTA via kommunens Formpipe-proxy, som översätter till arkivsystemets WCF-baserade gränssnitt.
+          </p>
+          <p>
+            Dagens API har en endpoint, inriktad på handlingar från bygglovssystemet ByggR. Tjänsten validerar att metadata innehåller filändelser, byter ut bilagans namn och länk mot ett genererat UUID, härleder sekretessnivå ur metadata och kompletterar med kommunens leveransöverenskommelse (submission agreement) innan importen skickas.
+          </p>
+          <p>
+            Svaret innehåller det arkiv-id som långtidsarkivet tilldelat handlingen, alternativt strukturerade feluppgifter om importen misslyckades. Tjänsten är medvetet tunn: den lagrar ingenting själv utan är en ren förmedlingstjänst mot arkivet.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Arkivering av ByggR-handlingar</strong> – Tar emot metadata och bilaga från bygglovssystemet ByggR och skickar dem som ett importärende till långtidsarkivet.</li>
+            <li><strong>Metadatavalidering</strong> – Kontrollerar att metadata innehåller filändelser innan arkivering; ogiltiga förfrågningar avvisas med 400 Bad Request.</li>
+            <li><strong>Sekretesshantering</strong> – Sekretessnivå läses ur handlingens metadata och följer med till arkivet.</li>
+            <li><strong>Spårbart arkiv-id</strong> – Svaret innehåller arkivets id för den importerade handlingen, eller detaljerade feluppgifter från arkivsystemet.</li>
+            <li><strong>Robust felhantering</strong> – Fel från arkivsidan översätts till strukturerade problemsvar och klientfel mot proxyn redovisas som Bad Gateway.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>2.0</strong></li>
+            <li>Kategori: <strong>Dokument och arkiv</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="archive-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-archive" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="archive-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/archive.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/archive.svg" alt="Arkitekturskiss för Archive: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 21, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap. Övriga integrationer som förekommer i koden: Formpipe LTA (långtidsarkiv, via FormpipeProxy), ByggR (bygglovssystem, som avsändare av handlingar).
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 21</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Övrigt:</strong> Feign-klient med Resilience4j circuit breaker mot FormpipeProxy, jsoup för XML-bearbetning av arkivmetadata</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som Archive anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>FormpipeProxy</td><td>–</td><td>Kommunens REST-proxy framför Formpipe LTA:s WCF-gränssnitt; tar emot importärendet och utför själva arkiveringen.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>integration.formpipe-proxy.base-url med anslutnings- och lästimeout för proxyn mot långtidsarkivet</li>
+        <li>byggr.submission-agreement-id – kommunens leveransöverenskommelse som stämplas på varje importärende</li>
+        <li>Ingen databas – tjänsten lagrar ingenting själv</li>
+        <li>Anrop görs per kommun – municipalityId ingår i API-vägen</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Bilagans filnamn ersätts med ett genererat UUID och metadata skrivs om med samma UUID innan importen – verifierat i ByggRFormpipeProxyMapper.</li>
+        <li>Sekretessnivån härleds ur metadata-XML:en med jsoup-parsning i MetadataUtil.</li>
+        <li>Metadata utan filändelser stoppas i valideringen innan något skickas till arkivet.</li>
+        <li>Tjänsten saknar helt databas och tjänstelagerpaket – all logik ligger i resurs- och mapperklasserna, vilket gör den till en ren förmedlingstjänst.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-archive" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

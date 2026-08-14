@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CsvFileReader – API-katalogen</title>
+  <meta name="description" content="Schemalagd tjänst som hämtar CSV-filer med organisations- och medarbetardata via SFTP och läser in dem i en databas som andra tjänster kan använda.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">CsvFileReader</span>
+      </nav>
+      <span class="app-tag app-tag-light">Integration</span>
+      <h1>CsvFileReader</h1>
+      <p class="hero-lead">
+        Schemalagd tjänst som hämtar CSV-filer med organisations- och medarbetardata via SFTP och läser in dem i en databas som andra tjänster kan använda.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            CsvFileReader är en bakgrundstjänst som håller en databas med kommunens organisationsträd och medarbetare uppdaterad. Källsystemet exporterar två CSV-filer – en med organisationsenheter och en med medarbetare – som tjänsten hämtar från en SFTP-server, läser in och skriver till MariaDB.
+          </p>
+          <p>
+            Importen körs varje timme och dessutom direkt vid uppstart. Raderna läses in i konfigurerbara batchar och skrivs med upsert-logik: befintliga poster uppdateras, nya läggs till. Medarbetare som inte längre finns med i filen markeras som inaktiva i stället för att raderas, så att historiken bevaras. Bearbetade filer flyttas till en processed-katalog och tidigare bearbetade filer rensas.
+          </p>
+          <p>
+            Tjänsten exponerar inget eget REST-API – dess uppgift är att fylla databasen, som i sin tur används av andra tjänster som behöver aktuell organisations- och medarbetarinformation.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>SFTP-hämtning</strong> – Hämtar organisations- och medarbetarfiler från en SFTP-server till en inkommande-katalog.</li>
+            <li><strong>CSV-inläsning</strong> – Läser semikolonseparerade CSV-filer i teckenkodningen Windows-1252 med Jacksons CSV-stöd.</li>
+            <li><strong>Batchvis upsert</strong> – Skriver rader i konfigurerbara batchar till MariaDB; befintliga poster uppdateras och nya läggs till (ON DUPLICATE KEY UPDATE).</li>
+            <li><strong>Inaktivering i stället för radering</strong> – Medarbetare som inte uppdaterats under en importkörning markeras som inaktiva, så att borttagna anställningar syns utan att data raderas.</li>
+            <li><strong>Schemaläggning med lås</strong> – Importjobben körs varje timme med ShedLock-lås (dept44-scheduler) så att endast en instans kör åt gången, samt direkt vid uppstart.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>1.0</strong></li>
+            <li>Kategori: <strong>Integration</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens interna tjänster som behöver aktuell organisations- och medarbetardata</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-csv-filereader" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        Ingen incheckad OpenAPI-specifikation hittades i källkodsförrådet; se
+        källkoden för aktuell API-dokumentation.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/csv-filereader.svg" alt="Arkitekturskiss för CsvFileReader: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.3), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Lagring: MariaDB; tabeller för organisation och medarbetare som fylls av importen (baseline-skript finns i repot, Flyway är avstängt i konfigurationen). Övriga integrationer som förekommer i koden: SFTP-server där källsystemet lämnar CSV-exporterna.
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.3), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB; tabeller för organisation och medarbetare som fylls av importen (baseline-skript finns i repot, Flyway är avstängt i konfigurationen)</li>
+        <li><strong>Övrigt:</strong> Jackson dataformat-csv för CSV-parsning, Apache Commons VFS2 + JSch för SFTP, JdbcTemplate med batchuppdateringar, dept44-scheduler med ShedLock</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Inga anrop till andra mikrotjänster hittades i källkodens konfiguration.
+      </p>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>SFTP-uppgifter (värd, användarnamn, lösenord) via miljövariabler</li>
+        <li>Förväntade filnamn för organisations- respektive medarbetarfilen samt kataloger för inkommande, bearbetade och misslyckade filer</li>
+        <li>Batchstorlekar för organisations- och medarbetarimporten</li>
+        <li>MariaDB-anslutning via miljövariabler; cron-uttryck och ShedLock-tider för importjobben</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Tjänsten saknar REST-API och därmed OpenAPI-specifikation – den består enbart av schemalagda importjobb och startas även av en CommandLineRunner vid uppstart.</li>
+        <li>Efter varje medarbetarimport sätts alla medarbetare som inte uppdaterats under körningen till inaktiva – verifierat i EmployeeImportService.</li>
+        <li>Medarbetare vars organisationsenhet saknas i organisationstabellen hanteras särskilt: org-id:n kontrolleras mot databasen batch för batch – verifierat i determineUnknownOrgIds.</li>
+        <li>Ett Flyway-baseline-skript finns under db/migration, men Flyway är avstängt i application.yml – databasschemat förutsätts alltså vara etablerat i förväg.</li>
+        <li>README:s kloningsanvisning pekar på organisationen Public-Service-as-a-Service, medan koden publiceras under Sundsvallskommun – repot delas mellan organisationerna.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-csv-filereader" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

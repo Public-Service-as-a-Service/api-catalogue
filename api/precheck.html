@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PreCheck – API-katalogen</title>
+  <meta name="description" content="Kontrollerar om en kommunal infrastrukturtjänst – till exempel fjärrvärme – kan levereras till en viss adress. Repot är arkiverat och tjänsten vidareutvecklas inte.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">PreCheck</span>
+      </nav>
+      <span class="app-tag app-tag-light">Samhällsservice</span> <span class="app-tag app-tag-light app-tag-status">Avvecklad</span>
+      <h1>PreCheck</h1>
+      <p class="hero-lead">
+        Kontrollerar om en kommunal infrastrukturtjänst – till exempel fjärrvärme – kan levereras till en viss adress. Repot är arkiverat och tjänsten vidareutvecklas inte.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            PreCheck svarar på frågan om en viss tjänst kan levereras till en adress, till exempel som förkontroll i en e-tjänst där en fastighetsägare vill beställa fjärrvärme. Anroparen anger adressens id och en tjänstekategori, och API:et returnerar per kategori om anslutning är möjlig, med eventuellt meddelande.
+          </p>
+          <p>
+            Under huven görs kontrollen i två steg: först hämtas adressens koordinater från Lantmäteriets API för belägenhetsadresser, därefter skickas koordinaterna till kommunens GIS-API som avgör leveransmöjligheten utifrån geografiska data. Koordinatsystemet är konfigurerbart med SWEREF 99 (EPSG 3006) som standard.
+          </p>
+          <p>
+            Repot är arkiverat på GitHub och tjänsten är avvecklad. Av de sju definierade tjänstekategorierna hann bara fjärrvärme (DISTRICT_HEATING) implementeras – övriga avvisas med statusen Not Implemented.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Leveranskontroll per adress</strong> – GET /address/{addressId}/{category} svarar om tjänsten kan levereras till adressen.</li>
+            <li><strong>Koordinatuppslag</strong> – Adressens koordinater hämtas automatiskt från Lantmäteriets belägenhetsadress-API.</li>
+            <li><strong>GIS-baserad bedömning</strong> – Koordinaterna kontrolleras mot kommunens GIS-API som avgör om anslutning är möjlig.</li>
+            <li><strong>Valbart referenssystem</strong> – Koordinatreferenssystem kan anges per anrop, med SWEREF 99 (3006) som standard.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>1.0</strong></li>
+            <li>Kategori: <strong>Samhällsservice</strong></li>
+            <li>Status: <strong>Avvecklad</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-precheck" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        Ingen incheckad OpenAPI-specifikation hittades i källkodsförrådet; se
+        källkoden för aktuell API-dokumentation.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/precheck.svg" alt="Arkitekturskiss för PreCheck: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 17, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (4.3.1), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap. Övriga integrationer som förekommer i koden: Lantmäteriets API för belägenhetsadresser (hämtar adressens koordinater).
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 17</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (4.3.1), byggd med Maven</li>
+        <li><strong>Övrigt:</strong> Resilience4j (circuit breakers mot GIS och Lantmäteriet), OpenFeign-klienter</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som PreCheck anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>GIS</td><td>1.0</td><td>Avgör utifrån adressens koordinater om tjänsten kan levereras (endpoint /precheck).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>application.yml med URL och OAuth2-klientuppgifter (client credentials) för både GIS- och Lantmäteriintegrationen</li>
+        <li>Timeout-inställningar per integration (connect 5 s, read 30 s)</li>
+        <li>Ingen databas – tjänsten är helt tillståndslös</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Repot är arkiverat på GitHub – tjänsten är avvecklad och vidareutvecklas inte.</li>
+        <li>Endast kategorin DISTRICT_HEATING stöds i koden; övriga sex kategorier ger 501 Not Implemented – verifierat i tjänstelagrets kategorivalidering.</li>
+        <li>API-vägarna saknar municipalityId, till skillnad från kommunens nyare API:er – tjänsten byggdes på en äldre dept44-generation (4.3.1).</li>
+        <li>Ingen egen OpenAPI-specifikation finns incheckad i repot; specen genererades vid körning.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-precheck" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

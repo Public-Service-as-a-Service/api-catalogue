@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BusinessRules – API-katalogen</title>
+  <meta name="description" content="Regelmotor som utvärderar verksamhetsregler – i dag för parkeringstillstånd för rörelsehindrade – och ger ärendehandläggningen ett maskinellt beslutsunderlag.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">BusinessRules</span>
+      </nav>
+      <span class="app-tag app-tag-light">Ärendehantering</span>
+      <h1>BusinessRules</h1>
+      <p class="hero-lead">
+        Regelmotor som utvärderar verksamhetsregler – i dag för parkeringstillstånd för rörelsehindrade – och ger ärendehandläggningen ett maskinellt beslutsunderlag.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            Vid myndighetsutövning ska samma regler tillämpas lika för alla. BusinessRules samlar verksamhetsreglerna i en central regelmotor: anroparen skickar in fakta om ett ärende och får tillbaka ett utvärderat resultat per regel, med motivering. Det gör att ärendeprocesser kan automatisera bedömningar utan att reglerna dubbleras i varje system.
+          </p>
+          <p>
+            Det regelområde (context) som är implementerat är parkeringstillstånd för rörelsehindrade. Reglerna täcker nyansökan och förnyelse för förare respektive passagerare samt förlorat tillstånd, och bygger på kriterier som gångförmåga, läkarintyg, passfoto, varaktighet, signatur, polisanmälans format och återkommande förluster.
+          </p>
+          <p>
+            Regelmotorn väljs per kommun och regelområde: Sundsvall och Ånge har egna motorer för parkeringstillstånd, där Ånges variant kör automatiserade regler. Varje regel avgör själv om den är tillämplig på de inskickade fakta – icke tillämpliga regler rapporteras som sådana i svaret i stället för att utelämnas.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Regelutvärdering</strong> – Tar emot ett regelområde och en uppsättning fakta och returnerar resultat per regel: PASS, FAIL, VALIDATION_ERROR eller NOT_APPLICABLE, med beskrivningar.</li>
+            <li><strong>Parkeringstillstånd</strong> – Regler för nyansökan och förnyelse för förare och passagerare samt förlorat tillstånd.</li>
+            <li><strong>Kriteriebaserade bedömningar</strong> – Reglerna byggs av återanvändbara kriterier, t.ex. gångförmåga, läkarintyg, passfoto, varaktighet och återkommande förluster.</li>
+            <li><strong>Kommunspecifika motorer</strong> – Regelmotor väljs utifrån kommun och regelområde – Sundsvall och Ånge har egna motorer, där Ånges kör automatiserade regler.</li>
+            <li><strong>Uppslag av befintliga tillstånd</strong> – Kriterier som rör aktiva, utgående eller förlorade tillstånd kontrolleras mot tillgångstjänsten PartyAssets.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>2.0</strong></li>
+            <li>Kategori: <strong>Ärendehantering</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens ärendehanteringssystem och automatiserade processer</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="business-rules-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-business-rules" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="business-rules-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/business-rules.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/business-rules.svg" alt="Arkitekturskiss för BusinessRules: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap.
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Övrigt:</strong> Egenutvecklad regelmotor (Rule/Criteria-abstraktioner), Feign-klient genererad ur PartyAssets-specifikationen, Guava</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som BusinessRules anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>PartyAssets</td><td>5.0</td><td>Slår upp personens befintliga parkeringstillstånd för kriterier om aktiva tillstånd, utgående tillstånd och återkommande förluster.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>application.yml med URL och OAuth2-klientuppgifter för PartyAssets</li>
+        <li>Ingen databas – regler och kriterier är implementerade i kod</li>
+        <li>Anrop görs per kommun – municipalityId ingår i API-vägen och avgör vilken regelmotor som används</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>API:et består av en enda resurs, POST /{municipalityId}/engine; regelmotor väljs på kommun och regelområde och saknas en motor för kombinationen svarar tjänsten 404 – verifierat i RuleEngineService.</li>
+        <li>Varje regel prövar först om den är tillämplig på de inskickade fakta; icke tillämpliga regler redovisas som NOT_APPLICABLE i svaret i stället för att utelämnas – verifierat i ParkingPermitRuleEngine.</li>
+        <li>Kommun-id:na är kodade i tjänsten: Sundsvall (2281) med fullständig regeluppsättning och Ånge (2260) med automatiserade regler.</li>
+        <li>Kriterierna för aktiva och utgående tillstånd samt återkommande förluster hämtar personens tillgångar från PartyAssets – regelmotorn är i övrigt självständig.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-business-rules" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

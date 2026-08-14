@@ -1,0 +1,919 @@
+openapi: 3.1.0
+info:
+  title: api-billing-preprocessor
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "4.5"
+servers:
+- url: http://localhost:62655
+  description: Generated server url
+tags:
+- name: Status Resource
+  description: Check status operations
+- name: BillingRecord
+  description: Billing record operations
+- name: Jobs
+  description: Jobs resources
+paths:
+  /{municipalityId}/billingrecords/{id}:
+    get:
+      tags:
+      - BillingRecord
+      summary: Read billing record
+      description: Fetches the billing record that matches the provided id
+      operationId: readBillingRecord
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: BillingRecord id
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc15
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BillingRecord"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    put:
+      tags:
+      - BillingRecord
+      summary: Update billing record
+      description: Updates the billing record matching provided id with the supplied
+        attributes
+      operationId: updateBillingRecord
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: BillingRecord id
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc15
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillingRecord"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BillingRecord"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - BillingRecord
+      summary: Delete billing record
+      description: "Deletes the billing record that matches the provided id, but only\
+        \ if status of record is 'NEW'. Otherwise a client error is returned."
+      operationId: deleteBillingRecord
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: BillingRecord id
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc15
+      responses:
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "405":
+          description: Method not allowed
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/jobs/filetransferrer:
+    post:
+      tags:
+      - Jobs
+      summary: Triggers job for transferring files with status CREATED or SEND_FAILED
+        to final destination
+      operationId: transferFiles
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      responses:
+        "202":
+          description: Successful Operation
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/jobs/filecreator:
+    post:
+      tags:
+      - Jobs
+      summary: Triggers job for creating files from billing records with status APPROVED
+      operationId: createFileEntities
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      responses:
+        "202":
+          description: Successful Operation
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/billingrecords:
+    get:
+      tags:
+      - BillingRecord
+      summary: Read matching billing records
+      description: Query for billing records with or without filters. The resource
+        allows the client a wide range of variations on how to filter the result.
+      operationId: findBillingRecords
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: filter
+        in: query
+        description: "Syntax description: [spring-filter](https://github.com/turkraft/spring-filter/blob/85730f950a5f8623159cc0eb4d737555f9382bb7/README.md#syntax)"
+        required: false
+        schema:
+          type: string
+        example: "category : 'ACCESS_CARD' and status : 'NEW'"
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageBillingRecord"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - BillingRecord
+      summary: Create billing record
+      description: Creates a new billing record defined by the supplied attributes
+      operationId: createBillingRecord
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillingRecord"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/billingrecords/batch:
+    post:
+      tags:
+      - BillingRecord
+      summary: Create billing records
+      description: Creates new billing records defined by the supplied attributes
+      operationId: createBillingRecords
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/BillingRecord"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/status:
+    get:
+      tags:
+      - Status Resource
+      summary: "Get the status for invoice files, indicating if they have been sent\
+        \ successfully or not"
+      description: Checks the status of a invoice file matching the given year and
+        month
+      operationId: getFileStatusesForMonth
+      parameters:
+      - name: municipalityId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: year
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: month
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - JANUARY
+          - FEBRUARY
+          - MARCH
+          - APRIL
+          - MAY
+          - JUNE
+          - JULY
+          - AUGUST
+          - SEPTEMBER
+          - OCTOBER
+          - NOVEMBER
+          - DECEMBER
+      responses:
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "200":
+          description: Operation successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InvoiceFileStatus"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    AccountInformation:
+      type: object
+      description: Account information model
+      properties:
+        costCenter:
+          type: string
+          description: Cost center
+          examples:
+          - "15800100"
+        subaccount:
+          type: string
+          description: Subaccount
+          examples:
+          - "936300"
+        department:
+          type: string
+          description: Department
+          examples:
+          - "920360"
+        accuralKey:
+          type: string
+          description: Accural key
+          examples:
+          - "5647"
+        activity:
+          type: string
+          description: Activity
+          examples:
+          - "5756"
+        article:
+          type: string
+          description: Article
+          examples:
+          - Electric bicycle
+        project:
+          type: string
+          description: Project
+          examples:
+          - "11041"
+        counterpart:
+          type: string
+          description: Counterpart
+          examples:
+          - "11830000"
+        amount:
+          type: number
+          description: Amount
+          examples:
+          - 1399.95
+    AddressDetails:
+      type: object
+      description: Address details model
+      properties:
+        street:
+          type: string
+          description: Street name and number. Mandatory for EXTERNAL billing record.
+          examples:
+          - Sesame Street 7
+        careOf:
+          type: string
+          description: Care of name
+          examples:
+          - Abby Cadabby
+        postalCode:
+          type: string
+          description: Postal code. Mandatory for EXTERNAL billing record.
+          examples:
+          - "12345"
+        city:
+          type: string
+          description: City. Mandatory for EXTERNAL billing record.
+          examples:
+          - Grouchytown
+    BillingRecord:
+      type: object
+      description: Billing record model
+      properties:
+        id:
+          type: string
+          description: Unique id for the billing record
+          examples:
+          - 71258e7d-5285-46ce-b9b2-877f8cad8edd
+          readOnly: true
+        category:
+          type: string
+          description: Billing category
+          pattern: ACCESS_CARD|CUSTOMER_INVOICE|SALARY_AND_PENSION|ISYCASE|MEX_INVOICE
+        type:
+          $ref: "#/components/schemas/Type"
+        status:
+          $ref: "#/components/schemas/Status"
+        approvedBy:
+          type: string
+          description: Information regarding the person that has approved the billing
+            record
+          examples:
+          - Big Bird
+        approved:
+          type: string
+          format: date-time
+          description: Timestamp when the billing record got approved status
+          examples:
+          - 2022-11-21T16:57:13.988+02:00
+          readOnly: true
+        recipient:
+          $ref: "#/components/schemas/Recipient"
+        invoice:
+          $ref: "#/components/schemas/Invoice"
+        created:
+          type: string
+          format: date-time
+          description: Timestamp when the billing record was created
+          examples:
+          - 2022-10-31T14:30:00.001+02:00
+          readOnly: true
+        modified:
+          type: string
+          format: date-time
+          description: Timestamp when the billing record was last modified
+          examples:
+          - 2022-11-14T08:57:42.358+02:00
+          readOnly: true
+        extraParameters:
+          type: object
+          additionalProperties:
+            type: string
+          description: A map of extra parameters for custom values on the billing
+            record
+          examples:
+          - caseId: abc123
+            uuid: 82a400cf-eb02-4a18-962d-fde55440868f
+        transferDate:
+          type: string
+          format: date
+          description: "The date when the billing record should be transferred to\
+            \ Raindance. If not specified, defaults to the next 15th of the month."
+          examples:
+          - 2023-12-15
+      required:
+      - category
+      - invoice
+      - status
+      - type
+    Invoice:
+      type: object
+      description: Invoice model
+      properties:
+        customerId:
+          type: string
+          description: Customer number in Raindance
+          examples:
+          - "16"
+          minLength: 1
+        description:
+          type: string
+          description: Description of the invoice. Maximum length is configurable
+            and depends on the billing record type (INTERNAL or EXTERNAL).
+          examples:
+          - "Errand number: 2113-01784"
+        ourReference:
+          type: string
+          description: Our reference
+          examples:
+          - Harvey Kneeslapper
+        customerReference:
+          type: string
+          description: Customer reference
+          examples:
+          - Alice Snuffleupagus
+          minLength: 1
+        date:
+          type: string
+          format: date
+          description: Date for the invoice
+          examples:
+          - 2022-12-24
+        dueDate:
+          type: string
+          format: date
+          description: Due date for the invoice
+          examples:
+          - 2022-12-24
+        totalAmount:
+          type: number
+          description: Total sum of all invoice rows
+          examples:
+          - 1399.95
+          readOnly: true
+        invoiceRows:
+          type: array
+          items:
+            $ref: "#/components/schemas/InvoiceRow"
+          minItems: 1
+      required:
+      - customerId
+      - customerReference
+      - invoiceRows
+    InvoiceRow:
+      type: object
+      description: Invoice row model
+      properties:
+        descriptions:
+          type: array
+          items:
+            type: string
+            description: Description of row
+            examples:
+            - Row with description
+            maxLength: 30
+            minLength: 1
+        detailedDescriptions:
+          type: array
+          items:
+            type: string
+            description: Detailed description of row
+            examples:
+            - Row with detailed description
+            minLength: 1
+        totalAmount:
+          type: number
+          description: Total sum of invoice row
+          examples:
+          - 1399.95
+          readOnly: true
+        vatCode:
+          type: string
+          description: VAT code for invoice row
+          examples:
+          - "25"
+          pattern: 00|06|12|25
+        costPerUnit:
+          type: number
+          description: Cost per unit
+          examples:
+          - 155.55
+        quantity:
+          type: number
+          description: Total amount of units
+          examples:
+          - 9.0
+        accountInformation:
+          type: array
+          description: Account information
+          items:
+            $ref: "#/components/schemas/AccountInformation"
+    Recipient:
+      type: object
+      description: Billing recipient model
+      properties:
+        partyId:
+          type: string
+          description: Unique id for the person issuing the billing record. Mandatory
+            for EXTERNAL billing record if legalId is null.
+          examples:
+          - f0882f1d-06bc-47fd-b017-1d8307f5ce95
+        legalId:
+          type: string
+          description: LegalId for the organization issuing the billing record. Mandatory
+            for EXTERNAL billing record if partyId is null.
+          examples:
+          - "3456789123"
+        organizationName:
+          type: string
+          description: Name of issuing organization of the billing record if the recipient
+            is an organization
+          examples:
+          - Sesame Merc AB
+        firstName:
+          type: string
+          description: First name of the billing record recipient
+          examples:
+          - Alice
+        lastName:
+          type: string
+          description: Last name of the billing record recipient
+          examples:
+          - Snuffleupagus
+        userId:
+          type: string
+          description: User id of the billing record recipient
+          examples:
+          - ALI22SNU
+        addressDetails:
+          $ref: "#/components/schemas/AddressDetails"
+      required:
+      - addressDetails
+    Status:
+      type: string
+      description: Billing status model
+      enum:
+      - NEW
+      - APPROVED
+      - INVOICED
+      - REJECTED
+      examples:
+      - APPROVED
+    Type:
+      type: string
+      description: Billing type model
+      enum:
+      - EXTERNAL
+      - INTERNAL
+    InvoiceFileStatus:
+      type: object
+      description: InvoiceFile status model
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        municipalityId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        sentAt:
+          type: string
+          format: date-time
+    PageBillingRecord:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        first:
+          type: boolean
+        last:
+          type: boolean
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/BillingRecord"
+        number:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        paged:
+          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        unpaged:
+          type: boolean
+        offset:
+          type: integer
+          format: int64
+    SortObject:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
+  securitySchemes: {}

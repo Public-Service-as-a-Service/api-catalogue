@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DataCatalog – API-katalogen</title>
+  <meta name="description" content="Aggregerar kommunens öppna data-metadata till en samlad DCAT-AP-SE-katalog som skördas av Sveriges Dataportal.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">DataCatalog</span>
+      </nav>
+      <span class="app-tag app-tag-light">Integration</span>
+      <h1>DataCatalog</h1>
+      <p class="hero-lead">
+        Aggregerar kommunens öppna data-metadata till en samlad DCAT-AP-SE-katalog som skördas av Sveriges Dataportal.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            DataCatalog är kommunens metadatakatalog för öppna data. Tjänsten samlar ihop DCAT-AP-SE-beskrivningar av kommunens datamängder från flera källor och slår samman dem till en enda katalog i RDF/XML-format, som Sveriges Dataportal (dataportal.se) skördar för att göra kommunens öppna data hittbara nationellt.
+          </p>
+          <p>
+            Katalogen byggs från två håll: dels hämtas färdiga DCAT-kataloger från konfigurerade externa källor (i dag IoT-plattformen Diwise), dels genererar tjänsten själv DCAT-metadata för internt förvaltade datamängder som beskrivs direkt i konfigurationen – till exempel sopschemat som exponeras via kommunens Garbage-API.
+          </p>
+          <p>
+            Vid sammanslagningen dedupliceras utgivare mot kommunens kanoniska utgivarpost och alla dataset samlas under en gemensam dcat:Catalog. Externa källor cachas en konfigurerbar tid, och en källa som inte svarar utesluts ur katalogen i stället för att fälla hela anropet.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Samlad DCAT-katalog</strong> – GET /datasets/dcat returnerar hela kommunens öppna data-katalog som DCAT-AP-SE i RDF/XML.</li>
+            <li><strong>Aggregering från externa källor</strong> – Färdiga DCAT-kataloger hämtas från konfigurerade källor, i dag IoT-plattformen Diwise.</li>
+            <li><strong>Egen metadatagenerering</strong> – DCAT-metadata för internt förvaltade datamängder (t.ex. sopschemat via Garbage-API:et) genereras ur konfigurationen.</li>
+            <li><strong>Sammanslagning med deduplicering</strong> – Alla källor slås ihop till en dcat:Catalog och utgivare dedupliceras mot kommunens kanoniska utgivarpost.</li>
+            <li><strong>Cachning och feltålighet</strong> – Externa källor cachas (standard en timme) och en källa som inte svarar utesluts i stället för att fälla anropet.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>1.0</strong></li>
+            <li>Kategori: <strong>Integration</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Sveriges Dataportal och andra skördare av öppna data-metadata</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-datacatalog" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        Ingen incheckad OpenAPI-specifikation hittades i källkodsförrådet; se
+        källkoden för aktuell API-dokumentation.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/datacatalog.svg" alt="Arkitekturskiss för DataCatalog: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.5), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Övriga integrationer som förekommer i koden: Diwise (IoT-plattform – extern DCAT-källa), Sveriges Dataportal (skördar den publicerade katalogen).
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.5), byggd med Maven</li>
+        <li><strong>Övrigt:</strong> Egen RDF/XML-hantering (parsning, generering och sammanslagning av DCAT-element), RestClient för källhämtning</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Inga anrop till andra mikrotjänster hittades i källkodens konfiguration.
+      </p>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>integration.dcat.rdf-sources – lista över externa DCAT-källor med namn och URL</li>
+        <li>integration.dcat.catalog – kommunens katalogmetadata (titlar, utgivare, kontaktuppgifter) och internt förvaltade dataset beskrivs direkt i application.yml</li>
+        <li>integration.dcat.cache-duration styr hur länge externa källor cachas (standard PT1H)</li>
+        <li>Ingen databas och inga OAuth2-integrationer – tjänsten är en ren läsande aggregator</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>En extern källa som inte svarar loggas och utesluts ur katalogen i stället för att fälla anropet; först när inga källor alls finns svarar tjänsten 503 – verifierat i DcatClient och DataCatalogService.</li>
+        <li>Internt förvaltade datamängder beskrivs helt i application.yml och renderas till DCAT av DcatRdfGenerator – i dag sopschemat från Garbage-API:et.</li>
+        <li>Tjänsten saknar municipalityId i API-vägen till skillnad från de flesta av kommunens API:er – katalogen är en enda gemensam resurs.</li>
+        <li>Repot innehåller ingen incheckad OpenAPI-specifikation (ingen openapi.yml under integrationstesterna); API:et består av en enda GET-endpoint.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-datacatalog" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CareManagement – API-katalogen</title>
+  <meta name="description" content="Ärendehantering för omsorgsverksamheten – lagrar ärenden med intressenter, parametrar, bilagor och beslut och driver dem framåt genom BPMN-processer i processmotorn Operaton.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">CareManagement</span>
+      </nav>
+      <span class="app-tag app-tag-light">Ärendehantering</span>
+      <h1>CareManagement</h1>
+      <p class="hero-lead">
+        Ärendehantering för omsorgsverksamheten – lagrar ärenden med intressenter, parametrar, bilagor och beslut och driver dem framåt genom BPMN-processer i processmotorn Operaton.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            CareManagement håller ordning på omsorgsrelaterade ärenden åt kommunens verksamhetssystem. Varje ärende lagras i ett namespace per verksamhet och kan förses med intressenter, fritt definierade parametrar, bilagor och en beslutslogg. Uppslagsvärden som kontaktorsaker och namespace-konfiguration administreras via egna metadataresurser.
+          </p>
+          <p>
+            När ett ärende skapas kan ett processdefinitionsnamn anges – då startar tjänsten automatiskt en BPMN-processinstans i processmotorn Operaton med ärendet som affärsnyckel. Ärendets parametrar hålls därefter synkroniserade som processvariabler, och via meddelandekorrelering kan väntande processteg återupptas, till exempel när en handläggare godkänner eller avslår.
+          </p>
+          <p>
+            Beslutsloggen fungerar som revisionsspår och rymmer både systemgenererade beslut, exempelvis DMN-utvärderade rekommendationer från processen, och mänskliga beslut, åtskilda med beslutstyp. Ärenden söks fram med fria filteruttryck, paginering och sortering.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Ärenden per namespace</strong> – Skapa, läsa, uppdatera och ta bort ärenden, uppdelade per kommun och namespace med konfigurerbart visningsnamn och kortkod.</li>
+            <li><strong>Processautomation</strong> – Ärenden kan starta en BPMN-processinstans i Operaton; ärendeparametrar synkroniseras löpande som processvariabler.</li>
+            <li><strong>Meddelandekorrelering</strong> – BPMN-meddelanden korreleras till ärendets pågående processinstans för att återuppta väntande processteg.</li>
+            <li><strong>Beslutslogg</strong> – Revisionsspår med både systemgenererade beslut (t.ex. DMN-rekommendationer) och handläggarbeslut, åtskilda med beslutstyp.</li>
+            <li><strong>Intressenter och parametrar</strong> – Intressenter med egna parametrar samt fria ärendeparametrar i nyckel/värde-form.</li>
+            <li><strong>Bilagor</strong> – Bilagor lagras med innehållet i databasen och hanteras per ärende.</li>
+            <li><strong>Metadata</strong> – Uppslagsvärden som kontaktorsaker administreras per namespace via metadataresurser.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>1.0</strong></li>
+            <li>Kategori: <strong>Ärendehantering</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="caremanagement-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-caremanagement" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="caremanagement-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/caremanagement.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/caremanagement.svg" alt="Arkitekturskiss för CareManagement: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap. Lagring: MariaDB med Flyway-migrationer; ärenden, intressenter, parametrar, beslut, bilagor (som blob) och namespace-konfiguration lagras per kommun och namespace.
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB med Flyway-migrationer; ärenden, intressenter, parametrar, beslut, bilagor (som blob) och namespace-konfiguration lagras per kommun och namespace</li>
+        <li><strong>Övrigt:</strong> Resilience4j (circuit breaker mot Operaton), spring-filter (turkraft) för dynamiska sökfilter, JPA/Hibernate med auditering</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som CareManagement anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Operaton</td><td>1.0</td><td>Startar processinstanser, uppdaterar processvariabler och korrelerar BPMN-meddelanden för ärendenas processer.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>application.yml med URL och OAuth2-klientuppgifter för Operaton-API:et</li>
+        <li>MariaDB-anslutning; databasschemat versionshanteras med Flyway</li>
+        <li>Namespace-konfiguration (visningsnamn, kortkod) administreras per kommun via API:et</li>
+        <li>Anrop görs per kommun och namespace – municipalityId och namespace ingår i API-vägarna</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Processtart är frivillig: anges inget processdefinitionsnamn skapas ärendet utan processinstans – verifierat i ErrandService/ProcessService.</li>
+        <li>Ärendeparametrar speglas till processvariabler i Operaton när de skapas, ändras eller tas bort; byts en parameternyckel raderas den gamla variabeln först.</li>
+        <li>Processdefinitionen slås upp på namn hos Operaton vid ärendeskapandet; okänt namn ger 400 Bad Request.</li>
+        <li>Beslutsloggen är utformad som revisionsspår med både systemgenererade och mänskliga beslut, enligt både API-dokumentationen och beslutsentiteten i koden.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-caremanagement" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

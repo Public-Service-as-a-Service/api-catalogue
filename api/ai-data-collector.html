@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Data Collector – API-katalogen</title>
+  <meta name="description" content="Samlar in innehåll från Confluence och håller det synkroniserat som kunskapsunderlag i AI-plattformen Eneo, så att kommunens AI-assistenter alltid svarar utifrån aktuell dokumentation.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">AI Data Collector</span>
+      </nav>
+      <span class="app-tag app-tag-light">AI-tjänster</span>
+      <h1>AI Data Collector</h1>
+      <p class="hero-lead">
+        Samlar in innehåll från Confluence och håller det synkroniserat som kunskapsunderlag i AI-plattformen Eneo, så att kommunens AI-assistenter alltid svarar utifrån aktuell dokumentation.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            AI Data Collector försörjer kommunens AI-assistenter med kunskapsunderlag. Tjänsten läser sidträd i Confluence – kommunens dokumentationsplattform – och laddar upp sidornas innehåll till grupper i AI-plattformen Eneo, där assistenterna använder dem som kunskapskällor.
+          </p>
+          <p>
+            Synkroniseringen sker på två sätt: dels genom schemalagda genomgångar av konfigurerade sidträd, dels i realtid via en webhook som Confluence anropar när sidor skapas, uppdateras eller tas bort. Webhook-anropen verifieras med HMAC-SHA256-signatur innan de behandlas.
+          </p>
+          <p>
+            Vilka Confluence-träd som mappas mot vilka Eneo-grupper konfigureras per kommun, och enskilda grenar kan svartlistas så att de aldrig skickas till AI-plattformen. Tjänsten håller reda på redan insamlade sidor i sin databas för att kunna uppdatera och ta bort rätt underlag i Eneo.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Schemalagd insamling</strong> – Konfigurerade Confluence-sidträd gås igenom enligt cron-schema per kommun och synkroniseras till Eneo.</li>
+            <li><strong>Realtidsuppdatering via webhook</strong> – Confluence anropar tjänsten när sidor skapas, uppdateras eller tas bort; ändringen speglas direkt i Eneo.</li>
+            <li><strong>Mappning mot Eneo-grupper</strong> – Varje Confluence-rotsida mappas mot en grupp i Eneo, konfigurerbart per kommun.</li>
+            <li><strong>Svartlistning</strong> – Utpekade grenar i sidträdet hoppas över i sin helhet och skickas aldrig till AI-plattformen.</li>
+            <li><strong>Signaturverifiering</strong> – Webhook-anrop verifieras med HMAC-SHA256 (x-hub-signature) innan de behandlas.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>1.0</strong></li>
+            <li>Kategori: <strong>AI-tjänster</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens AI-assistenter och de team som förvaltar deras kunskapsunderlag</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="ai-data-collector-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-ai-data-collector" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="ai-data-collector-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/ai-data-collector.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/ai-data-collector.svg" alt="Arkitekturskiss för AI Data Collector: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Lagring: MariaDB med Flyway-migrationer; insamlade Confluence-sidor och deras Eneo-koppling lagras per kommun, samt ShedLock-tabell för schemaläggningslås. Övriga integrationer som förekommer i koden: Confluence – källa för dokumentationssidor, via REST-API och webhooks, Eneo (kommunens AI-plattform) – kunskapsunderlag laddas upp till och tas bort ur grupper.
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB med Flyway-migrationer; insamlade Confluence-sidor och deras Eneo-koppling lagras per kommun, samt ShedLock-tabell för schemaläggningslås</li>
+        <li><strong>Övrigt:</strong> ShedLock med JDBC-låsning för schemalagda jobb, OpenAPI Generator för Eneo-klienten, HMAC-signaturverifiering av webhooks</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Inga anrop till andra mikrotjänster hittades i källkodens konfiguration.
+      </p>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>Miljökonfiguration per kommun: Confluence-anslutning, mappningar rotsida–Eneo-grupp, svartlistade rotsidor samt cron-schema och ShedLock-låstid</li>
+        <li>Webhook-hemlighet för HMAC-verifiering av Confluence-anrop</li>
+        <li>URL och OAuth2-klientuppgifter för Eneo</li>
+        <li>MariaDB-anslutning; databasschemat versionshanteras med Flyway</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Tjänsten skapar en arbetare per konfigurerad kommun och schemalägger den individuellt med egen cron och eget ShedLock-lås – verifierat i ConfluenceDataSource.</li>
+        <li>Svartlistade sidor stoppar hela grenen: varken sidan eller dess barn behandlas.</li>
+        <li>AI-plattformen hette tidigare Intric – databasmigrationen V1.3 döper om kolumnerna från intric till eneo.</li>
+        <li>README anger Java 21, men bygget styrs av dept44-service-parent 8.0.8 som övriga tjänster (Java 25) – koden är sanningskällan.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-ai-data-collector" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

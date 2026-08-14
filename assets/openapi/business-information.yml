@@ -1,0 +1,654 @@
+openapi: 3.1.0
+info:
+  title: api-business-information
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+servers:
+- url: http://localhost:61934
+  description: Generated server url
+tags:
+- name: Anlaggningar
+  description: Anläggningar som står som registrerade och som inte har ett upphört
+    datum ska kunna klassas om.
+- name: anlaggningsuppgifter
+  description: Information om en anläggning
+paths:
+  /{municipalityId}/anlaggningar/{organisationsnummer}:
+    get:
+      tags:
+      - Anlaggningar
+      summary: Hämta aktiva företag/anläggningar med angivet organisationsnummer
+      description: Returnerar aktiva anläggningar med angivet organisationsnummer
+      operationId: getAnlaggningar
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: organisationsnummer
+        in: path
+        description: organisationsnummer för den eller de anläggningar som ska hämtas
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Anlaggningar"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/anlaggning/{anlaggningsid}:
+    get:
+      tags:
+      - anlaggningsuppgifter
+      summary: Hämta uppgifter om anläggningen med angivet anläggningsid
+      description: Returnerar uppgifter om en anläggning
+      operationId: getAnlaggning
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: anlaggningsid
+        in: path
+        description: Anläggningsid för den anläggning som ska hämtas
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Anlaggning"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/anlaggning/{anlaggningsid}/livsmedelsverksamhet:
+    get:
+      tags:
+      - anlaggningsuppgifter
+      summary: Hämta uppgifter om livsmedelsverksamheten vid angiven anläggning*
+      description: |-
+        *Den här endpointen kommer inte returnera någon data då underliggande system inte tillhandahåller den information som ska returneras.
+        Returnerar uppgifter om en anläggnings livsmedelsverksamhet. Med livsmedelsverksamhet avses huvudsaklig inriktning, aktiviteter, produktgrupper och eventuella tredjepartscertifieringar.
+      operationId: getLivsmedelsverksamhet
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: anlaggningsid
+        in: path
+        description: Anläggningsid för den anläggning som ska hämtas
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Livsmedelsverksamhet"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/anlaggning/{anlaggningsid}/fakturering:
+    get:
+      tags:
+      - anlaggningsuppgifter
+      summary: Hämta faktureringsuppgifter för en anläggning
+      description: Returnerar faktureringsuppgifter för en anläggning.
+      operationId: getFakturering
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: anlaggningsid
+        in: path
+        description: Anläggningsid för den anläggning vars faktureringsuppgifter ska
+          hämtas
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Faktura"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Anlaggningar:
+      type: object
+      description: Uppgifter som används för att identifiera en anläggning
+      properties:
+        anlaggningsid:
+          type:
+          - string
+          - "null"
+          example: 0951c35c-c57b-4d65-9faf-b92ad0c846c8
+          maxLength: 50
+          minLength: 1
+        anlaggningsnamn:
+          type:
+          - string
+          - "null"
+          example: Emmas Konditori
+          maxLength: 100
+          minLength: 1
+        gatuadress:
+          type:
+          - string
+          - "null"
+          example: Storgatan 8
+          maxLength: 64
+          minLength: 1
+        ort:
+          type:
+          - string
+          - "null"
+          example: Sundsvall
+          maxLength: 32
+          minLength: 1
+        huvudsakliginriktning:
+          type:
+          - string
+          - "null"
+          example: SLI
+    Adress:
+      type: object
+      description: "Adress kan vara t.ex. postadress, besöksadress eller fakturaadress"
+      properties:
+        coadress:
+          type:
+          - string
+          - "null"
+          description: C/o-adress
+          maxLength: 64
+          minLength: 1
+        gatuadress:
+          type: string
+          description: "Utdelningsadress, gatuadress eller box till företaget, anlä\
+            ggningen/verksamhetsutövaren"
+          example: Storgatan 8
+          maxLength: 64
+          minLength: 1
+        postnummer:
+          type:
+          - string
+          - "null"
+          description: Postnummer
+          example: 851 81
+          maxLength: 6
+          minLength: 5
+        ort:
+          type: string
+          description: "Ort, postort"
+          example: Sundsvall
+          maxLength: 32
+          minLength: 1
+        land:
+          type:
+          - string
+          - "null"
+          description: Land
+          example: Sverige
+          maxLength: 32
+          minLength: 1
+        adresstyp:
+          type:
+          - string
+          - "null"
+          enum:
+          - Besöksadress
+          - Postadress
+          - Postadress SSBTGU
+          - Fakturaadress
+      required:
+      - gatuadress
+      - ort
+    Anlaggning:
+      type: object
+      description: Uppgifter om en anläggning
+      properties:
+        anlaggningsid:
+          type:
+          - string
+          - "null"
+          example: 0951c35c-c57b-4d65-9faf-b92ad0c846c8
+          maxLength: 50
+          minLength: 1
+        anlaggningsnamn:
+          type:
+          - string
+          - "null"
+          example: Emmas Konditori
+          maxLength: 100
+          minLength: 1
+        fastighetsbeteckning:
+          type:
+          - string
+          - "null"
+          example: Viken 23:1
+          maxLength: 50
+          minLength: 1
+        mobilAnlaggning:
+          type:
+          - string
+          - "null"
+          description: Är det en mobil anläggning?
+          enum:
+          - nej
+          - ja
+        adresser:
+          type: array
+          description: Anläggningens adresser
+          items:
+            $ref: "#/components/schemas/Adress"
+        kontaktpersoner:
+          type: array
+          description: Anläggningens kontaktpersoner
+          items:
+            $ref: "#/components/schemas/Kontaktperson"
+    Kontaktperson:
+      type: object
+      properties:
+        kontaktpersonid:
+          type:
+          - string
+          - "null"
+          example: 0951c35c-c57b-4d65-9faf-b92ad0c846c8
+        fornamn:
+          type:
+          - string
+          - "null"
+          description: Förnamn
+          example: Jenny
+          maxLength: 32
+          minLength: 1
+        efternamn:
+          type:
+          - string
+          - "null"
+          example: Svensson
+          maxLength: 32
+          minLength: 1
+        kontaktuppgifter:
+          type: array
+          description: Kontaktuppgifter för kontaktpersonen
+          items:
+            $ref: "#/components/schemas/Kontaktuppgift"
+        roll:
+          type: array
+          items:
+            type: string
+            enum:
+            - Kontaktperson anläggningen
+            - Kontaktperson ärendet
+            - Uppgiftslämnare
+    Kontaktuppgift:
+      type: object
+      description: Telefonnummer och/eller e-postadress
+      properties:
+        telefonnummer:
+          type:
+          - string
+          - "null"
+          example: "0701740605"
+          maxLength: 15
+          minLength: 1
+        epostadress:
+          type:
+          - string
+          - "null"
+          format: email
+          example: jenny.svensson@foretaget.com
+          maxLength: 50
+          minLength: 1
+    Livsmedelsverksamhet:
+      type: object
+      description: Information om den livsmedelsverksamhet som bedrivs vid anläggningen
+      properties:
+        omfattning:
+          type:
+          - string
+          - "null"
+          enum:
+          - SLO1
+          - SLO2
+          - SLO3
+          - SLO4
+          - TLO1
+          - TLO2
+          - TLO3
+          - TLO4
+          - HKO1
+          - HKO2
+          - HKO3
+          - HKO4
+          - DVO1
+          - DVO2
+          - DVO3
+          - DVO4
+          - DVO5
+        huvudsakliginriktning:
+          type:
+          - string
+          - "null"
+          enum:
+          - DVI
+          - SLI
+          - TLI
+          - HKI
+        huvudaktivitet:
+          type: array
+          items:
+            type: string
+            enum:
+            - DVHA001
+            - DVHA002
+            - DVHA003
+            - DVHA004
+            - DVHA005
+            - HKHA001
+            - HKHA002
+            - HKHA003
+            - HKHA004
+            - HKHA005
+            - HKHA006
+            - HKHA007
+            - HKHA008
+            - SLHA001
+            - SLHA002
+            - SLHA003
+            - SLHA004
+            - SLHA005
+            - SLHA006
+            - SLHA007
+            - SLHA008
+            - TLHA001
+            - TLHA002
+            - TLHA003
+            - TLHA004
+            - TLHA005
+            - TLHA006
+            - TLHA008
+            - TLHA010
+            - TLHA011
+            - TLHA012
+            - TLHA013
+            - TLHA014
+            - TLHA015
+            - TLHA016
+            - TLHA017
+            - TLHA018
+            - TLHA019
+            - TLHA020
+            - TLHA021
+            - TLHA022
+        aktivitet:
+          type: array
+          items:
+            type: string
+            enum:
+            - DVUA001
+            - DVUA002
+            - DVUA003
+            - DVUA004
+            - DVUA005
+            - DVUA006
+            - DVUA007
+            - DVUA008
+            - DVUA009
+            - DVUA010
+            - HKUA001
+            - HKUA002
+            - HKUA003
+            - HKUA006
+            - HKUA007
+            - SLUA001
+            - SLUA002
+            - SLUA003
+            - SLUA004
+            - SLUA005
+            - SLUA006
+            - SLUA007
+            - SLUA008
+            - SLUA009
+            - SLUA010
+            - SLUA011
+            - SLUA012
+            - SLUA013
+            - SLUA014
+            - SLUA015
+            - SLUA016
+            - SLUA017
+            - SLUA018
+            - SLUA019
+            - SLUA020
+            - SLUA021
+            - SLUA022
+            - SLUA023
+            - SLUA024
+            - SLUA025
+            - SLUA026
+            - SLUA027
+            - SLUA030
+            - SLUA031
+            - SLUA032
+            - SLUA033
+            - TLUA001
+            - TLUA002
+            - TLUA003
+            - TLUA004
+            - TLUA005
+            - TLUA006
+            - TLUA007
+            - TLUA008
+            - TLUA009
+            - TLUA010
+            - TLUA011
+            - TLUA012
+            - TLUA013
+            - TLUA014
+            - TLUA016
+            - TLUA017
+            - TLUA018
+            - TLUA019
+            - TLUA020
+            - TLUA021
+        produktgrupp:
+          type: array
+          items:
+            type: string
+            enum:
+            - PG001
+            - PG002
+            - PG003
+            - PG004
+            - PG005
+            - PG006
+            - PG007
+            - PG008
+            - PG009
+            - PG010
+        tredjepartscertifiering:
+          type:
+          - string
+          - "null"
+          description: Om verksamheten har en tredjepartscertifiering eller inte
+          enum:
+          - nej
+          - ja
+    Faktura:
+      type: object
+      description: Faktureringsuppgifter
+      properties:
+        anlaggningsnamn:
+          type:
+          - string
+          - "null"
+          example: Emmas Konditori
+        fakturareferens:
+          type:
+          - string
+          - "null"
+          description: Fakturareferens att använda vid fakturering
+          example: EK1101
+        adresser:
+          type: array
+          description: Faktureringsadress
+          items:
+            $ref: "#/components/schemas/Adress"
+  securitySchemes: {}

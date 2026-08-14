@@ -1,0 +1,741 @@
+openapi: 3.1.0
+info:
+  title: api-e-signing
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.1"
+servers:
+- url: http://localhost:57681
+  description: Generated server url
+tags:
+- name: eSigning
+  description: E-signing
+paths:
+  /{municipalityId}/e-signing/webhooks/comfact:
+    post:
+      tags:
+      - eSigning
+      summary: Receive a signing event from Comfact (forwarded by api-comfact-facade)
+      operationId: handleComfactEvent
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ComfactEventNotification"
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/e-signing/start:
+    post:
+      tags:
+      - eSigning
+      summary: Start a signing process
+      operationId: startSigningProcess
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SigningRequest"
+        required: true
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EsigningResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "503":
+          description: Service Unavailable
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/e-signing/signings:
+    post:
+      tags:
+      - eSigning
+      summary: Create a signing request via the configured signing provider
+      operationId: createSigning
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StartSigningRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StartSigningResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/e-signing/signings/{providerCaseId}:
+    get:
+      tags:
+      - eSigning
+      summary: Get the current status of a signing case
+      operationId: getSigningInstance
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: providerCaseId
+        in: path
+        description: The signing provider's case id
+        required: true
+        schema:
+          type: string
+        example: 1234567890
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SigningInstanceResponse"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - eSigning
+      summary: Cancel a signing case via the configured signing provider
+      description: Withdraws the signing case at the provider so it stops progressing.
+        The final state is confirmed asynchronously through the provider callback.
+      operationId: cancelSigning
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: providerCaseId
+        in: path
+        description: The signing provider's case id
+        required: true
+        schema:
+          type: string
+        example: 1234567890
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    ComfactEventNotification:
+      type: object
+      description: A signing event forwarded from Comfact (via api-comfact-facade)
+      properties:
+        eventTrigger:
+          type: string
+          description: The Comfact event trigger
+          examples:
+          - signingInstanceCompleted
+        signingInstanceId:
+          type: string
+          description: The Comfact signing instance id
+          examples:
+          - "1234567890"
+          minLength: 1
+        customerReference:
+          type: string
+          description: The customer reference (Postportalen MessageId) supplied at
+            create and echoed back by Comfact
+          examples:
+          - 550e8400-e29b-41d4-a716-446655440000
+        statusCode:
+          type: string
+          description: The Comfact status code of the signing instance
+          examples:
+          - completed
+        expires:
+          type: string
+          format: date-time
+          description: When the signing instance expires
+          examples:
+          - 2026-12-31T23:59:59Z
+        signatory:
+          $ref: "#/components/schemas/ComfactSignatory"
+          description: "The acting signatory, present on signatory events"
+        signedDocument:
+          $ref: "#/components/schemas/SigningDocument"
+          description: "The signed document, present on a completed event"
+        timestamp:
+          type: string
+          format: date-time
+          description: When the event occurred
+          examples:
+          - 2026-12-31T23:59:59Z
+      required:
+      - eventTrigger
+      - signingInstanceId
+    ComfactSignatory:
+      type: object
+      description: The signatory referenced by a Comfact event
+      properties:
+        partyId:
+          type: string
+          description: The party id of the signatory
+          examples:
+          - 550e8400-e29b-41d4-a716-446655440000
+        action:
+          type: string
+          description: The action taken by the signatory
+          enum:
+          - approved
+          - declined
+          examples:
+          - approved
+        reason:
+          type: string
+          description: "The reason given for the action, when provided"
+          examples:
+          - Not authorised to sign
+    SigningDocument:
+      type: object
+      description: Document to be signed
+      properties:
+        name:
+          type: string
+          description: "Optional descriptive name for the document, visible to the\
+            \ signatory"
+          examples:
+          - Employment contract
+        fileName:
+          type: string
+          description: The document file name including extension
+          examples:
+          - document.pdf
+          minLength: 1
+        mimeType:
+          type: string
+          description: The document mime type. Must be application/pdf
+          examples:
+          - application/pdf
+        content:
+          type: string
+          description: Base64-encoded content of the document to be signed
+          examples:
+          - dGVzdA==
+          minLength: 1
+      required:
+      - content
+      - fileName
+      - mimeType
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Document:
+      type: object
+      description: Document model
+      properties:
+        descriptiveName:
+          type: string
+          description: Optional descriptive name for the document that is to be signed.
+          examples:
+          - Employment contract
+        registrationNumber:
+          type: string
+          description: "The document registration number, the value must not be blank\
+            \ or null"
+          examples:
+          - 12345-2022
+          minLength: 1
+        fileName:
+          type: string
+          description: "The document file name, the value must not be blank or null"
+          examples:
+          - document.pdf
+          minLength: 1
+      required:
+      - fileName
+      - registrationNumber
+    Initiator:
+      type: object
+      description: Initiator model
+      properties:
+        name:
+          type: string
+          description: The initiator name
+          examples:
+          - John Doe
+          minLength: 1
+        partyId:
+          type: string
+          description: The initiator party id
+          examples:
+          - 550e8400-e29b-41d4-a716-446655440000
+        organization:
+          type: string
+          description: The initiator organization
+          examples:
+          - Sundsvall Municipality
+        email:
+          type: string
+          format: email
+          description: The initiator email
+          examples:
+          - john.doe@sundsvall.se
+      required:
+      - email
+      - name
+      - partyId
+    Message:
+      type: object
+      description: Message model
+      properties:
+        subject:
+          type: string
+          description: Subject of the message
+          examples:
+          - Please sign the document
+          minLength: 1
+        body:
+          type: string
+          description: Body of the message
+          examples:
+          - "Dear John Doe, please sign the document."
+          minLength: 1
+      required:
+      - body
+      - subject
+    Reminder:
+      type: object
+      description: Reminder model
+      properties:
+        message:
+          $ref: "#/components/schemas/Message"
+          description: The reminder message
+        intervalInHours:
+          type: integer
+          format: int32
+          description: The reminder interval in hours
+          examples:
+          - 24
+          minimum: 1
+        startDateTime:
+          type: string
+          format: date-time
+          description: The reminder start date and time
+          examples:
+          - 2021-12-31T23:59:59Z
+      required:
+      - intervalInHours
+      - message
+      - startDateTime
+    Signatory:
+      type: object
+      description: Signatory model
+      properties:
+        name:
+          type: string
+          description: The signatory name
+          examples:
+          - John Doe
+          minLength: 1
+        organization:
+          type: string
+          description: The signatory organization
+          examples:
+          - Sundsvall Municipality
+        partyId:
+          type: string
+          description: The signatory party id
+          examples:
+          - 550e8400-e29b-41d4-a716-446655440000
+        email:
+          type: string
+          format: email
+          description: The signatory email
+          examples:
+          - john.doe@sundsvall.se
+          minLength: 1
+        notificationMessage:
+          $ref: "#/components/schemas/Message"
+          description: The notification message
+      required:
+      - name
+      - partyId
+    SigningRequest:
+      type: object
+      description: Signing request model
+      properties:
+        language:
+          type: string
+          description: "The language used for the signing instance. Valid values are\
+            \ one of [en-US, sv-SE, da-DK, fr-FR, de-DE, nb-NO, ru-RU, zh-CN, fi-FI,\
+            \ uk-UA]. Swedish will be used If no language is provided"
+          examples:
+          - sv-SE
+        callbackUrl:
+          type: string
+          description: Optional callback url
+          examples:
+          - https://example.com/callback
+        expires:
+          type: string
+          format: date-time
+          description: "Optional date and time when the signing request expires. If\
+            \ no exipre date is provided, expiretime will be set to 30 days from time\
+            \ when request was received."
+          examples:
+          - 2021-12-31T23:59:59Z
+        document:
+          $ref: "#/components/schemas/Document"
+          description: The document to sign
+        initiator:
+          $ref: "#/components/schemas/Initiator"
+          description: The initiator of the signing request
+        notificationMessage:
+          $ref: "#/components/schemas/Message"
+          description: The notification message
+        reminder:
+          $ref: "#/components/schemas/Reminder"
+          description: Reminder object
+        signatories:
+          type: array
+          items:
+            $ref: "#/components/schemas/Signatory"
+          minItems: 1
+          uniqueItems: true
+      required:
+      - document
+      - initiator
+      - notificationMessage
+      - signatories
+    EsigningResponse:
+      type: object
+      description: Response model
+      properties:
+        processId:
+          type: string
+          description: The process id of the esigning process
+          examples:
+          - "12345"
+    StartSigningRequest:
+      type: object
+      description: Start signing request model
+      properties:
+        language:
+          type: string
+          description: The language used for the signing instance. Swedish will be
+            used if no language is provided
+          examples:
+          - sv-SE
+        customerReference:
+          type: string
+          description: "The consumer's own reference for the case (e.g. Postportalen's\
+            \ MessageId). It is passed to the provider and echoed back verbatim in\
+            \ every event callback, so the consumer can correlate the case."
+          examples:
+          - 550e8400-e29b-41d4-a716-446655440000
+        expires:
+          type: string
+          format: date-time
+          description: Optional date and time when the signing request expires
+          examples:
+          - 2026-12-31T23:59:59Z
+        document:
+          $ref: "#/components/schemas/SigningDocument"
+          description: The primary document to sign
+        attachments:
+          type: array
+          description: Optional additional documents (attachments) included in the
+            signing alongside the primary document
+          items:
+            $ref: "#/components/schemas/SigningDocument"
+        initiator:
+          $ref: "#/components/schemas/Initiator"
+          description: The initiator of the signing request
+        notificationMessage:
+          $ref: "#/components/schemas/Message"
+          description: The notification message
+        reminder:
+          $ref: "#/components/schemas/Reminder"
+          description: Reminder object
+        signatories:
+          type: array
+          items:
+            $ref: "#/components/schemas/Signatory"
+          minItems: 1
+          uniqueItems: true
+      required:
+      - document
+      - initiator
+      - notificationMessage
+      - signatories
+    StartSigningResponse:
+      type: object
+      description: Start signing response model
+      properties:
+        providerCaseId:
+          type: string
+          description: The signing provider's case id
+          examples:
+          - "1234567890"
+        status:
+          type: string
+          description: The normalized status of the signing case
+          enum:
+          - INITIATED
+          - PENDING
+          - SIGNED
+          - EXPIRED
+          - FAILED
+          examples:
+          - INITIATED
+        provider:
+          type: string
+          description: The id of the signing provider that handled the request
+          examples:
+          - comfact
+        signatoryUrls:
+          type: object
+          additionalProperties:
+            type: string
+          description: "Direct signing urls per party id, when supplied by the provider"
+    SigningInstanceResponse:
+      type: object
+      description: Signing instance response model
+      properties:
+        providerCaseId:
+          type: string
+          description: The signing provider's case id
+          examples:
+          - "1234567890"
+        status:
+          type: string
+          description: The normalized status of the signing case
+          enum:
+          - INITIATED
+          - PENDING
+          - SIGNED
+          - EXPIRED
+          - FAILED
+          examples:
+          - PENDING
+        provider:
+          type: string
+          description: The id of the signing provider that handled the request
+          examples:
+          - comfact
+        expires:
+          type: string
+          format: date-time
+          description: When the signing case expires
+          examples:
+          - 2026-12-31T23:59:59Z
+        signedDocument:
+          $ref: "#/components/schemas/SigningDocument"
+          description: "The signed document, present only when status is SIGNED"
+  securitySchemes: {}

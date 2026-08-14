@@ -1,0 +1,563 @@
+openapi: 3.1.0
+info:
+  title: api-eventlog
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.3"
+servers:
+- url: http://localhost:64210
+  description: Generated server url
+tags:
+- name: Events
+  description: Event operations
+paths:
+  /{municipalityId}/{logKey}:
+    get:
+      tags:
+      - Events
+      summary: Fetch log events
+      description: "Fetch log events for a specific logKey, with or without filtering\
+        \ the result"
+      operationId: getEventsForLogKey
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: logKey
+        in: path
+        description: Events stored under this UUID
+        required: true
+        schema:
+          type: string
+        example: f0882f1d-06bc-47fd-b017-1d8307f5ce95
+      - name: filter
+        in: query
+        description: "Syntax description: [spring-filter](https://github.com/turkraft/springfilter#syntax)"
+        required: false
+        schema:
+          type: string
+        example: metadata.key:'userId' and metadata.value:'john123'
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageEvent"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - Events
+      summary: Create log event
+      description: Creates a log event under logKey
+      operationId: createEvent
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: logKey
+        in: path
+        description: Event will be stored under this UUID. Used to separate data under
+          a unique id.
+        required: true
+        schema:
+          type: string
+        example: f0882f1d-06bc-47fd-b017-1d8307f5ce95
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Event"
+        required: true
+      responses:
+        "202":
+          description: Successful operation
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}:
+    get:
+      tags:
+      - Events
+      summary: Fetch log events
+      description: "Fetch log events, with or without filtering the result"
+      operationId: getEvents
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: filter
+        in: query
+        description: "Syntax description: [spring-filter](https://github.com/turkraft/springfilter#syntax)"
+        required: false
+        schema:
+          type: string
+        example: metadata.key:'userId' and metadata.value:'john123'
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageEvent"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/events/{id}:
+    get:
+      tags:
+      - Events
+      summary: Fetch log event by id
+      description: Fetch a single log event by its unique id
+      operationId: getEventById
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Event id
+        required: true
+        schema:
+          type: string
+        example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    Event:
+      type: object
+      description: Event model
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this event
+          examples:
+          - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          readOnly: true
+        logKey:
+          type: string
+          description: Unique identifier
+          examples:
+          - fbe2fb67-005c-4f26-990f-1c95b5f6933e
+          readOnly: true
+        type:
+          $ref: "#/components/schemas/EventType"
+        subType:
+          type: string
+          description: Event sub type
+          examples:
+          - ATTACHMENT
+        requestGroupId:
+          type: string
+          description: "Request group id, groups events originating from the same\
+            \ operation"
+          examples:
+          - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        executingUser:
+          type: "null"
+          $ref: "#/components/schemas/ExecutingUser"
+          description: The user that executed the action that caused this event
+        details:
+          type: string
+          description: Additional details about the event
+          examples:
+          - Filnamn 'abc.pdf'
+        municipalityId:
+          type: string
+          description: Municipality ID
+          examples:
+          - "2281"
+          readOnly: true
+        message:
+          type: string
+          description: Event description
+          examples:
+          - Request saved in database
+          minLength: 1
+        expires:
+          type:
+          - string
+          - "null"
+          format: date-time
+          description: Date when event can be scheduled for delete. 'null' means never
+          examples:
+          - 2030-10-31T01:30:00.000+02:00
+        owner:
+          type: string
+          description: Service that created event
+          examples:
+          - SupportManagement
+          minLength: 1
+        created:
+          type: string
+          format: date-time
+          description: Timestamp when the event was created
+          examples:
+          - 2000-10-31T01:30:00.000+02:00
+          readOnly: true
+        historyReference:
+          type:
+          - string
+          - "null"
+          description: Historical external reference to an immutable snapshot of data
+          examples:
+          - fbe2fb67-005c-4f26-990f-1c95b5f6933e
+        sourceType:
+          type:
+          - string
+          - "null"
+          description: Source which the event refers to
+          examples:
+          - errand
+        metadata:
+          type: array
+          items:
+            $ref: "#/components/schemas/Metadata"
+      required:
+      - message
+      - owner
+      - type
+    EventType:
+      type: string
+      description: |
+        ## CRUD events:
+        * `CREATE`
+        * `READ`
+        * `UPDATE`
+        * `DELETE`
+        ## System events:
+        * `ACCESS` - login, logout, authorization, throttling
+        * `EXECUTE` - send, queue, schedule, transfer, move
+        * `CANCEL` - terminate, abort, decommission, kill
+        * `DROP` - skip, omit, ignore, disregard
+      enum:
+      - CREATE
+      - READ
+      - UPDATE
+      - DELETE
+      - ACCESS
+      - EXECUTE
+      - CANCEL
+      - DROP
+    ExecutingUser:
+      type: object
+      description: Executing user model
+      properties:
+        type:
+          $ref: "#/components/schemas/ExecutingUserType"
+        value:
+          type: string
+          description: The identifier of the executing user
+          examples:
+          - john.doe
+          minLength: 1
+      required:
+      - type
+      - value
+    ExecutingUserType:
+      type: string
+      description: |
+        ## Executing user types:
+        * `AD_USER` - Active Directory user
+        * `PARTY_ID` - Party identifier (UUID)
+      enum:
+      - AD_USER
+      - PARTY_ID
+    Metadata:
+      type: object
+      description: Metadata model
+      properties:
+        key:
+          type: string
+          description: The key
+          examples:
+          - userId
+          minLength: 1
+        value:
+          type: string
+          description: The value
+          examples:
+          - john123
+          minLength: 1
+      required:
+      - key
+      - value
+    PageEvent:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/Event"
+        number:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        unpaged:
+          type: boolean
+        paged:
+          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int64
+    SortObject:
+      type: object
+      properties:
+        unsorted:
+          type: boolean
+        sorted:
+          type: boolean
+        empty:
+          type: boolean
+  securitySchemes: {}

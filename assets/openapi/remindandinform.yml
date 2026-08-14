@@ -1,0 +1,593 @@
+openapi: 3.1.0
+info:
+  title: api-remindandinform
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "4.0"
+servers:
+- url: http://localhost:55308
+  description: Generated server url
+tags:
+- name: Reminder
+  description: Remind operations
+paths:
+  /{municipalityId}/reminders:
+    post:
+      tags:
+      - Reminder
+      summary: Create a new reminder.
+      operationId: createReminder
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReminderRequest"
+        required: true
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/reminders/send:
+    post:
+      tags:
+      - Reminder
+      summary: Send reminders.
+      operationId: sendReminders
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendRemindersRequest"
+        required: true
+      responses:
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/reminders/{reminderId}:
+    get:
+      tags:
+      - Reminder
+      summary: Returns a reminder by reminder-id
+      operationId: getReminderByReminderId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: reminderId
+        in: path
+        description: Reminder ID
+        required: true
+        schema:
+          type: string
+          minLength: 1
+        example: R-81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reminder"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - Reminder
+      summary: Deletes a reminder.
+      operationId: deleteReminder
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: reminderId
+        in: path
+        description: Reminder ID
+        required: true
+        schema:
+          type: string
+          minLength: 1
+        example: R-81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "204":
+          description: Successful operation
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    patch:
+      tags:
+      - Reminder
+      summary: Manage updates of a reminder.
+      operationId: updateReminder
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: reminderId
+        in: path
+        description: Reminder ID
+        required: true
+        schema:
+          type: string
+          minLength: 1
+        example: R-81471222-5798-11e9-ae24-57fa13b361e1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateReminderRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Reminder"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/reminders/parties/{partyId}:
+    get:
+      tags:
+      - Reminder
+      summary: Returns all reminders for a person or an organization.
+      operationId: getRemindersByPartyId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: partyId
+        in: path
+        description: Party ID
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Reminder"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    ReminderRequest:
+      type: object
+      description: Reminder creation request model
+      properties:
+        partyId:
+          type: string
+          description: PartyId (e.g. a personId or an organizationId)
+          examples:
+          - 81471222-5798-11e9-ae24-57fa13b361e2
+        action:
+          type: string
+          description: What should be done
+          examples:
+          - Renew application
+          maxLength: 8192
+          minLength: 0
+        note:
+          type: string
+          description: Reminder note
+          examples:
+          - A short note about the reminder
+          maxLength: 2048
+          minLength: 0
+        caseId:
+          type: string
+          description: Id for the case
+          examples:
+          - "12345"
+          maxLength: 255
+          minLength: 0
+        caseType:
+          type: string
+          description: Type of the case
+          examples:
+          - Byggärende
+          maxLength: 255
+          minLength: 0
+        caseLink:
+          type: string
+          description: Link to the case
+          examples:
+          - http://test.sundsvall.se/case1337
+          maxLength: 512
+          minLength: 0
+        externalCaseId:
+          type: string
+          description: External id for the case
+          examples:
+          - "2229"
+          maxLength: 255
+          minLength: 0
+        reminderDate:
+          type: string
+          format: date
+          description: Date for reminding
+          examples:
+          - 2021-11-01
+        createdBy:
+          type: string
+          description: Identity (username or given name) of the individual that is
+            creating the reminder post
+          examples:
+          - Albert Einstein
+          maxLength: 255
+          minLength: 0
+      required:
+      - action
+      - createdBy
+      - partyId
+      - reminderDate
+    SendRemindersRequest:
+      type: object
+      description: Request model for sending reminders of a specified date
+      properties:
+        reminderDate:
+          type: string
+          format: date
+          description: Date for reminding
+          examples:
+          - 2021-11-01
+      required:
+      - reminderDate
+    UpdateReminderRequest:
+      type: object
+      description: Reminder update request model
+      properties:
+        partyId:
+          type: string
+          description: PartyId (e.g. a personId or an organizationId)
+          examples:
+          - 81471222-5798-11e9-ae24-57fa13b361e2
+        action:
+          type: string
+          description: What should be done
+          examples:
+          - Renew application
+          maxLength: 8192
+          minLength: 0
+        note:
+          type: string
+          description: Reminder note
+          examples:
+          - A short note about the reminder
+          maxLength: 2048
+          minLength: 0
+        caseId:
+          type: string
+          description: Id for the case
+          examples:
+          - "12345"
+          maxLength: 255
+          minLength: 0
+        caseType:
+          type: string
+          description: Type of the case
+          examples:
+          - Byggärende
+          maxLength: 255
+          minLength: 0
+        caseLink:
+          type: string
+          description: Link to the case
+          examples:
+          - http://test.sundsvall.se/case1337
+          maxLength: 512
+          minLength: 0
+        externalCaseId:
+          type: string
+          description: External id for the case
+          examples:
+          - "2229"
+          maxLength: 255
+          minLength: 0
+        reminderDate:
+          type: string
+          format: date
+          description: Date for reminding
+          examples:
+          - 2021-11-01
+        modifiedBy:
+          type: string
+          description: Identity (username or given name) of the individual that is
+            modifying the reminder post
+          examples:
+          - Albert Einstein
+          maxLength: 255
+          minLength: 0
+      required:
+      - modifiedBy
+    Reminder:
+      type: object
+      description: Reminder model
+      properties:
+        reminderId:
+          type: string
+          description: Reminder ID
+          examples:
+          - R-81471222-5798-11e9-ae24-57fa13b361e1
+        partyId:
+          type: string
+          description: Party ID (e.g. a personId or an organizationId)
+          examples:
+          - 81471222-5798-11e9-ae24-57fa13b361e2
+        action:
+          type: string
+          description: What should be done
+          examples:
+          - Renew application
+        note:
+          type: string
+          description: Reminder note
+          examples:
+          - A short note about the reminder
+        caseId:
+          type: string
+          description: Case ID
+          examples:
+          - "12345"
+        caseType:
+          type: string
+          description: Case Type
+          examples:
+          - Byggärende
+        caseLink:
+          type: string
+          description: Link to the case
+          examples:
+          - http://test.sundsvall.se/case12345
+        externalCaseId:
+          type: string
+          description: External Case ID
+          examples:
+          - "2229"
+        reminderDate:
+          type: string
+          format: date
+          description: Date for reminding
+          examples:
+          - 2021-11-01
+        created:
+          type: string
+          format: date-time
+          description: Timestamp when reminder was created
+          examples:
+          - 2021-10-15T07:43:13.225+02:00
+        createdBy:
+          type: string
+          description: Identity of the individual that created the reminder
+          examples:
+          - Albert Einstein
+        modified:
+          type: string
+          format: date-time
+          description: Timestamp when reminder was last modified
+          examples:
+          - 2021-10-22T11:28:37.431+02:00
+        modifiedBy:
+          type: string
+          description: Identity of the individual that last modified the reminder
+          examples:
+          - Albert Einstein
+  securitySchemes: {}

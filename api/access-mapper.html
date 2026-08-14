@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AccessMapper – API-katalogen</title>
+  <meta name="description" content="Översätter en medarbetares Active Directory-grupper till behörigheter i kommunens interna system, utifrån konfigurerbara åtkomstgrupper.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">AccessMapper</span>
+      </nav>
+      <span class="app-tag app-tag-light">Integration</span>
+      <h1>AccessMapper</h1>
+      <p class="hero-lead">
+        Översätter en medarbetares Active Directory-grupper till behörigheter i kommunens interna system, utifrån konfigurerbara åtkomstgrupper.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            Många av kommunens interna system behöver veta vad en medarbetare får göra – men behörigheterna förvaltas i Active Directory, som systemen inte bör integrera direkt mot. AccessMapper fungerar som brygga: tjänsten slår upp vilka AD-grupper en användare tillhör och översätter dem till åtkomstgrupper med systemspecifika behörigheter.
+          </p>
+          <p>
+            Kopplingen mellan AD-grupper och behörigheter konfigureras via API:et. En åtkomstgrupp registreras per kommun och namnrymd (namespace) med AD-gruppens id som nyckel och innehåller en eller flera åtkomsttyper, var och en med behörighetsposter som anger nivå och mönster. På så sätt kan olika verksamhetssystem ha sina egna behörighetsmodeller i egna namnrymder, medan grunddatat hämtas från samma AD.
+          </p>
+          <p>
+            När ett system frågar efter en användares behörigheter hämtar tjänsten användarens AD-grupper, matchar dem mot de registrerade åtkomstgrupperna i den aktuella namnrymden och returnerar de behörigheter som är kopplade – med möjlighet att filtrera på åtkomsttyp.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Behörighetsuppslag</strong> – Hämtar en användares AD-grupper och returnerar de åtkomstgrupper med behörigheter som matchar i den aktuella namnrymden, med filtrering på åtkomsttyp.</li>
+            <li><strong>Åtkomstgrupper</strong> – Registrerar, uppdaterar, listar och tar bort åtkomstgrupper som kopplar en AD-grupp till behörigheter.</li>
+            <li><strong>Namnrymder</strong> – Behörighetskonfigurationen hålls isär per kommun och namnrymd, så att olika system kan ha egna behörighetsmodeller.</li>
+            <li><strong>Åtkomsttyper och nivåer</strong> – Varje åtkomstgrupp innehåller åtkomsttyper med behörighetsposter (nivå och mönster) som beskriver vad gruppen ger rätt till.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>1.0</strong></li>
+            <li>Kategori: <strong>Integration</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="access-mapper-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-access-mapper" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="access-mapper-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/access-mapper.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/access-mapper.svg" alt="Arkitekturskiss för AccessMapper: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap. Lagring: MariaDB; lagrar åtkomstgrupper med åtkomsttyper och behörighetsposter per kommun och namnrymd. Övriga integrationer som förekommer i koden: Active Directory (indirekt – via kommunens ActiveDirectory-API).
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB; lagrar åtkomstgrupper med åtkomsttyper och behörighetsposter per kommun och namnrymd</li>
+        <li><strong>Övrigt:</strong> Feign-klient genererad ur ActiveDirectory-specifikationen (openapi-generator), JPA med Specification-baserad filtrering, Resilience4j (circuit breaker mot ActiveDirectory)</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som AccessMapper anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>ActiveDirectory</td><td>v2</td><td>Hämtar vilka AD-grupper en användare tillhör.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>application.yml med URL och OAuth2-klientuppgifter för ActiveDirectory-integrationen</li>
+        <li>MariaDB-anslutning; initialt schema finns som SQL-skript i repot (Flyway är avstängt i standardkonfigurationen)</li>
+        <li>Anrop görs per kommun och namnrymd – municipalityId och namespace ingår i API-vägarna</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Behörighetsuppslaget hämtar användarens grupper från AD och matchar gruppernas GUID mot registrerade åtkomstgrupper i namnrymden; AD-domänen är hårdkodad till personal i tjänsten – verifierat i AccessService.</li>
+        <li>Åtkomstgruppens id är AD-gruppens GUID, vilket gör kopplingen mellan AD och den interna behörighetsmodellen explicit.</li>
+        <li>Ett initialt Flyway-skript finns under db/migration, men Flyway är avstängt i application.yml – schemat förutsätts vara etablerat i förväg.</li>
+        <li>Inparametrar saneras innan de skrivs till loggar och felmeddelanden (sanitizeForLogging) – verifierat i AccessGroupService.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-access-mapper" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

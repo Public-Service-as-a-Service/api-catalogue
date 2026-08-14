@@ -1,0 +1,316 @@
+openapi: 3.1.0
+info:
+  title: SnailMailSender
+  contact: { }
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "3.3"
+servers:
+  - url: http://localhost:55438
+    description: Generated server url
+tags:
+  - name: SnailMailSender
+    description: SnailMailSender
+paths:
+  /{municipalityId}/send/snailmail:
+    post:
+      tags:
+        - SnailMailSender
+      summary: Prepare snail mail for batch
+      operationId: sendSnailMail
+      parameters:
+        - name: x-issuer
+          in: header
+          description: |
+            **DEPRECATED**: This parameter will be removed in a future version, use X-Sent-By instead.
+            Issuer of the request, is used as a prefix in a folder name.
+            Cannot contain any of: '"', '*', '<', '>', '?', '|', '/', '\', ':'
+          required: false
+          deprecated: true
+          schema:
+            type: string
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendSnailMailRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful Operation
+        "400":
+          description: Bad RequestEntity
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/send/batch/{batchId}:
+    post:
+      tags:
+        - SnailMailSender
+      summary: Send batch
+      operationId: sendBatch
+      parameters:
+        - name: municipalityId
+          in: path
+          description: Municipality id
+          required: true
+          schema:
+            type: string
+          example: 2281
+        - name: batchId
+          in: path
+          description: Batch id
+          required: true
+          schema:
+            type: string
+          example: b588d1b7-7911-4e78-89d5-b710b32e0f8e
+      responses:
+        "200":
+          description: Successful Operation
+        "400":
+          description: Bad RequestEntity
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Problem"
+                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+        - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: The first name of the recipient
+          examples:
+            - John
+        lastName:
+          type: string
+          description: The last name of the recipient
+          examples:
+            - Doe
+        organizationName:
+          type: string
+          description: The organization name of the recipient
+          examples:
+            - Acme AB
+        address:
+          type: string
+          description: The address
+          examples:
+            - Main Street 1
+        apartmentNumber:
+          type: string
+          description: The apartment number
+          examples:
+            - "1101"
+        careOf:
+          type: string
+          description: The care of
+          examples:
+            - c/o John Doe
+        zipCode:
+          type: string
+          description: The zip code
+          examples:
+            - "12345"
+        city:
+          type: string
+          description: The city
+          examples:
+            - Main Street
+        country:
+          type: string
+          description: The country
+          examples:
+            - Sweden
+        organizationNumber:
+          type: string
+          description: The organization number of the recipient
+          examples:
+            - 123456-7890
+    Attachment:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The attachment (file) content as a BASE64-encoded string
+          examples:
+            - aGVsbG8gd29ybGQK
+        name:
+          type: string
+          description: The attachment filename
+          examples:
+            - test.pdf
+          minLength: 1
+        contentType:
+          type: string
+          description: The attachment content type
+          enum:
+            - application/pdf
+          examples:
+            - application/pdf
+        envelopeType:
+          type: string
+          description: The envelope type for the letter
+          enum:
+            - WINDOWED
+            - PLAIN
+          examples:
+            - WINDOWED
+      required:
+        - name
+    SendSnailMailRequest:
+      type: object
+      properties:
+        department:
+          type: string
+          description: DepartmentEntity and unit that should be billed
+          examples:
+            - "SBK(Gatuavdelningen, Trafiksektionen)"
+          minLength: 1
+        folderName:
+          type: string
+          description: Used to set the name of the organization folder in the share
+          examples:
+            - Sundsvalls Kommun
+        deviation:
+          type: string
+          description: If the letter to send deviates from the standard
+          examples:
+            - A3 Ritning
+        batchId:
+          type: string
+          description: BatchEntity id to be used for creating a csv-file
+          examples:
+            - 6a5c3d04-412d-11ec-973a-0242ac130043
+          minLength: 1
+        issuer:
+          type: string
+          deprecated: true
+          description: "The issuer of the request. **DEPRECATED**: This parameter\
+            \ will be removed in a future version, use X-Sent-By instead."
+          examples:
+            - user123
+        municipalityId:
+          type: string
+          description: The municipality id
+          examples:
+            - "2281"
+        attachments:
+          type: array
+          description: Attachments
+          items:
+            $ref: "#/components/schemas/Attachment"
+          minItems: 1
+        address:
+          $ref: "#/components/schemas/Address"
+          description: Recipient address
+      required:
+        - address
+        - attachments
+        - batchId
+        - department
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        detail:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: { }
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+  securitySchemes: { }
