@@ -1,0 +1,1818 @@
+openapi: 3.1.0
+info:
+  title: api-oep-integrator
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "1.6"
+servers:
+- url: http://localhost:65508
+  description: Generated server url
+tags:
+- name: Instances
+  description: Instance configuration
+- name: Webmessages
+  description: Resource for sending webmessages to OpenE
+- name: Cases
+  description: Operations on case
+paths:
+  /{municipalityId}/{instanceType}/cases/{flowInstanceId}/status:
+    get:
+      tags:
+      - Cases
+      summary: Get case status
+      description: Get case status by flow instance ID
+      operationId: getCaseStatusByFlowInstanceId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: The instanceType where case belongs
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: flowInstanceId
+        in: path
+        description: flow-instance id
+        required: true
+        schema:
+          type: string
+        example: 112233
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseStatus"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    put:
+      tags:
+      - Cases
+      summary: Set case status
+      description: Set case status by flowInstanceId
+      operationId: setStatus
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: The instanceType where case belongs
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: flowInstanceId
+        in: path
+        description: flow-instance ID
+        required: true
+        schema:
+          type: string
+        example: 112233
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaseStatusChangeRequest"
+        required: true
+      responses:
+        "204":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseStatusChangeResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{instanceType}/cases/systems/{system}/{externalId}/status:
+    put:
+      tags:
+      - Cases
+      summary: Set case status
+      description: Set case status by externalId
+      operationId: setStatus_1
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: The instanceType where case belongs
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: system
+        in: path
+        description: The system where external ID exists
+        required: true
+        schema:
+          type: string
+        example: CaseData
+      - name: externalId
+        in: path
+        description: Case ID in specified system
+        required: true
+        schema:
+          type: string
+        example: 234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaseStatusChangeRequest"
+        required: true
+      responses:
+        "204":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CaseStatusChangeResponse"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{instanceType}/webmessages:
+    post:
+      tags:
+      - Webmessages
+      summary: Create webmessage
+      operationId: createWebmessage
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: Which instanceType a message should be sent to
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                request:
+                  $ref: "#/components/schemas/WebmessageRequest"
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+              - request
+      responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+  /{municipalityId}/{instanceType}/cases/{flowInstanceId}/delivery:
+    post:
+      tags:
+      - Cases
+      summary: Confirm delivery
+      description: Confirms delivery of a case
+      operationId: confirmDelivery
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: The instanceType where case belongs
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: flowInstanceId
+        in: path
+        description: flow-instance ID
+        required: true
+        schema:
+          type: string
+        example: 112233
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfirmDeliveryRequest"
+        required: true
+      responses:
+        "204":
+          description: Successful operation
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/instances:
+    get:
+      tags:
+      - Instances
+      summary: Get instances
+      description: 'Get all instances for a municipalityId '
+      operationId: getInstances
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Instance"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+    post:
+      tags:
+      - Instances
+      summary: Create instance
+      description: Creates a new instance
+      operationId: createInstance
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Instance"
+        required: true
+      responses:
+        "201":
+          description: Successful operation
+          headers:
+            Location:
+              style: simple
+              schema:
+                type: string
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+  /{municipalityId}/instances/{instanceId}:
+    get:
+      tags:
+      - Instances
+      summary: Get instance
+      description: Get an instance
+      operationId: getInstance
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceId
+        in: path
+        description: instance ID
+        required: true
+        schema:
+          type: string
+        example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Instance"
+        "404":
+          description: Instance not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+    delete:
+      tags:
+      - Instances
+      summary: Delete instance
+      description: Deletes an instance
+      operationId: deleteInstance
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceId
+        in: path
+        description: instance ID
+        required: true
+        schema:
+          type: string
+        example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        "204":
+          description: Successful operation
+        "404":
+          description: Instance not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+    patch:
+      tags:
+      - Instances
+      summary: Update instance
+      description: Updates an instance
+      operationId: updateInstance
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceId
+        in: path
+        description: instance ID
+        required: true
+        schema:
+          type: string
+        example: 123e4567-e89b-12d3-a456-426614174000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Instance"
+        required: true
+      responses:
+        "204":
+          description: Successful operation
+        "404":
+          description: Instance not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+  /{municipalityId}/{instanceType}/webmessages/families/{familyId}:
+    get:
+      tags:
+      - Webmessages
+      summary: Get all webmessages for a familyId
+      operationId: getWebmessagesByFamilyId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: Which instanceType a message should be sent to
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: familyId
+        in: path
+        description: Family id
+        required: true
+        schema:
+          type: string
+        example: 123
+      - name: fromDateTime
+        in: query
+        description: The start date and time for filtering web messages (optional)
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: 2024-01-31T12:00:00
+      - name: toDateTime
+        in: query
+        description: The end date and time for filtering web messages (optional).
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: 2024-01-31T12:00:00
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Webmessage"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+  /{municipalityId}/{instanceType}/webmessages/cases/{flowInstanceId}:
+    get:
+      tags:
+      - Webmessages
+      summary: Get all webmessages for a given case (errand)
+      operationId: getWebmessagesByFlowInstanceId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: Which instanceType a message should be sent to
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: flowInstanceId
+        in: path
+        description: MetadataFlow instance id
+        required: true
+        schema:
+          type: string
+        example: 123
+      - name: fromDateTime
+        in: query
+        description: The start date and time for filtering web messages (optional)
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: 2024-01-31T12:00:00
+      - name: toDateTime
+        in: query
+        description: The end date and time for filtering web messages (optional).
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: 2024-01-31T12:00:00
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Webmessage"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+  /{municipalityId}/{instanceType}/webmessages/attachments/{attachmentId}:
+    get:
+      tags:
+      - Webmessages
+      summary: Get attachment by id
+      operationId: getAttachmentById
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: Which instanceType a message should be sent to
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: attachmentId
+        in: path
+        description: Attachment id
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 123
+      responses:
+        "200":
+          description: Successful operation
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+  /{municipalityId}/{instanceType}/cases/{flowInstanceId}:
+    get:
+      tags:
+      - Cases
+      summary: Get case
+      description: Get case by flow instance ID
+      operationId: getCaseByFlowInstanceId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: The instanceType where case belongs
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: flowInstanceId
+        in: path
+        description: flow-instance ID
+        required: true
+        schema:
+          type: string
+        example: 112233
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{instanceType}/cases/{flowInstanceId}/queries/{queryId}/files/{fileId}:
+    get:
+      tags:
+      - Cases
+      summary: Get case attachment
+      description: "Get case attachment by flowInstanceId, queryId and fileId"
+      operationId: getCaseAttachment
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: The instanceType where case belongs
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: flowInstanceId
+        in: path
+        description: flow-instance ID
+        required: true
+        schema:
+          type: string
+        example: 112233
+      - name: queryId
+        in: path
+        description: Query ID
+        required: true
+        schema:
+          type: string
+        example: 112233
+      - name: fileId
+        in: path
+        description: File ID
+        required: true
+        schema:
+          type: string
+        example: 112233
+      responses:
+        "200":
+          description: Successful operation
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{instanceType}/cases/{flowInstanceId}/pdf:
+    get:
+      tags:
+      - Cases
+      summary: Get case PDF
+      description: Get case PDF by flow instance ID
+      operationId: getCasePdfByFlowInstanceId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: The instanceType where case belongs
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: flowInstanceId
+        in: path
+        description: flow-instance ID
+        required: true
+        schema:
+          type: string
+        example: 112233
+      responses:
+        "200":
+          description: Successful operation
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{instanceType}/cases/parties/{partyId}:
+    get:
+      tags:
+      - Cases
+      summary: Get cases by citizen identifier
+      description: Get a list of case envelopes by citizen identifier
+      operationId: getCasesByPartyId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: The instanceType where case belongs
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: partyId
+        in: path
+        description: The party ID
+        required: true
+        schema:
+          type: string
+        example: 5d68eb00-d8da-49a0-a6b5-8d395be34a5e
+      - name: fromDate
+        in: query
+        description: Filter cases on fromDate
+        required: false
+        schema:
+          type: string
+          format: date
+        example: 2024-01-01
+      - name: toDate
+        in: query
+        description: Filter cases on toDate
+        required: false
+        schema:
+          type: string
+          format: date
+        example: 2024-01-31
+      - name: status
+        in: query
+        description: Filter by status
+        required: false
+        schema:
+          type: string
+        example: Preliminär
+      - name: includeStatus
+        in: query
+        description: Should response include status
+        required: false
+        schema:
+          type: boolean
+        example: true
+      responses:
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseEnvelope"
+  /{municipalityId}/{instanceType}/cases/multisign/users/{userId}:
+    get:
+      tags:
+      - Cases
+      summary: Get cases waiting for multi-sign by user ID
+      description: Get a list of case envelopes waiting for multi-sign signing for
+        the given AD user ID
+      operationId: getMultisignCasesByUserId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: The instanceType where case belongs
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: userId
+        in: path
+        description: The AD user ID
+        required: true
+        schema:
+          type: string
+        example: joedoe
+      - name: fromDate
+        in: query
+        description: Filter cases on fromDate
+        required: false
+        schema:
+          type: string
+          format: date
+        example: 2024-01-01
+      - name: toDate
+        in: query
+        description: Filter cases on toDate
+        required: false
+        schema:
+          type: string
+          format: date
+        example: 2024-01-31
+      - name: status
+        in: query
+        description: Filter by status
+        required: false
+        schema:
+          type: string
+        example: Preliminär
+      - name: includeStatus
+        in: query
+        description: Should response include status
+        required: false
+        schema:
+          type: boolean
+        example: true
+      responses:
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseEnvelope"
+  /{municipalityId}/{instanceType}/cases/multisign/parties/{partyId}:
+    get:
+      tags:
+      - Cases
+      summary: Get cases waiting for multi-sign by citizen identifier
+      description: Get a list of case envelopes waiting for multi-sign signing for
+        the given citizen identifier
+      operationId: getMultisignCasesByPartyId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: The instanceType where case belongs
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: partyId
+        in: path
+        description: The party ID
+        required: true
+        schema:
+          type: string
+        example: 5d68eb00-d8da-49a0-a6b5-8d395be34a5e
+      - name: fromDate
+        in: query
+        description: Filter cases on fromDate
+        required: false
+        schema:
+          type: string
+          format: date
+        example: 2024-01-01
+      - name: toDate
+        in: query
+        description: Filter cases on toDate
+        required: false
+        schema:
+          type: string
+          format: date
+        example: 2024-01-31
+      - name: status
+        in: query
+        description: Filter by status
+        required: false
+        schema:
+          type: string
+        example: Preliminär
+      - name: includeStatus
+        in: query
+        description: Should response include status
+        required: false
+        schema:
+          type: boolean
+        example: true
+      responses:
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseEnvelope"
+  /{municipalityId}/{instanceType}/cases/families/{familyId}:
+    get:
+      tags:
+      - Cases
+      summary: Get cases by family ID
+      description: Get a list of case envelopes by family ID
+      operationId: getCasesByFamilyId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality ID
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: instanceType
+        in: path
+        description: The instanceType where case belongs
+        required: true
+        schema:
+          $ref: "#/components/schemas/InstanceType"
+        example: INTERNAL
+      - name: familyId
+        in: path
+        description: The family ID
+        required: true
+        schema:
+          type: string
+        example: 123
+      - name: fromDate
+        in: query
+        description: Filter cases on fromDate
+        required: false
+        schema:
+          type: string
+          format: date
+        example: 2024-01-01
+      - name: toDate
+        in: query
+        description: Filter cases on toDate
+        required: false
+        schema:
+          type: string
+          format: date
+        example: 2024-01-31
+      - name: status
+        in: query
+        description: Filter by status
+        required: false
+        schema:
+          type: string
+        example: Preliminär
+      responses:
+        "400":
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseEnvelope"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    InstanceType:
+      type: string
+      description: InstanceType type. INTERNAL/EXTERNAL
+      enum:
+      - INTERNAL
+      - EXTERNAL
+      examples:
+      - INTERNAL
+    CaseStatusChangeRequest:
+      type: object
+      description: SetStatus request model
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The status ID
+          examples:
+          - 123
+        name:
+          type: string
+          description: The status name
+          examples:
+          - Inskickat
+        principal:
+          $ref: "#/components/schemas/Principal"
+          description: The principal
+    Principal:
+      type: object
+      description: Principal model
+      properties:
+        name:
+          type: string
+          description: The name
+          examples:
+          - John Doe
+        userId:
+          type: string
+          description: The user id
+          examples:
+          - joh12doe
+          minLength: 1
+      required:
+      - userId
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    CaseStatusChangeResponse:
+      type: object
+      description: SetStatus response model
+      properties:
+        eventId:
+          type: integer
+          format: int32
+          description: Event id
+          examples:
+          - 123
+    ExternalReference:
+      type: object
+      description: ExternalReference model
+      properties:
+        key:
+          type: string
+          description: The external reference key
+          examples:
+          - flowInstanceId
+        value:
+          type: string
+          description: The external reference value
+          examples:
+          - "356746349"
+    Sender:
+      type: object
+      description: "Sender model. The attributes in this object are mutually exclusive,\
+        \ meaning that only one of them can be set at a time."
+      properties:
+        userId:
+          type: string
+          description: The user ID of the sender. I.e. employee ID
+          examples:
+          - joe01doe
+        administratorId:
+          type: string
+          description: The user ID of the case administrator. I.e. the employee ID
+            of the administrative official.
+          examples:
+          - joe01doe
+        partyId:
+          type: string
+          description: The party ID of the sender.
+          examples:
+          - 582462d3-ae94-476f-96de-f495a927dea8
+    WebmessageRequest:
+      type: object
+      description: Webmessage request model
+      properties:
+        sender:
+          $ref: "#/components/schemas/Sender"
+          description: The sender
+        message:
+          type: string
+          description: The message
+          examples:
+          - This is a message
+          minLength: 1
+        externalReferences:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExternalReference"
+      required:
+      - message
+    ConfirmDeliveryRequest:
+      type: object
+      description: ConfirmDelivery request model
+      properties:
+        caseId:
+          type: string
+          description: The case id in the system that delivered the case. From Open-E
+            Platforms perspective this is the 'external case id
+          examples:
+          - caa230c6-abb4-4592-ad9a-34e263c2787d
+          minLength: 1
+        delivered:
+          type: boolean
+          description: If the case was delivered
+          examples:
+          - "true"
+        logMessage:
+          type: string
+          description: Any log message
+          examples:
+          - The case was delivered successfully
+        system:
+          type: string
+          description: The system that delivered the case
+          examples:
+          - ByggR
+          minLength: 1
+      required:
+      - caseId
+      - system
+    Instance:
+      type: object
+      description: Instance model
+      properties:
+        id:
+          type: string
+          description: InstanceType ID
+          examples:
+          - 123e4567-e89b-12d3-a456-426614174000
+          readOnly: true
+        integrationType:
+          $ref: "#/components/schemas/IntegrationType"
+          description: Type of integration. SOAP/REST
+          examples:
+          - SOAP
+        instanceType:
+          $ref: "#/components/schemas/InstanceType"
+          description: InstanceType type. INTERNAL/EXTERNAL
+          examples:
+          - INTERNAL
+        baseUrl:
+          type: string
+          description: Base URL of the instanceType
+          examples:
+          - https://example.com
+        username:
+          type: string
+          description: Username for the instanceType
+          examples:
+          - user123
+          writeOnly: true
+        password:
+          type: string
+          description: Password for the instanceType
+          examples:
+          - pass123
+          writeOnly: true
+        familyIds:
+          type: array
+          description: List with family IDs
+          examples:
+          - - family1
+            - family2
+          items:
+            type: string
+        connectTimeout:
+          type: integer
+          format: int32
+          description: Connection timeout in seconds
+          examples:
+          - 5
+        readTimeout:
+          type: integer
+          format: int32
+          description: Read timeout in seconds
+          examples:
+          - 60
+    IntegrationType:
+      type: string
+      description: IntegrationType model
+      enum:
+      - SOAP
+      - REST
+      examples:
+      - SOAP
+    Direction:
+      type: string
+      description: Direction model
+      enum:
+      - INBOUND
+      - OUTBOUND
+      examples:
+      - INBOUND
+    Webmessage:
+      type: object
+      description: Webmessage model
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The webMessageCollector Id for the message
+          examples:
+          - 1
+        direction:
+          $ref: "#/components/schemas/Direction"
+          description: If the message is inbound or outbound. Inbound means coming
+            from open-E. Outbound means sent to open-E
+          examples:
+          - INBOUND
+        municipalityId:
+          type: string
+          description: The municipality id
+          examples:
+          - "2281"
+        familyId:
+          type: string
+          description: What E-service the message was found in
+          examples:
+          - "501"
+        externalCaseId:
+          type: string
+          description: 'The external caseID '
+          examples:
+          - caa230c6-abb4-4592-ad9a-34e263c2787b
+        message:
+          type: string
+          description: 'The message '
+          examples:
+          - Hello World
+        messageId:
+          type: string
+          description: The unique messageId from openE for the message
+          examples:
+          - "12"
+        sent:
+          type: string
+          format: date-time
+          description: 'Time and date the message was sent '
+          examples:
+          - 2023-02-23T17:26:23
+        username:
+          type: string
+          description: Username for the poster
+          examples:
+          - te01st
+        firstName:
+          type: string
+          description: 'Firstname of the poster '
+          examples:
+          - Test
+        lastName:
+          type: string
+          description: Lastname of the poster
+          examples:
+          - Testsson
+        email:
+          type: string
+          description: Email for the poster
+          examples:
+          - test@sundsvall.se
+        userId:
+          type: string
+          description: The userId for the poster
+          examples:
+          - "123"
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/WebmessageAttachment"
+            description: List of attachments for the message
+            examples:
+            - "attachment1, attachment2"
+        instance:
+          type: string
+          description: The instance of the message
+          examples:
+          - external
+    WebmessageAttachment:
+      type: object
+      description: Webmessage attachment model
+      properties:
+        attachmentId:
+          type: integer
+          format: int32
+          description: The Id for the attachment
+          examples:
+          - 1
+        name:
+          type: string
+          description: The name of the file
+          examples:
+          - file.txt
+        extension:
+          type: string
+          description: The extension of the file
+          examples:
+          - txt
+        mimeType:
+          type: string
+          description: The mime type of the file
+          examples:
+          - text/plain
+    Case:
+      type: object
+      description: Case model
+      properties:
+        flowInstanceId:
+          type: string
+          description: The flowInstanceId (caseId)
+          examples:
+          - "109581"
+        familyId:
+          type: string
+          description: The familyId
+          examples:
+          - "832"
+        version:
+          type: integer
+          format: int32
+          description: Version of the case
+          examples:
+          - 4
+        flowId:
+          type: string
+          description: The flowId
+          examples:
+          - "2411"
+        title:
+          type: string
+          description: The title of the case
+          examples:
+          - Anmälan om sjukfrånvaro
+        status:
+          $ref: "#/components/schemas/CaseStatus"
+          description: The case status
+        created:
+          type: string
+          format: date-time
+          description: The case create date
+          examples:
+          - 2023-11-15T11:55
+        payload:
+          type: string
+          description: The payload of the case in xml
+          examples:
+          - "<Values><sickNotePercentRow2><QueryID>66909</QueryID><Name><![CDATA[Omfattning\
+            \ p* sjukfrånvaro enligt läkarintyg]]></Name><Value>50%</Value></sickNotePercentRow2><sickNotePeriodRow2><QueryID>66910</QueryID><Name><![CDATA[Sjukskrivningsperioden\
+            \ from tom]]></Name><Datum_fran><![CDATA[2024-12-09]]></Datum_fran><Datum_till><![CDATA[2024-12-20]]></Datum_till></sickNotePeriodRow2></Values>"
+    CaseStatus:
+      type: object
+      description: Case status model
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: The status ID
+          examples:
+          - 123
+        name:
+          type: string
+          description: The status name
+          examples:
+          - Inskickat
+        newExternalMessagesDisallowed:
+          type: boolean
+          description: Whether new external messages are disallowed
+        addExternalMessage:
+          type: boolean
+          description: Whether to add external message
+        addInternalMessage:
+          type: boolean
+          description: Whether to add internal message
+        isRestrictedAdminDeletable:
+          type: boolean
+          description: Whether restricted admin can delete
+        status:
+          type: string
+          description: The status
+          examples:
+          - ARCHIVED
+    CaseEnvelope:
+      type: object
+      description: Case envelope model
+      properties:
+        flowInstanceId:
+          type: string
+          description: The flowInstanceId (caseId)
+          examples:
+          - "109581"
+        created:
+          type: string
+          format: date-time
+          description: The case create date
+          examples:
+          - 2023-11-15T11:55
+        statusUpdated:
+          type: string
+          format: date-time
+          description: The case status change date
+          examples:
+          - 2023-11-16T12:01
+        displayName:
+          type: string
+          description: The display name for the family the case belongs to
+          examples:
+          - Kompiskortet
+        status:
+          $ref: "#/components/schemas/CaseStatus"
+          description: The case status
+  securitySchemes: {}

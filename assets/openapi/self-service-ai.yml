@@ -1,0 +1,602 @@
+openapi: 3.1.0
+info:
+  title: self-service-ai
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+servers:
+- url: http://localhost:61338
+  description: Generated server url
+tags:
+- name: Assistant session resources
+  description: "Resources for creating, interacting with and removing assistant sessions"
+paths:
+  /{municipalityId}/session:
+    post:
+      tags:
+      - Assistant session resources
+      summary: Create assistant session
+      description: Resource for creating a new session towards the assistant
+      operationId: createAssistantSession
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionRequest"
+        required: true
+      responses:
+        "201":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/session/{id}:
+    get:
+      tags:
+      - Assistant session resources
+      summary: Interact with assistant
+      description: Resource for interacting with the assistant by asking a question
+      operationId: askAssistant
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Session id
+        required: true
+        schema:
+          type: string
+        example: f5211067-b3c7-4394-b84a-aa3fa65507e3
+      - name: question
+        in: query
+        description: The question to ask
+        required: true
+        schema:
+          type: string
+          minLength: 1
+        example: "What is the answer to the ultimate question of life, the universe\
+          \ and everything?"
+      responses:
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionResponse"
+        "204":
+          description: If no answer could be retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - Assistant session resources
+      summary: Remove assistant session
+      description: Resource for removing the assistant session matching sent in id
+      operationId: deleteAssistantSession
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Session id
+        required: true
+        schema:
+          type: string
+        example: f5211067-b3c7-4394-b84a-aa3fa65507e3
+      responses:
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "204":
+          description: Successful Operation
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/session/{id}/ready:
+    get:
+      tags:
+      - Assistant session resources
+      summary: Ask if assistant is ready for interaction
+      description: Resource for checking if the assistant is ready to answer questions
+        (i.e. has been fully initialized with data)
+      operationId: isAssistantReady
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: Session id
+        required: true
+        schema:
+          type: string
+        example: f5211067-b3c7-4394-b84a-aa3fa65507e3
+      responses:
+        "404":
+          description: Not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionStatusResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    SessionRequest:
+      type: object
+      description: Model for session initiation request
+      properties:
+        partyId:
+          type: string
+          description: The id of the party to use when retrieving the information
+            that will form the basis of the assistant's answers
+          examples:
+          - 5a6c3e4e-c320-4006-b448-1fd4121df828
+        customerEngagementOrgIds:
+          type: array
+          items:
+            type: string
+            description: Organization id specifying the counterparty to fetch customer's
+              engagements for
+            examples:
+            - "5566123456"
+          maxItems: 2147483647
+          minItems: 1
+          uniqueItems: true
+      required:
+      - customerEngagementOrgIds
+      - partyId
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    SessionResponse:
+      type: object
+      description: Model for session initiation response
+      properties:
+        assistantId:
+          type: string
+          description: The id of the assistant
+          examples:
+          - becd153d-e1d9-4a4a-9fcf-eb8a157d3f1f
+        sessionId:
+          type: string
+          description: The id of the session to be used when interacting with the
+            assistant
+          examples:
+          - 9406e9e3-e2bf-4b5a-9237-2925b396f096
+    Assistant:
+      type: object
+      description: Model for assistant information
+      properties:
+        id:
+          type: string
+          description: Id of the assistant
+          examples:
+          - 9406e9e3-e2bf-4b5a-9237-2925b396f096
+        handle:
+          type: string
+          description: Readable handle name for the assistant
+          examples:
+          - Assistant name
+    File:
+      type: object
+      description: Model for file information
+      properties:
+        id:
+          type: string
+          description: Id of the file
+          examples:
+          - 9406e9e3-e2bf-4b5a-9237-2925b396f096
+        name:
+          type: string
+          description: Readable name for the file
+          examples:
+          - file-name.json
+        mimeType:
+          type: string
+          description: Mime type for the file
+          examples:
+          - application/json
+        size:
+          type: integer
+          format: int32
+          description: Size of the file
+          examples:
+          - 12345
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when file was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when file was last updated
+        transcription:
+          type: string
+          description: Transcription of file
+          examples:
+          - transcription
+    Metadata:
+      type: object
+      description: Model for model metadata information
+      properties:
+        embeddingModelId:
+          type: string
+          description: Id for the embedding model
+          examples:
+          - d0846e7e-a860-43d0-8bc2-d0a029c23381
+        url:
+          type: string
+          description: Url for the embedding model
+          examples:
+          - http://some.url
+        title:
+          type: string
+          description: Title of the embeddning model
+          examples:
+          - Title
+        size:
+          type: integer
+          format: int32
+          description: Size
+    Model:
+      type: object
+      description: Model for completion model information
+      properties:
+        id:
+          type: string
+          description: Id of the model
+          examples:
+          - 1f717b73-c676-4316-112e-cda43650d832
+        name:
+          type: string
+          description: Name for the model
+          examples:
+          - gpt-4o-mini-azure
+        nickname:
+          type: string
+          description: Nickname for the model
+          examples:
+          - GPT-4o mini (Azure)
+        family:
+          type: string
+          description: Family to which the model belongs
+          examples:
+          - azure
+        tokenLimit:
+          type: integer
+          format: int32
+          description: Token limit
+        deprecated:
+          type: boolean
+          description: Signal if model is deprecated or not
+        nrBillionParameters:
+          type: integer
+          format: int32
+          description: Nr billion parameters
+        hfLink:
+          type: string
+          description: Hf link for model
+          examples:
+          - http://some.address
+        stability:
+          type: string
+          description: Stability of the model
+          examples:
+          - stable
+        hosting:
+          type: string
+          description: Hosting for the model
+          examples:
+          - swe
+        openSource:
+          type: boolean
+          description: Signal if the model is open source or not
+        description:
+          type: string
+          description: Description for the model
+          examples:
+          - "Microsoft Azure's hosted version of the compact GPT-4 Omni model, offering\
+            \ faster processing with advanced capabilities."
+        deploymentName:
+          type: string
+          description: Deployment name for the model
+          examples:
+          - gpt-4o-mini
+        org:
+          type: string
+          description: Organization owning the model
+          examples:
+          - Microsoft
+        vision:
+          type: boolean
+          description: Vision setting for the model
+        reasoning:
+          type: boolean
+          description: Reasoning setting for the model
+        baseUrl:
+          type: string
+          description: Base url for the model
+          examples:
+          - http://some.url
+        orgEnabled:
+          type: boolean
+          description: Organization enabled setting for the model
+        orgDefault:
+          type: boolean
+          description: Organization default setting for the model
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when model was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when model was last updated
+    QuestionResponse:
+      type: object
+      description: Model for question response
+      properties:
+        sessionId:
+          type: string
+          description: The id of the session to be used when interacting with the
+            assistant
+          examples:
+          - 9406e9e3-e2bf-4b5a-9237-2925b396f096
+        question:
+          type: string
+          description: The question to ask
+          examples:
+          - "What is the answer to the ultimate question of life, the universe and\
+            \ everything?"
+        answer:
+          type: string
+          description: Answer to asked question
+          examples:
+          - "42"
+        files:
+          type: array
+          items:
+            $ref: "#/components/schemas/File"
+            description: Files used when answering asked question
+        references:
+          type: array
+          items:
+            $ref: "#/components/schemas/Reference"
+            description: References used when answering asked question
+        model:
+          $ref: "#/components/schemas/Model"
+          description: Model used when answering asked question
+        tools:
+          $ref: "#/components/schemas/Tools"
+          description: Tools used when answering asked question
+    Reference:
+      type: object
+      description: Model for reference information
+      properties:
+        id:
+          type: string
+          description: Id of the reference
+          examples:
+          - d0846e7e-a860-43d0-8bc2-d0a029c23381
+        metadata:
+          $ref: "#/components/schemas/Metadata"
+          description: Metadata for the reference
+        groupId:
+          type: string
+          description: Group id to which the reference belongs
+          examples:
+          - 56839552-08b7-44e6-88eb-c4c524c0833b
+        websiteId:
+          type: string
+          description: Website id for the reference
+          examples:
+          - 56839552-08b7-44e6-88eb-c4c524c0833b
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the reference was created
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the reference was last updated
+        score:
+          type: integer
+          format: int32
+          description: Score for the reference
+    Tools:
+      type: object
+      description: Model for tools information
+      properties:
+        assistants:
+          type: array
+          items:
+            $ref: "#/components/schemas/Assistant"
+            description: Assistants used when answering asked question
+    SessionStatusResponse:
+      type: object
+      description: Model for session status response
+      properties:
+        status:
+          type: string
+          description: The status of the session
+          enum:
+          - PENDING
+          - READY
+          - FAILED
+          examples:
+          - READY
+        detail:
+          type: string
+          description: Additional detail about the session status
+          examples:
+          - Session initialization failed
+  securitySchemes: {}

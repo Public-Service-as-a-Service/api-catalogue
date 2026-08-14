@@ -1,0 +1,914 @@
+openapi: 3.1.0
+info:
+  title: api-billing-data-collector
+  contact: {}
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: "2.1"
+servers:
+- url: http://localhost:64633
+  description: Generated server url
+tags:
+- name: SCB KPI
+  description: Statistics Sweden KPI lookup
+- name: Billing Data Collector
+  description: Billing Data Collector resources
+- name: Counterpart
+  description: Counterpart resources
+paths:
+  /{municipalityId}/scheduled-billing/{id}:
+    get:
+      tags:
+      - Billing Data Collector
+      summary: Get scheduled billing by id
+      operationId: getScheduledBilling
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: id of scheduled billing
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc14
+      responses:
+        "200":
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScheduledBilling"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    put:
+      tags:
+      - Billing Data Collector
+      summary: Updates scheduled billing
+      operationId: updateScheduledBilling
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: id of scheduled billing
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc14
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduledBilling"
+        required: true
+      responses:
+        "200":
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScheduledBilling"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    delete:
+      tags:
+      - Billing Data Collector
+      summary: Delete scheduled billing by id
+      operationId: deleteScheduledBilling
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: id
+        in: path
+        description: id of scheduled billing
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc14
+      responses:
+        "204":
+          description: Successful deletion
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/{source}/events:
+    post:
+      tags:
+      - Billing Data Collector
+      summary: Handle events from external services
+      operationId: handleEvent
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: source
+        in: path
+        description: Source system sending the event
+        required: true
+        schema:
+          type: string
+          enum:
+          - CONTRACT
+          - OPENE
+        example: CONTRACT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventRequest"
+        required: true
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/trigger:
+    post:
+      tags:
+      - Billing Data Collector
+      summary: Trigger billing for all flowInstanceId:s between two specific dates.
+        Will return a list of all triggered flowInstanceId:s
+      operationId: triggerBilling
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: startDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+        example: 2024-01-01
+      - name: endDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+        example: 2024-02-01
+      - name: familyIds
+        in: query
+        description: "FamilyIds to trigger billing for. If not provided, billing will\
+          \ be triggered for all supported familyIds"
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+        example:
+        - "123"
+        - "456"
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/trigger/{flowInstanceId}:
+    post:
+      tags:
+      - Billing Data Collector
+      summary: Trigger billing for a flowInstanceId
+      operationId: triggerBilling_1
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: flowInstanceId
+        in: path
+        description: flowInstanceId to trigger billing for
+        required: true
+        schema:
+          type: string
+          minLength: 1
+        example: 123
+      responses:
+        "202":
+          description: Accepted
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/scheduled-billing:
+    get:
+      tags:
+      - Billing Data Collector
+      summary: Get all scheduled billing for source data
+      operationId: getScheduledBillings
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: page
+        in: query
+        description: Zero-based page index (0..N)
+        required: false
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: size
+        in: query
+        description: The size of the page to be returned
+        required: false
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+      - name: sort
+        in: query
+        description: "Sorting criteria in the format: property,(asc|desc). Default\
+          \ sort order is ascending. Multiple sort criteria are supported."
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        "200":
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageScheduledBilling"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+    post:
+      tags:
+      - Billing Data Collector
+      summary: Adds scheduled billing for source data
+      operationId: addScheduledBilling
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduledBilling"
+        required: true
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/scheduled-billing/external/{source}/{externalId}:
+    get:
+      tags:
+      - Billing Data Collector
+      summary: Get scheduled billing by external id
+      operationId: getScheduledBillingExternalId
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: source
+        in: path
+        description: Source system where data is collected
+        required: true
+        schema:
+          type: string
+          enum:
+          - CONTRACT
+          - OPENE
+        example: CONTRACT
+      - name: externalId
+        in: path
+        description: externalId of scheduled billing
+        required: true
+        schema:
+          type: string
+        example: b82bd8ac-1507-4d9a-958d-369261eecc14
+      responses:
+        "200":
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScheduledBilling"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/scb/kpi:
+    get:
+      tags:
+      - SCB KPI
+      summary: Look up an SCB KPI value for a given base year and period
+      operationId: getKpi
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: baseYear
+        in: query
+        description: KPI base year
+        required: true
+        schema:
+          type: string
+          enum:
+          - KPI_80
+          - KPI_2020
+        example: KPI_80
+      - name: period
+        in: query
+        description: Period (year-month) to look up
+        required: true
+        schema:
+          type: string
+        example: 2024-10
+      responses:
+        "200":
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScbKpiResponse"
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /{municipalityId}/counterpart:
+    get:
+      tags:
+      - Counterpart
+      summary: Find counterpart by partyId and stakeholderType
+      operationId: getCounterpart
+      parameters:
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: partyId
+        in: query
+        description: Party id
+        required: true
+        schema:
+          type: string
+        example: fb2f0290-3820-11ed-a261-0242ac120002
+      - name: stakeholderType
+        in: query
+        description: Stakeholder type
+        required: false
+        schema:
+          type: string
+        example: PERSON
+      responses:
+        "200":
+          description: Successful
+          content:
+            text/plain:
+              schema:
+                type: string
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                oneOf:
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "502":
+          description: Bad Gateway
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+  /api-docs:
+    get:
+      tags:
+      - API
+      summary: OpenAPI
+      operationId: getApiDocs
+      responses:
+        "200":
+          description: OK
+          content:
+            application/yaml:
+              schema:
+                type: string
+      x-auth-type: None
+      x-throttling-tier: Unlimited
+      x-wso2-mutual-ssl: Optional
+components:
+  schemas:
+    Problem:
+      type: object
+      properties:
+        title:
+          type: string
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+    ScheduledBilling:
+      type: object
+      description: Scheduled billing
+      properties:
+        id:
+          type: string
+          description: Unique id for scheduled billing
+          examples:
+          - f0882f1d-06bc-47fd-b017-1d8307f5ce95
+          readOnly: true
+        externalId:
+          type: string
+          description: External id in source system
+          example: 66c57446-72e7-4cc5-af7c-053919ce904b
+          maxLength: 64
+          minLength: 0
+        source:
+          type: string
+          description: Source system where billing data is collected
+          enum:
+          - CONTRACT
+          - OPENE
+          example: CONTRACT
+        billingDaysOfMonth:
+          type: array
+          items:
+            type: integer
+            format: int32
+            description: "Days of month when billing should be scheduled. On short\
+              \ months, highest possible date will be used if value is bigger than\
+              \ number of days in month"
+            example: 1
+            maximum: 31
+            minimum: 1
+          minItems: 1
+          uniqueItems: true
+        billingMonths:
+          type: array
+          items:
+            type: integer
+            format: int32
+            description: Which months billing should be scheduled
+            example: 1
+            maximum: 12
+            minimum: 1
+          minItems: 1
+          uniqueItems: true
+        lastBilled:
+          type: string
+          format: date-time
+          description: Timestamp when of last successful billing
+          example: 2000-10-31T01:30:00.000+02:00
+          readOnly: true
+        nextScheduledBilling:
+          type: string
+          format: date
+          description: Date of next scheduled billing if still active
+          example: 2001-05-15
+          readOnly: true
+        paused:
+          type: boolean
+          default: false
+          description: "If set to true, scheduled billing will not be triggered"
+          example: false
+        invoicedIn:
+          type: string
+          description: Direction of invoicing on the contract — used to detect ADVANCE↔ARREARS
+            switches mid-contract.
+          enum:
+          - ADVANCE
+          - ARREARS
+          example: ADVANCE
+          readOnly: true
+      required:
+      - billingDaysOfMonth
+      - billingMonths
+      - externalId
+      - source
+    ConstraintViolationProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        status:
+          type: integer
+          format: int32
+        violations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Violation"
+        title:
+          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+    ThrowableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
+    Violation:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+    EventRequest:
+      type: object
+      description: Billing source event
+      properties:
+        id:
+          type: string
+          description: External id
+          example: 2026-00001
+          minLength: 1
+        municipalityId:
+          type: string
+          description: Municipality id (taken from the path parameter when this event
+            is delivered via the events endpoint)
+          example: "2281"
+        eventType:
+          type: string
+          description: Event type
+          enum:
+          - CREATED
+          - UPDATED
+          - DELETED
+          - TERMINATED
+          example: CREATED
+      required:
+      - eventType
+      - id
+    PageScheduledBilling:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScheduledBilling"
+        number:
+          type: integer
+          format: int32
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        unpaged:
+          type: boolean
+        paged:
+          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        offset:
+          type: integer
+          format: int64
+    SortObject:
+      type: object
+      properties:
+        unsorted:
+          type: boolean
+        sorted:
+          type: boolean
+        empty:
+          type: boolean
+    ScbKpiResponse:
+      type: object
+      description: SCB KPI lookup response
+      properties:
+        baseYear:
+          type: string
+          description: KPI base year
+          enum:
+          - KPI_80
+          - KPI_2020
+          example: KPI_80
+        period:
+          type: string
+          description: Period (year-month) the KPI value applies to
+          example: 2024-10
+        value:
+          type: number
+          description: "KPI value, rounded to two decimals"
+          example: 355.91
+      required:
+      - baseYear
+      - period
+      - value
+  securitySchemes: {}

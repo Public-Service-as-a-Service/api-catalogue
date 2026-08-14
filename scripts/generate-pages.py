@@ -20,14 +20,17 @@ SWAGGER_UI_VERSION = "5.17.14"  # vendored in assets/vendor/swagger-ui/
 CATEGORY_ORDER = [
     "Kommunikation",
     "Ärendehantering",
-    "Master-data",
-    "Ekonomi",
-    "Integration",
+    "Ekonomi och fakturering",
+    "Dokument och arkiv",
+    "Parts- och kunddata",
     "AI-tjänster",
-    "Övrigt",
+    "Integration",
+    "Samhällsservice",
+    "Utbildning",
+    "Utvecklingsverktyg",
 ]
 
-STATUS_LABEL = {"poc": "Prototyp", "avvecklad": "Avvecklad"}
+STATUS_LABEL = {"poc": "Prototyp", "avvecklad": "Avvecklad", "verktyg": "Verktyg"}
 
 
 def e(s):
@@ -126,6 +129,10 @@ def tech_list(api):
     return "\n        ".join(items)
 
 
+def has_spec(api):
+    return os.path.exists(os.path.join(ROOT, "assets", "openapi", f"{api['slug']}.yml"))
+
+
 def page(api):
     slug = api["slug"]
     namn = api["namn"]
@@ -165,6 +172,41 @@ def page(api):
       </p>"""
     konf = api.get("konfiguration") or []
     konf_html = "\n".join(f"        <li>{e(k)}</li>" for k in konf) or "        <li>Se källkodens miljöfilsexempel.</li>"
+
+    if has_spec(api):
+        swagger_fact_link = f"""          <p class="fact-box-link">
+            <a href="{slug}-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+"""
+        apidok_section = f"""
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="{slug}-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/{slug}.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+"""
+    else:
+        swagger_fact_link = ""
+        apidok_section = """
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        Ingen incheckad OpenAPI-specifikation hittades i källkodsförrådet; se
+        källkoden för aktuell API-dokumentation.
+      </p>
+    </div>
+  </section>
+"""
 
     return f"""<!doctype html>
 <html lang="sv">
@@ -219,32 +261,14 @@ def page(api):
             <li>Status: <strong>{e(STATUS_LABEL.get(api.get('status'), 'Aktiv'))}</strong></li>
             <li>Målgrupp: <strong>{e(api.get('malgrupp', '–'))}</strong></li>
           </ul>
-          <p class="fact-box-link">
-            <a href="{slug}-swagger.html">API-dokumentation (Swagger UI)</a>
-          </p>
-          <p class="fact-box-link">
+{swagger_fact_link}          <p class="fact-box-link">
             <a href="{repo_url}" rel="external">Källkod på GitHub</a>
           </p>
         </aside>
       </div>
     </div>
   </section>
-
-  <section class="section section-slim" id="api-dokumentation">
-    <div class="container">
-      <h2>API-dokumentation</h2>
-      <p class="section-intro">
-        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
-        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
-        interaktivt i Swagger UI eller laddas ner som YAML.
-      </p>
-      <div class="hero-actions">
-        <a class="button button-primary" href="{slug}-swagger.html">Öppna Swagger UI</a>
-        <a class="button button-outline" href="../assets/openapi/{slug}.yml" download>OpenAPI-specifikation (YAML)</a>
-      </div>
-    </div>
-  </section>
-
+{apidok_section}
   <section class="section section-alt" id="teknisk-dokumentation">
     <div class="container">
       <h2>Teknisk dokumentation</h2>
@@ -405,15 +429,18 @@ def main():
     with open(DATA, encoding="utf-8") as f:
         apis = json.load(f)
     os.makedirs(OUT, exist_ok=True)
+    missing = []
     for api in apis:
         with open(os.path.join(OUT, f"{api['slug']}.html"), "w", encoding="utf-8") as f:
             f.write(page(api))
-        with open(os.path.join(OUT, f"{api['slug']}-swagger.html"), "w", encoding="utf-8") as f:
-            f.write(swagger_page(api))
-        spec = os.path.join(ROOT, "assets", "openapi", f"{api['slug']}.yml")
-        if not os.path.exists(spec):
-            raise SystemExit(f"missing OpenAPI spec: assets/openapi/{api['slug']}.yml")
-    print(f"wrote {len(apis)} API pages (+ Swagger UI pages)")
+        if has_spec(api):
+            with open(os.path.join(OUT, f"{api['slug']}-swagger.html"), "w", encoding="utf-8") as f:
+                f.write(swagger_page(api))
+        else:
+            missing.append(api["slug"])
+    print(f"wrote {len(apis)} API pages ({len(apis) - len(missing)} Swagger UI pages)")
+    if missing:
+        print("no OpenAPI spec (Swagger UI skipped):", ", ".join(missing))
 
     index_path = os.path.join(ROOT, "index.html")
     with open(index_path, encoding="utf-8") as f:
