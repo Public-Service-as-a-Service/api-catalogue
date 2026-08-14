@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PartyAssets – API-katalogen</title>
+  <meta name="description" content="Register över tillstånd och andra tillgångar som en part – invånare eller företag – har hos kommunen, till exempel parkeringstillstånd.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">PartyAssets</span>
+      </nav>
+      <span class="app-tag app-tag-light">Parts- och kunddata</span>
+      <h1>PartyAssets</h1>
+      <p class="hero-lead">
+        Register över tillstånd och andra tillgångar som en part – invånare eller företag – har hos kommunen, till exempel parkeringstillstånd.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            PartyAssets håller reda på tillgångar (assets) som kommunen utfärdat till en part, exempelvis tillstånd och kort. Varje tillgång knyts till en part via partyId och beskrivs med typ, giltighetstid, status, statusorsak och valfria tilläggsparametrar. Verksamhetssystem kan därmed slå upp vilka engagemang en invånare eller ett företag har hos kommunen utan att själva hålla egna register.
+          </p>
+          <p>
+            API:et stödjer hela livscykeln: tillgångar kan skapas som utkast, aktiveras, uppdateras, ersättas av nya versioner och avslutas. Ett schemalagt jobb sätter automatiskt status till utgången när giltighetstiden passerats. Tilläggsparametrar kan valideras mot JSON-scheman, och tillgångar kan kopplas till resurser i andra system via kommunens Relation-tjänst.
+          </p>
+          <p>
+            Tjänsten innehåller även en importfunktion för parkeringstillstånd från systemet PR3: en Excel-fil läses in, tillstånden registreras som tillgångar och resultatet skickas som e-postrapport via Messaging.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Registrera tillgångar</strong> – Tillgångar skapas per part med typ, giltighetstid, status, statusorsak och valfria tilläggsparametrar.</li>
+            <li><strong>Sök och uppslag</strong> – Tillgångar söks fram per kommun och part med filtrering på bland annat typ, status och giltighet; utkast hanteras separat.</li>
+            <li><strong>Utkast och ersättning</strong> – Tillgångar kan skapas som utkast och senare aktiveras, samt ersättas av nya versioner med spårbar koppling till den ersatta tillgången.</li>
+            <li><strong>Automatisk utgång</strong> – Ett dagligt schemalagt jobb sätter status till utgången för aktiva och tillfälliga tillgångar vars giltighetstid passerats.</li>
+            <li><strong>Statusorsaker som metadata</strong> – Giltiga statusorsaker per status administreras som metadata per kommun.</li>
+            <li><strong>Schemavalidering</strong> – Tilläggsparametrar kan valideras mot JSON-scheman via kommunens JsonSchema-tjänst.</li>
+            <li><strong>PR3-import</strong> – Parkeringstillstånd importeras från Excel-filer ur systemet PR3 och resultatet rapporteras via e-post.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>6.5</strong></li>
+            <li>Kategori: <strong>Parts- och kunddata</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="party-assets-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-party-assets" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="party-assets-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/party-assets.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/party-assets.svg" alt="Arkitekturskiss för PartyAssets: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap. Lagring: MariaDB med Flyway-migrationer; tillgångar, statusorsaker och JSON-scheman lagras i databasen. Övriga integrationer som förekommer i koden: PR3 (import av parkeringstillstånd via Excel-filer).
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB med Flyway-migrationer; tillgångar, statusorsaker och JSON-scheman lagras i databasen</li>
+        <li><strong>Övrigt:</strong> Resilience4j (circuit breakers mot beroende tjänster), ShedLock för schemalagda jobb, fastexcel för PR3-importen</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som PartyAssets anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Party</td><td>2.0</td><td>Översätter person- och organisationsnummer till partyId och avgör om en part är privatperson eller företag.</td></tr>
+            <tr><td>Relation</td><td>1.1</td><td>Skapar relationer mellan tillgångar och resurser i andra system utifrån källreferensen.</td></tr>
+            <tr><td>JsonSchema</td><td>1.0</td><td>Validerar tillgångarnas tilläggsparametrar mot registrerade JSON-scheman.</td></tr>
+            <tr><td>Messaging</td><td>7.9</td><td>Skickar e-postrapport med resultatet av en PR3-import.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>application.yml med URL och OAuth2-klientuppgifter för Party, Relation, JsonSchema och Messaging</li>
+        <li>MariaDB-anslutning; databasschemat versionshanteras med Flyway</li>
+        <li>Cron-schema och ShedLock-låstid för det dagliga utgångsjobbet</li>
+        <li>PR3-importen kan slås av med pr3import.enabled=false</li>
+        <li>Anrop görs per kommun – municipalityId ingår i alla API-vägar</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Ett schemalagt jobb (kl. 00:00 varje natt, med ShedLock-lås) letar upp aktiva och tillfälliga tillgångar vars validTo passerats och sätter status EXPIRED – verifierat i AssetExpirationWorker.</li>
+        <li>Källreferenser valideras mot formatet '{relationType}|{sourceResourceId};{sourceType};{sourceService};{sourceNamespace}|' och skapar relationer i Relation-tjänsten – verifierat i AssetService.</li>
+        <li>PR3-importen läser Excel-filer med fastexcel, skiljer på förare och passagerare för parkeringstillstånd och mejlar en resultatrapport via Messaging – verifierat i PR3Importer och PR3ImportMessagingClient.</li>
+        <li>Sökningar exkluderar alltid utkast; utkast hämtas via en separat operation – verifierat i AssetService.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-party-assets" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

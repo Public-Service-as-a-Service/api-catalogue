@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SupportCenter – Swagger UI – API-katalogen</title>
+  <meta name="description" content="Interaktiv API-dokumentation (Swagger UI) för SupportCenter.">
+  <link rel="stylesheet" href="../assets/vendor/swagger-ui/swagger-ui.css">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero page-hero-slim">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <a href="supportcenter.html">SupportCenter</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">Swagger UI</span>
+      </nav>
+      <span class="app-tag app-tag-light">Ärendehantering</span>
+      <h1>SupportCenter 2.3</h1>
+      <p class="hero-lead">
+        Interaktiv API-dokumentation, genererad ur tjänstens OpenAPI-specifikation.
+        Anrop i produktion görs via kommunens API-plattform på api.sundsvall.se.
+      </p>
+    </div>
+  </section>
+
+  <section class="section swagger-section">
+    <div class="container">
+      <div id="swagger-ui" aria-label="Swagger UI för SupportCenter"></div>
+      <noscript>
+        <p>
+          Swagger UI kräver JavaScript. Specifikationen kan i stället läsas som
+          <a href="../assets/openapi/supportcenter.yml">YAML</a>.
+        </p>
+      </noscript>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/vendor/swagger-ui/swagger-ui-bundle.js"></script>
+<script>
+  window.addEventListener('load', function () {
+    window.ui = SwaggerUIBundle({
+      url: '../assets/openapi/supportcenter.yml',
+      dom_id: '#swagger-ui',
+      deepLinking: true,
+      presets: [SwaggerUIBundle.presets.apis],
+      layout: 'BaseLayout',
+      docExpansion: 'list',
+      defaultModelsExpandDepth: 0,
+      validatorUrl: null,
+      tryItOutEnabled: false,
+      supportedSubmitMethods: []
+    });
+  });
+</script>
+
+</body>
+</html>

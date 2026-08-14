@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Billing Data Collector – API-katalogen</title>
+  <meta name="description" content="Samlar in faktureringsunderlag från e-tjänsteformulär och avtal, omvandlar dem till fakturaposter och skickar dem vidare till Billing Preprocessor.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">Billing Data Collector</span>
+      </nav>
+      <span class="app-tag app-tag-light">Ekonomi och fakturering</span>
+      <h1>Billing Data Collector</h1>
+      <p class="hero-lead">
+        Samlar in faktureringsunderlag från e-tjänsteformulär och avtal, omvandlar dem till fakturaposter och skickar dem vidare till Billing Preprocessor.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            Billing Data Collector automatiserar insamlingen av faktureringsunderlag som annars skulle registreras manuellt. Tjänsten hämtar inskickade kundfakturaformulär från kommunens e-tjänsteplattform (Open ePlatform) och omvandlar dem till fakturaposter som skickas till Billing Preprocessor för vidare hantering mot ekonomisystemet.
+          </p>
+          <p>
+            Tjänsten sköter också schemalagd avtalsfakturering: avtal hämtas från Contract-tjänsten, priser räknas upp med konsumentprisindex (KPI) från SCB, och färdiga fakturaposter skapas enligt varje avtals faktureringsintervall. När en post skapats registreras en koppling mellan avtalet och fakturaposten via Relation-tjänsten.
+          </p>
+          <p>
+            Underlag som inte kan behandlas hamnar i en falloutlista som kan granskas och triggas om via API:et, och en daglig e-postrapport skickas till konfigurerade mottagare. Faktureringen kan även triggas manuellt per ärende eller för ett datumintervall.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Insamling från e-tjänstformulär</strong> – Hämtar inskickade kundfakturaformulär från Open ePlatform och omvandlar dem till fakturaposter, schemalagt varje natt eller manuellt per ärende.</li>
+            <li><strong>Schemalagd avtalsfakturering</strong> – Skapar fakturaposter från avtal enligt deras faktureringsintervall, med priser uppräknade med konsumentprisindex från SCB.</li>
+            <li><strong>Vidarebefordran till Billing Preprocessor</strong> – Färdiga fakturaposter skickas till Billing Preprocessor som tar dem vidare till ekonomisystemet Raindance.</li>
+            <li><strong>Fallouthantering</strong> – Underlag som inte kan behandlas sparas som fallout, kan triggas om via API:et och rapporteras dagligen via e-post.</li>
+            <li><strong>Avtalshändelser</strong> – Tar emot händelser om skapade, uppdaterade, borttagna och avslutade avtal och uppdaterar den schemalagda faktureringen därefter.</li>
+            <li><strong>KPI-uppslag</strong> – Exponerar konsumentprisindex från SCB via ett eget API-anrop, med långtidscachning av svaren.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>2.1</strong></li>
+            <li>Kategori: <strong>Ekonomi och fakturering</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="billing-data-collector-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-billing-data-collector" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="billing-data-collector-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/billing-data-collector.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/billing-data-collector.svg" alt="Arkitekturskiss för Billing Data Collector: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap. Lagring: MariaDB med Flyway-migrationer; lagrar historik, falloutposter, schemalagd fakturering och motpartsmappning. Övriga integrationer som förekommer i koden: Open ePlatform (e-tjänsteplattform, hämtning av kundfakturaformulär), SCB PxWeb API (konsumentprisindex för prisuppräkning).
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB med Flyway-migrationer; lagrar historik, falloutposter, schemalagd fakturering och motpartsmappning</li>
+        <li><strong>Övrigt:</strong> Schemalagda jobb med Shedlock-låsning, Caffeine-cache för partyId och KPI-data, Xsoup för tolkning av formulärdata</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som Billing Data Collector anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>BillingPreProcessor</td><td>4.5</td><td>Tar emot de fakturaposter tjänsten skapar.</td></tr>
+            <tr><td>Contract</td><td>10.0</td><td>Hämtar avtal som underlag för den schemalagda avtalsfaktureringen.</td></tr>
+            <tr><td>Messaging</td><td>7.9</td><td>Skickar den dagliga falloutrapporten via e-post.</td></tr>
+            <tr><td>Party</td><td>2.0</td><td>Slår upp partyId för externa fakturamottagare.</td></tr>
+            <tr><td>Relation</td><td>1.1</td><td>Registrerar kopplingen mellan avtal och skapad fakturapost.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>application.yml med URL och OAuth2-klientuppgifter för Billing Preprocessor, Contract, Party och Relation</li>
+        <li>Anslutning och certifikat för Open ePlatform samt bas-URL för SCB:s PxWeb-API</li>
+        <li>MariaDB-anslutning; databasschemat versionshanteras med Flyway</li>
+        <li>Cron-scheman för jobben: OpenE-hämtning (03:00), falloutrapport (04:00), avtalsfakturering (varannan timme) och certifikatkontroll (06:00)</li>
+        <li>Mottagare och mall för falloutrapportens e-post</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Externa fakturaposter berikas med partyId via Party-tjänsten; hittas inget partyId skickas organisationsnumret vidare i stället (gäller ej privatpersoner) – verifierat i KundfakturaformularBillingRecordDecorator.</li>
+        <li>Avtalspriser indexuppräknas med KPI från SCB där oktobervärdet alltid används som indexperiod; KPI-svaren cachas i 30 dagar.</li>
+        <li>När en avtalsfakturapost skapats registreras en relation mellan avtalet och posten via Relation-API:et – verifierat i ContractBillingHandler.</li>
+        <li>Ett dagligt certifikatjobb kontrollerar OpenE-certifikatets giltighet och varnar 15 dagar före utgång.</li>
+        <li>README beskriver bara tjänsten översiktligt ("schedules and performs billings") – funktionaliteten ovan är härledd ur koden.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-billing-data-collector" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

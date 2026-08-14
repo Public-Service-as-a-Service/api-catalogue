@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ESigning – API-katalogen</title>
+  <meta name="description" content="Gemensam ingång för elektronisk signering av dokument – startar, följer upp och avbryter signeringsärenden hos den signeringsleverantör som är konfigurerad för kommunen.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">ESigning</span>
+      </nav>
+      <span class="app-tag app-tag-light">Dokument och arkiv</span>
+      <h1>ESigning</h1>
+      <p class="hero-lead">
+        Gemensam ingång för elektronisk signering av dokument – startar, följer upp och avbryter signeringsärenden hos den signeringsleverantör som är konfigurerad för kommunen.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            ESigning ger kommunens verksamhetssystem ett leverantörsoberoende sätt att få dokument elektroniskt signerade. Anroparen startar ett signeringsärende med dokument och undertecknare, och tjänsten väljer signeringsleverantör utifrån vilken kommun anropet gäller – idag Comfact via kommunens ComfactFacade-tjänst. Svaret innehåller ärende-id, status och signeringslänkar till undertecknarna.
+          </p>
+          <p>
+            Signeringsärenden kan hämtas med aktuell status, giltighetstid och – när alla undertecknat – det signerade dokumentet. Pågående ärenden kan avbrytas. När signeringsleverantören rapporterar händelser via webhook normaliserar tjänsten dem till ett leverantörsneutralt format och vidarebefordrar dem till Postportalservice, som korrelerar händelsen mot rätt utskick och mottagare.
+          </p>
+          <p>
+            Tjänsten har även ett äldre processbaserat flöde där signering av dokument som lagras i kommunens Document-tjänst startas som en långkörande process i process-tjänsten PwEsigning. Innan processen startas kontrolleras att dokumentet finns, att det är en PDF och att ingen signering redan pågår.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Starta signeringsärende</strong> – Signeringsärenden startas med dokument och undertecknare; svaret innehåller ärende-id, status och signeringslänkar.</li>
+            <li><strong>Leverantörsoberoende gateway</strong> – Signeringsleverantör väljs per kommun via konfiguration; idag stöds Comfact via ComfactFacade.</li>
+            <li><strong>Status och signerat dokument</strong> – Ärenden kan hämtas med status och giltighetstid, och det signerade dokumentet returneras när signeringen är klar.</li>
+            <li><strong>Avbryt signering</strong> – Pågående signeringsärenden kan avbrytas hos leverantören.</li>
+            <li><strong>Webhook och händelsevidarebefordran</strong> – Händelser från Comfact tas emot via webhook, normaliseras och vidarebefordras till Postportalservice.</li>
+            <li><strong>Processbaserad signering</strong> – Ett äldre flöde startar signering av dokument i Document-tjänsten som en långkörande process via PwEsigning.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>2.1</strong></li>
+            <li>Kategori: <strong>Dokument och arkiv</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="e-signing-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-e-signing" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="e-signing-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/e-signing.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/e-signing.svg" alt="Arkitekturskiss för ESigning: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap. Övriga integrationer som förekommer i koden: Comfact (elektronisk signering, via ComfactFacade).
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Övrigt:</strong> Resilience4j (circuit breakers och retry mot beroende tjänster), Feign-klienter; ingen egen databas – tillståndet ligger hos leverantören och i Postportalservice</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som ESigning anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>ComfactFacade</td><td>3.1</td><td>Startar, hämtar och avbryter signeringsärenden hos signeringsleverantören Comfact.</td></tr>
+            <tr><td>Document</td><td>2.0</td><td>Hämtar och validerar dokument som ska signeras i det processbaserade flödet.</td></tr>
+            <tr><td>PwEsigning</td><td>1.0</td><td>Startar den långkörande signeringsprocessen i det processbaserade flödet.</td></tr>
+            <tr><td>Postportalservice</td><td>1.9</td><td>Tar emot normaliserade signeringshändelser och korrelerar dem mot utskick och mottagare.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>application.yml med URL och OAuth2-klientuppgifter för ComfactFacade, Document, PwEsigning och Postportalservice</li>
+        <li>Signeringsleverantör konfigureras per kommun (byMunicipalityId) med en standardleverantör som reserv</li>
+        <li>Ingen databas behöver konfigureras – tjänsten är tillståndslös</li>
+        <li>Anrop görs per kommun – municipalityId ingår i alla API-vägar</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Signeringsleverantör väljs per kommun via ett konfigurerbart register (SigningProviderRegistry) med standardleverantör som reserv; saknas konfiguration avvisas anropet – verifierat i koden.</li>
+        <li>Webhook-händelser från Comfact mappas till ett leverantörsneutralt händelseformat innan de skickas vidare till Postportalservice, som korrelerar på customerReference och undertecknarens partyId.</li>
+        <li>I det processbaserade flödet vägras start om dokumentet redan har metadatafältet signingInProgress=true eller om filen inte är en PDF – verifierat i SigningService.</li>
+        <li>Tjänsten saknar egen databas och lagrar inget tillstånd själv.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-e-signing" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

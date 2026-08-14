@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Operaton – API-katalogen</title>
+  <meta name="description" content="Kommunens gemensamma BPMN-processmotor – kör verksamhetsprocesser modellerade i BPMN och DMN och erbjuder en självdokumenterande katalog av färdiga processbyggstenar som skicka e-post, skicka sms och skapa ärende.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">Operaton</span>
+      </nav>
+      <span class="app-tag app-tag-light">Integration</span>
+      <h1>Operaton</h1>
+      <p class="hero-lead">
+        Kommunens gemensamma BPMN-processmotor – kör verksamhetsprocesser modellerade i BPMN och DMN och erbjuder en självdokumenterande katalog av färdiga processbyggstenar som skicka e-post, skicka sms och skapa ärende.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            Operaton ger kommunens verksamhetssystem en gemensam processmotor byggd på den öppna Operaton-motorn (en vidareutveckling av Camunda 7), inbäddad i en dept44-tjänst. Via API:et driftsätts BPMN-processer och DMN-beslutstabeller, processinstanser startas och följs, processvariabler ändras och väntande processteg återupptas genom meddelandekorrelering. DMN-beslut kan även utvärderas direkt mot inskickade variabler.
+          </p>
+          <p>
+            Det som gör tjänsten särskilt användbar är katalogen av externa arbetsuppgifter (external task workers). Varje worker beskriver sig själv med ämne samt in- och utvariabler, och katalogen kan hämtas både som ren dokumentation och som bpmn-js-elementmallar som laddas in i en BPMN-modellerare. Processmodellerare kan därmed dra in färdiga byggstenar som skicka e-post, skicka sms eller skapa ärende utan att känna till de bakomliggande API:erna.
+          </p>
+          <p>
+            Med tjänsten följer workerpaket mot Messaging (e-post och sms), SupportManagement (skapa ärende), CareManagement (ärendehantering med beslut och normberäkning för ekonomiskt bistånd, bland annat mot Lifecare) och FinancialAid (hämta beslutsunderlag och utvärdera inkomster mot regelverk). Motorns administrationsgränssnitt (webapps) ingår som valbar modul.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Driftsättning av processer</strong> – BPMN-processer och DMN-beslutstabeller driftsätts, listas och tas bort via API:et; cascade-borttagning avslutar även pågående instanser.</li>
+            <li><strong>Processinstanser</strong> – Instanser startas per processdefinitionsnyckel med valfria variabler, listas och följs; variabler kan läggas till, ändras och tas bort under körning.</li>
+            <li><strong>Meddelandekorrelering</strong> – BPMN-meddelanden korreleras till väntande processinstanser, till exempel när en handläggare fattar sitt beslut.</li>
+            <li><strong>DMN-beslut</strong> – Beslutstabeller listas, hämtas som XML och utvärderas direkt mot inskickade variabler.</li>
+            <li><strong>Självdokumenterande workerkatalog</strong> – Alla external task-ämnen exponeras med sina in- och utvariabelkontrakt, även som bpmn-js-elementmallar för BPMN-modellerare.</li>
+            <li><strong>Färdiga processbyggstenar</strong> – Workers för e-post, sms, ärendeskapande, ärendeuppdatering, beslut, normberäkning och regelverksutvärdering ingår som moduler.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>1.0</strong></li>
+            <li>Kategori: <strong>Integration</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer, verksamhetssystem och processmodellerare</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-operaton" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        Ingen incheckad OpenAPI-specifikation hittades i källkodsförrådet; se
+        källkoden för aktuell API-dokumentation.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/operaton.svg" alt="Arkitekturskiss för Operaton: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap. Lagring: MariaDB; Operaton-motorn hanterar sina egna processtabeller och Flyway lägger till ShedLock-tabellen för schemalagda jobb. Övriga integrationer som förekommer i koden: Operaton BPMN-motor (inbäddad, operaton-bpm-spring-boot-starter 2.1.3) med valbara webapps för administration.
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB; Operaton-motorn hanterar sina egna processtabeller och Flyway lägger till ShedLock-tabellen för schemalagda jobb</li>
+        <li><strong>Övrigt:</strong> Multimodulbygge (core, deployment, process, decision, workers samt workerpaket per verksamhetsområde), inbäddad Operaton-motor 2.1.3, dept44-scheduler med ShedLock</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som Operaton anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Messaging</td><td>1.0</td><td>Workers för att skicka e-post (send-email) och sms (send-sms) från BPMN-processer.</td></tr>
+            <tr><td>SupportManagement</td><td>1.0</td><td>Worker som skapar ärenden (create-errand) från BPMN-processer.</td></tr>
+            <tr><td>CareManagement</td><td>1.0</td><td>Workers som skapar och uppdaterar ärenden, registrerar beslut, hanterar normberäkning, hämtar Lifecare-komplement och kontrollerar betalstatus.</td></tr>
+            <tr><td>FinancialAid</td><td>1.0</td><td>Workers som hämtar beslutsunderlag för ekonomiskt bistånd och utvärderar inkomster mot regelverk.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>application.yml med URL och OAuth2-klientuppgifter (client_credentials) för Messaging, SupportManagement, CareManagement och FinancialAid</li>
+        <li>Administratörskonto för motorns webapps (standard demo/demo – ska ersättas per miljö)</li>
+        <li>Cron-uttryck för schemalagda workers (bl.a. logger-worker och hämtning av beslutsunderlag för ekonomiskt bistånd)</li>
+        <li>MariaDB-anslutning; motorns schema hanteras av Operaton och ShedLock-tabellen av Flyway</li>
+        <li>Anrop görs per kommun – municipalityId ingår i alla API-vägar</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Workerkatalogen byggs automatiskt: en Spring BeanPostProcessor (TopicRegistry) samlar in alla @TopicWorker-annoterade beans med deras variabelkontrakt och exponerar dem via /topics, inklusive som bpmn-js-elementmallar.</li>
+        <li>Webapp-modulen är valbar – utelämnas den körs motorn headless; ingår den nås Operatons administrationsgränssnitt under /operaton.</li>
+        <li>Ingen OpenAPI-specifikation finns incheckad i repot (integrationstesterna verifierar driftsättning och topics, inte specen), vilket avviker från dept44-standarden.</li>
+        <li>Klientkontrakten mot beroende tjänster är egna, minimala specifikationer med version 1.0 – de speglar inte de fullständiga API:ernas versionsnummer.</li>
+        <li>Workerpaketet för CareManagement innehåller processtöd för ekonomiskt bistånd med normberäkning i flera steg (skapa, förbereda, fastställa) samt hämtning av komplement från Lifecare.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-operaton" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

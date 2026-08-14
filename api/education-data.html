@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EducationData – API-katalogen</title>
+  <meta name="description" content="Samlar in nationell utbildningsdata från Skolverkets SUSA-navet och Planned Educations-API och lagrar den lokalt som grund för kommunens utbildningstjänster.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">EducationData</span>
+      </nav>
+      <span class="app-tag app-tag-light">Utbildning</span>
+      <h1>EducationData</h1>
+      <p class="hero-lead">
+        Samlar in nationell utbildningsdata från Skolverkets SUSA-navet och Planned Educations-API och lagrar den lokalt som grund för kommunens utbildningstjänster.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            EducationData är kommunens insamlingstjänst för nationell utbildningsdata. Ett nattligt jobb hämtar utbildningstillfällen (educationEvents), utbildningsinformation (educationInfos) och utbildningsanordnare (educationProviders) från Skolverkets SUSA-navet, sida för sida, och lagrar varje sidas JSON-svar komprimerat i databasen tillsammans med insamlingsdatum.
+          </p>
+          <p>
+            Utöver SUSA-navet hämtas referensdata om yrkesområden för vuxenutbildning från Skolverkets Planned Educations-API (v4). Referenskategorierna ersätts i sin helhet vid varje import.
+          </p>
+          <p>
+            Tjänsten exponerar ett minimalt API: en endpoint för att manuellt trigga importen utanför schemat. Själva datat konsumeras av andra tjänster som läser direkt ur den insamlade databasen – EducationData fungerar som ett lokalt, versionsdaterat mellanlager mot de nationella källorna.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Nattlig import från SUSA-navet</strong> – Hämtar utbildningstillfällen, utbildningsinformation och utbildningsanordnare från Skolverkets SUSA-navet varje natt kl. 02.</li>
+            <li><strong>Referensdata om yrkesområden</strong> – Hämtar områdeskategorier för vuxenutbildning från Skolverkets Planned Educations-API och ersätter tidigare referensdata.</li>
+            <li><strong>Komprimerad lagring per sida</strong> – Varje hämtad JSON-sida gzip-komprimeras och lagras med sidnummer och insamlingsdatum.</li>
+            <li><strong>Manuell import</strong> – Importen kan triggas på begäran via POST /{municipalityId}/scheduler/trigger och körs då asynkront.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>1.0</strong></li>
+            <li>Kategori: <strong>Utbildning</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-education-data" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        Ingen incheckad OpenAPI-specifikation hittades i källkodsförrådet; se
+        källkoden för aktuell API-dokumentation.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/education-data.svg" alt="Arkitekturskiss för EducationData: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25 (via dept44-föräldern), Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Lagring: MariaDB med Flyway-migrationer; lagrar insamlade JSON-sidor (gzip-komprimerade) från SUSA-navet samt referenskategorier. Övriga integrationer som förekommer i koden: Skolverkets SUSA-navet (nationell utbildningsdata: utbildningstillfällen, utbildningsinformation, anordnare), Skolverkets Planned Educations-API v4 (yrkesområden för vuxenutbildning).
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25 (via dept44-föräldern)</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB med Flyway-migrationer; lagrar insamlade JSON-sidor (gzip-komprimerade) från SUSA-navet samt referenskategorier</li>
+        <li><strong>Övrigt:</strong> OpenFeign-klienter mot Skolverkets API:er, ShedLock för schemalagda jobb</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Inga anrop till andra mikrotjänster hittades i källkodens konfiguration.
+      </p>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>application.yml med bas-URL:er till SUSA-navet och Planned Educations-API (miljövariabler)</li>
+        <li>MariaDB-anslutning; databasschemat versionshanteras med Flyway</li>
+        <li>Importjobb (cron, kl. 02 varje natt) med ShedLock-låsning och konfigurerbar sidstorlek (json-size)</li>
+        <li>Anrop görs per kommun – municipalityId ingår i API-vägen</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Ingen OpenAPI-specifikation finns incheckad i repot – API-ytan består av en enda endpoint som triggar importen.</li>
+        <li>SUSA-navets JSON-svar lagras rått och gzip-komprimerat per sida i stället för att normaliseras till tabeller – verifierat i mappern och databasentiteterna.</li>
+        <li>Referenskategorierna från Planned Educations-API ersätts i sin helhet vid varje import (deleteAllInBatch följt av saveAll); ett tomt svar avbryter bytet med felet Bad Gateway.</li>
+        <li>README är i stort en ofylld mall (bl.a. platshållartexter i beskrivning och beroendelista) – uppgifterna ovan är härledda ur koden.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-education-data" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

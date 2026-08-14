@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ContactSettings – API-katalogen</title>
+  <meta name="description" content="Register över invånares och företags valda kontaktvägar – används av kommunens meddelandetjänster för att avgöra hur en mottagare vill bli nådd.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">ContactSettings</span>
+      </nav>
+      <span class="app-tag app-tag-light">Parts- och kunddata</span>
+      <h1>ContactSettings</h1>
+      <p class="hero-lead">
+        Register över invånares och företags valda kontaktvägar – används av kommunens meddelandetjänster för att avgöra hur en mottagare vill bli nådd.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            ContactSettings håller reda på hur invånare och företag vill bli kontaktade av kommunen. För varje part (partyId) lagras kontaktinställningar med en eller flera kanaler, till exempel sms-nummer och e-postadresser, tillsammans med ett alias per kanal. Andra tjänster – bland annat Messaging – slår upp inställningarna för att välja rätt kanal när ett meddelande ska skickas.
+          </p>
+          <p>
+            Utöver personliga inställningar stödjer tjänsten virtuella kontaktinställningar, som skapas av en riktig inställning och saknar egen part – de kan användas för till exempel funktionsbrevlådor. Tjänsten hanterar även delegat-relationer: en part kan delegera sin kontakthantering till en annan part, med filter som styr i vilka sammanhang delegeringen gäller.
+          </p>
+          <p>
+            Vid uppslag per part följer tjänsten delegeringskedjan och samlar in alla kontaktinställningar som matchar angivna filter, så att ett meddelande kan nå både parten själv och dess delegater. Det går också att söka fram vilka inställningar som pekar på en viss destination, till exempel ett telefonnummer eller en e-postadress.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Kontaktinställningar per part</strong> – Skapa, uppdatera, hämta och ta bort kontaktinställningar med kanaler (t.ex. sms och e-post) för invånare och företag.</li>
+            <li><strong>Virtuella inställningar</strong> – Kontaktinställningar utan egen part kan skapas under en riktig inställning, till exempel för funktionsbrevlådor.</li>
+            <li><strong>Delegering</strong> – En part kan delegera sin kontakthantering till en annan part; delegeringen förses med filter som styr när den gäller.</li>
+            <li><strong>Uppslag med delegeringskedja</strong> – Vid uppslag per part följs delegeringskedjan rekursivt och alla matchande kontaktinställningar samlas in.</li>
+            <li><strong>Sökning på destination</strong> – Hitta vilka kontaktinställningar som innehåller en viss destination, till exempel ett telefonnummer eller en e-postadress.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>2.0</strong></li>
+            <li>Kategori: <strong>Parts- och kunddata</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="contactsettings-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-contactsettings" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="contactsettings-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/contactsettings.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/contactsettings.svg" alt="Arkitekturskiss för ContactSettings: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Lagring: MariaDB med Flyway-migrationer; kontaktinställningar, kanaler, delegat-relationer och filter lagras här.
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB med Flyway-migrationer; kontaktinställningar, kanaler, delegat-relationer och filter lagras här</li>
+        <li><strong>Övrigt:</strong> Ingen integration mot andra mikrotjänster – tjänsten är ett fristående register</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Inga anrop till andra mikrotjänster hittades i källkodens konfiguration.
+      </p>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>MariaDB-anslutning; databasschemat versionshanteras med Flyway</li>
+        <li>Inga beroende mikrotjänster behöver konfigureras</li>
+        <li>Anrop görs per kommun – municipalityId ingår i alla API-vägar</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Uppslaget per part följer delegeringskedjan rekursivt och skyddar mot cirkulära delegeringar med ett register över redan besökta inställningar – verifierat i ContactSettingsService.</li>
+        <li>När en riktig kontaktinställning tas bort raderas även dess virtuella barn och alla delegat-relationer i samma operation.</li>
+        <li>Tjänsten saknar helt integrationer mot andra mikrotjänster – den är ett rent register som andra tjänster (t.ex. Messaging) anropar.</li>
+        <li>Delegeringar kan förses med nyckel/värde-filter, och vid uppslag matchas frågans parametrar mot delegeringens filter.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-contactsettings" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

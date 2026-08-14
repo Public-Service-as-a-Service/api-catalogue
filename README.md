@@ -17,8 +17,8 @@ Swagger UI-sida för den interaktiva API-dokumentationen.
 
 - `index.html` – förstasidan med information om katalogen och en översikt över
   API:erna, grupperad per kategori.
-- `api/<slug>.html` – en sida per API, med beskrivning och teknisk
-  dokumentation. Genereras från `scripts/apis-data.json` med
+- `api/<slug>.html` – en sida per API (ett 80-tal), med beskrivning och
+  teknisk dokumentation. Genereras från `scripts/apis-data.json` med
   `scripts/generate-pages.py`.
 - `api/<slug>-swagger.html` – Swagger UI-sida per API som renderar
   OpenAPI-specifikationen interaktivt.

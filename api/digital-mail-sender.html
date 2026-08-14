@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digital Mail Sender – API-katalogen</title>
+  <meta name="description" content="Levererar digital post och digitala fakturor till invånarnas digitala brevlådor, till exempel Kivra och Min myndighetspost.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">Digital Mail Sender</span>
+      </nav>
+      <span class="app-tag app-tag-light">Kommunikation</span>
+      <h1>Digital Mail Sender</h1>
+      <p class="hero-lead">
+        Levererar digital post och digitala fakturor till invånarnas digitala brevlådor, till exempel Kivra och Min myndighetspost.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            Digital Mail Sender är kommunens väg in till den nationella infrastrukturen för digital post. I stället för att varje verksamhetssystem själv integrerar mot Skatteverkets förmedlingstjänst Mina meddelanden och mot brevlådeoperatörer anropar de detta API – i praktiken oftast via Messaging-API:et, som använder tjänsten för meddelandetyperna digital post och digital faktura.
+          </p>
+          <p>
+            Vid utskick av digital post översätts mottagarens partyId till person- eller organisationsnummer via Party-tjänsten, varefter tjänsten frågar Skatteverket vilken digital brevlåda mottagaren har och om avsändaren får nå den. Meddelandet skickas sedan som signerat SOAP-meddelande till mottagarens brevlådeoperatör. Tjänsten stödjer operatörerna Kivra, Min myndighetspost, Billo och Fortnox.
+          </p>
+          <p>
+            Digitala fakturor levereras via Kivras REST-API, efter kontroll av att mottagaren är en giltig Kivra-mottagare. API:et erbjuder även ett uppslag av vilka mottagare som kan nås digitalt, vilket Messaging använder för att avgöra om ett brev kan levereras digitalt eller ska gå som fysisk post.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Skicka digital post</strong> – Meddelanden med HTML-innehåll och PDF-bilagor levereras till mottagarens digitala brevlåda via Skatteverkets förmedlingstjänst.</li>
+            <li><strong>Skicka digital faktura</strong> – Fakturor med betalinformation (OCR, förfallodag, belopp) levereras till mottagarens Kivra-brevlåda.</li>
+            <li><strong>Uppslag av digitala brevlådor</strong> – För en lista av mottagare svaras vilka som har en nåbar digital brevlåda och hos vilken operatör – underlag för kanalval digitalt/fysiskt.</li>
+            <li><strong>Flera brevlådeoperatörer</strong> – Stöd för Kivra, Min myndighetspost, Billo och Fortnox; listan över stödda operatörer är konfigurerbar.</li>
+            <li><strong>Certifikatövervakning</strong> – En schemalagd kontroll övervakar certifikatet mot Kivra och larmar automatiskt via e-post och Slack om problem upptäcks.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>4.1</strong></li>
+            <li>Kategori: <strong>Kommunikation</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="digital-mail-sender-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-digital-mail-sender" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="digital-mail-sender-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/digital-mail-sender.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/digital-mail-sender.svg" alt="Arkitekturskiss för Digital Mail Sender: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap. Lagring: MariaDB; används för schemaläggningslås (ShedLock) – Flyway-migrationen finns men är avstängd som standard. Övriga integrationer som förekommer i koden: Skatteverket Mina meddelanden (SOAP, signerade meddelanden) för digital post, Kivra (REST-API) för digitala fakturor, Brevlådeoperatörer: Kivra, Min myndighetspost, Billo, Fortnox.
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB; används för schemaläggningslås (ShedLock) – Flyway-migrationen finns men är avstängd som standard</li>
+        <li><strong>Övrigt:</strong> Apache CXF för SOAP mot Skatteverket med signering (kod från Mina meddelanden), Resilience4j circuit breakers, ShedLock</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som Digital Mail Sender anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Party</td><td>2.1</td><td>Översätter partyId till person- eller organisationsnummer inför uppslag och utskick.</td></tr>
+            <tr><td>Messaging</td><td>7.9</td><td>Skickar larm via e-post och Slack när certifikatövervakningen upptäcker problem.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>URL, certifikat och nyckellager för Skatteverkets förmedlingstjänst samt lista över stödda brevlådeoperatörer</li>
+        <li>Kivra-integration med OAuth2-klientuppgifter för digitala fakturor</li>
+        <li>URL och OAuth2-klientuppgifter för Party och Messaging</li>
+        <li>Maxstorlek för utgående SOAP-meddelanden (standard 2 MB)</li>
+        <li>Anrop görs per kommun – municipalityId (och för digital post även avsändarens organisationsnummer) ingår i API-vägarna</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>PDF-bilagor komprimeras automatiskt innan utskick för att hålla nere meddelandestorleken – verifierat i DigitalMailService/PdfCompressor.</li>
+        <li>Vid utskick kontrolleras först hos Skatteverket att mottagaren har en nåbar brevlåda och tillåter avsändaren; saknas giltig brevlåda svarar API:et 404.</li>
+        <li>En digital faktura till en mottagare som inte är giltig Kivra-mottagare ger svar med sent=false i stället för fel.</li>
+        <li>Certifikatövervakningen mot Kivra larmar via Messaging (e-post och Slack) och sätter tjänstens hälsostatus – notifieringen skickas en gång per upptäckt problem tills status åter är frisk.</li>
+        <li>Base64-innehåll och signaturer maskeras i anropsloggarna via Logbook-filter, både för JSON och SOAP-trafik.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-digital-mail-sender" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

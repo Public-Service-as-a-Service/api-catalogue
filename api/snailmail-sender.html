@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SnailMailSender – API-katalogen</title>
+  <meta name="description" content="Samlar ihop fysiska brevförsändelser i batchar och lämnar över dem till tryck- och kuverteringsleverantör via filöverföring.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">SnailMailSender</span>
+      </nav>
+      <span class="app-tag app-tag-light">Kommunikation</span>
+      <h1>SnailMailSender</h1>
+      <p class="hero-lead">
+        Samlar ihop fysiska brevförsändelser i batchar och lämnar över dem till tryck- och kuverteringsleverantör via filöverföring.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            SnailMailSender hanterar kommunens utskick av fysiska brev. Applikationer – i praktiken främst Messaging-API:et, som faller tillbaka på fysisk post när digital leverans inte är möjlig – skickar in brevförsändelser med mottagaradress och bilagor (breven som PDF). Försändelserna samlas per batch och avdelning i en databas.
+          </p>
+          <p>
+            När en batch är komplett triggas utskicket, och tjänsten skriver då ut brevunderlaget till en filyta som tryck- och kuverteringsleverantören hämtar ifrån: en Samba-utdelning och/eller en SFTP-server, beroende på vilka integrationer som är aktiverade. Underlaget består av brevens PDF-filer tillsammans med csv-filer med mottagaruppgifter, sorterade i mappar per avdelning.
+          </p>
+          <p>
+            En schemalagd bevakning fångar upp batchar som av någon anledning aldrig triggats: batchar äldre än en konfigurerbar tid (standard en timme) skickas automatiskt. Efter lyckad överlämning raderas batchen ur databasen.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Ta emot brevförsändelser</strong> – Försändelser med mottagaradress, avdelning och PDF-bilagor registreras och köas i en batch per utskick.</li>
+            <li><strong>Skicka batch</strong> – Ett separat anrop triggar överlämning av en hel batch till leverantören, varefter batchen raderas ur databasen.</li>
+            <li><strong>Filleverans via Samba och/eller SFTP</strong> – Brevunderlag (PDF:er och csv-filer med mottagaruppgifter) skrivs till en Samba-utdelning och/eller SFTP-server; integrationerna kan aktiveras oberoende av varandra.</li>
+            <li><strong>Mappstruktur per avdelning</strong> – Underlaget sorteras i mappar per batch och avdelning, med konfigurerbart mappnamn, så att leverantören kan hantera olika brevtyper olika.</li>
+            <li><strong>Automatisk hantering av kvarglömda batchar</strong> – En schemalagd kontroll (var tionde minut) skickar batchar som inte triggats inom konfigurerad tid.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>3.3</strong></li>
+            <li>Kategori: <strong>Kommunikation</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="snailmail-sender-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-snailmail-sender" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="snailmail-sender-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/snailmail-sender.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/snailmail-sender.svg" alt="Arkitekturskiss för SnailMailSender: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Lagring: MariaDB med Flyway-migrationer; batchar, avdelningar och försändelser lagras tills batchen skickats och raderas därefter. Övriga integrationer som förekommer i koden: Samba-filutdelning hos tryck- och kuverteringsleverantör, SFTP-server hos tryck- och kuverteringsleverantör.
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB med Flyway-migrationer; batchar, avdelningar och försändelser lagras tills batchen skickats och raderas därefter</li>
+        <li><strong>Övrigt:</strong> Spring Integration SFTP och JSch för SFTP, SMB-klient för Samba, ShedLock för schemaläggningslås, Resilience4j circuit breakers</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Inga anrop till andra mikrotjänster hittades i källkodens konfiguration.
+      </p>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>MariaDB-anslutning; databasschemat versionshanteras med Flyway</li>
+        <li>Samba-integration: aktivering, adress till utdelning och inloggningsuppgifter (integration.samba)</li>
+        <li>SFTP-integration: aktivering, server och inloggningsuppgifter (integration.sftp)</li>
+        <li>Schemalagd bevakning av ohanterade batchar: cron, ålder innan batch anses övergiven samt ShedLock-låstider</li>
+        <li>Anrop görs per kommun – municipalityId ingår i API-vägarna</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Inkommande försändelser serialiseras med en semafor som begränsar till ett samtidigt anrop, som skydd mot kapplöpning vid get-or-create av batch och avdelning – verifierat i SnailMailService.</li>
+        <li>Databasen körs med isolationsnivån READ_COMMITTED, och circuit breakers ignorerar DataIntegrityViolationException – båda medvetna val för att get-or-create-kapplöpningar ska läka i stället för att ge fel.</li>
+        <li>Om varken Samba- eller SFTP-integrationen är aktiv avvisas batch-utskick med ett fel – minst en leveransväg måste vara konfigurerad.</li>
+        <li>README anger Citizen som beroende tjänst, men koden innehåller ingen Citizen-integration (endast Samba, SFTP och databas) – koden är sanningskällan.</li>
+        <li>Bilagors base64-innehåll maskeras i anropsloggarna via Logbook-filter.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-snailmail-sender" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

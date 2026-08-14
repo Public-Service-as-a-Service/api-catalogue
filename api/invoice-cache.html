@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>InvoiceCache – API-katalogen</title>
+  <meta name="description" content="Cachar fakturainformation från ekonomisystemet Raindance i en lokal databas och tillhandahåller sökbara fakturauppgifter och faktura-PDF:er för kommunens applikationer.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">InvoiceCache</span>
+      </nav>
+      <span class="app-tag app-tag-light">Ekonomi och fakturering</span>
+      <h1>InvoiceCache</h1>
+      <p class="hero-lead">
+        Cachar fakturainformation från ekonomisystemet Raindance i en lokal databas och tillhandahåller sökbara fakturauppgifter och faktura-PDF:er för kommunens applikationer.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Om API:et</h2>
+      <div class="columns">
+        <div class="column-text">
+          <p>
+            InvoiceCache gör kommunens fakturadata tillgänglig för andra applikationer utan att varje system behöver fråga ekonomisystemet Raindance direkt. Ett schemalagt Spring Batch-jobb läser varje timme fakturauppgifter från Raindances databas via en skrivskyddad anslutning och speglar dem i tjänstens egen databas.
+          </p>
+          <p>
+            Via API:et kan applikationer söka fram fakturor på bland annat fakturanummer, OCR-nummer, datumintervall och part (partyId, som översätts till person- eller organisationsnummer via Party-tjänsten). Tjänsten lagrar och levererar även fakturor i PDF-format – dels genom import från en filshare, dels genom att applikationer laddar upp PDF:er via API:et.
+          </p>
+          <p>
+            Tjänsten fungerar därmed både som läs-cache mot Raindance och som lagringsplats för faktura-PDF:er, med batchjobb vars hälsa exponeras via tjänstens övervakningsändpunkter.
+          </p>
+
+          <h3>Det här gör API:et</h3>
+          <ul class="app-modules">
+            <li><strong>Fakturasökning</strong> – Sökning av cachade fakturor på fakturanummer, OCR-nummer, datum, belopp och part, med paginering.</li>
+            <li><strong>Timvis synkronisering från Raindance</strong> – Ett schemalagt Spring Batch-jobb läser fakturauppgifter direkt ur Raindances databas och uppdaterar cachen varje timme.</li>
+            <li><strong>Faktura-PDF:er</strong> – Lagring och hämtning av fakturor i PDF-format, både styckvis och som ström för flera fakturor.</li>
+            <li><strong>PDF-import från filshare</strong> – Faktura-PDF:er importeras schemalagt från en Samba-filshare kopplad till Raindance.</li>
+            <li><strong>Uppslag via part</strong> – Sökning på partyId översätts till person- eller organisationsnummer via Party-tjänsten, och svaren mappas tillbaka till rätt part.</li>
+            <li><strong>Backup och återställning</strong> – Fakturacachen säkerhetskopieras i egna batchjobb som kan återställa data om synkroniseringen misslyckas.</li>
+          </ul>
+        </div>
+        <aside class="fact-box" aria-label="Snabbfakta">
+          <h3>Snabbfakta</h3>
+          <ul>
+            <li>Version: <strong>4.1</strong></li>
+            <li>Kategori: <strong>Ekonomi och fakturering</strong></li>
+            <li>Status: <strong>Aktiv</strong></li>
+            <li>Målgrupp: <strong>Kommunens applikationer och verksamhetssystem</strong></li>
+          </ul>
+          <p class="fact-box-link">
+            <a href="invoice-cache-swagger.html">API-dokumentation (Swagger UI)</a>
+          </p>
+          <p class="fact-box-link">
+            <a href="https://github.com/Sundsvallskommun/api-service-invoice-cache" rel="external">Källkod på GitHub</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="api-dokumentation">
+    <div class="container">
+      <h2>API-dokumentation</h2>
+      <p class="section-intro">
+        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
+        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
+        interaktivt i Swagger UI eller laddas ner som YAML.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="invoice-cache-swagger.html">Öppna Swagger UI</a>
+        <a class="button button-outline" href="../assets/openapi/invoice-cache.yml" download>OpenAPI-specifikation (YAML)</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="teknisk-dokumentation">
+    <div class="container">
+      <h2>Teknisk dokumentation</h2>
+      <p class="section-intro">
+        Nedan beskrivs hur tjänsten är uppbyggd, vilka andra tjänster den anropar och
+        vad som krävs för att driftsätta den. Informationen är härledd ur källkoden
+        och dess konfiguration på GitHub.
+      </p>
+
+      <h3>Arkitektur</h3>
+      <figure class="diagram">
+        <div class="diagram-wrap">
+          <img src="../assets/diagrams/invoice-cache.svg" alt="Arkitekturskiss för InvoiceCache: tjänstens delar och dess integrationer.">
+        </div>
+        <figcaption>Lösningsarkitektur, härledd ur källkodens konfiguration.</figcaption>
+      </figure>
+      <p>
+        API:et är en mikrotjänst (Java 25, Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven). Konsumenter når tjänsten via kommunens gemensamma API-plattform (WSO2) på api.sundsvall.se – tjänsten anropas aldrig direkt. Tjänsten anropar i sin tur andra mikrotjänster i kommunens tjänstelandskap. Lagring: MariaDB med Flyway-migrationer för fakturacache och PDF-lagring; separat skrivskyddad SQL Server-anslutning mot Raindance. Övriga integrationer som förekommer i koden: Raindance (ekonomisystem, skrivskyddad databasanslutning via SQL Server samt PDF-filer via Samba-filshare).
+      </p>
+
+      <h3>Teknikstack</h3>
+      <ul>
+        <li><strong>Språk:</strong> Java 25</li>
+        <li><strong>Ramverk:</strong> Spring Boot via kommunens gemensamma tjänsteplattform dept44 (8.0.8), byggd med Maven</li>
+        <li><strong>Databas:</strong> MariaDB med Flyway-migrationer för fakturacache och PDF-lagring; separat skrivskyddad SQL Server-anslutning mot Raindance</li>
+        <li><strong>Övrigt:</strong> Spring Batch för synkroniserings-, backup- och återställningsjobb med Shedlock-låsning, jcifs-ng för Samba-åtkomst, mssql-jdbc mot Raindance</li>
+      </ul>
+
+      <h3>Beroenden till andra mikrotjänster</h3>
+      <p>
+        Tjänsten anropar följande mikrotjänster. Versionerna är hämtade ur
+        källkodens integrationsklienter.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Mikrotjänster som InvoiceCache anropar</caption>
+          <thead>
+            <tr><th scope="col">Tjänst</th><th scope="col">Version</th><th scope="col">Användning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Party</td><td>1.0</td><td>Översätter partyId till person- eller organisationsnummer vid fakturasökning.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Konfiguration och driftsättning</h3>
+      <ul>
+        <li>Två datakällor: MariaDB för cachen (Flyway-versionerad) och en skrivskyddad SQL Server-anslutning mot Raindance</li>
+        <li>Samba-anslutning för import av faktura-PDF:er, med eget cron-schema</li>
+        <li>Cron-scheman för batchjobben, bland annat timvis fakturasynkronisering</li>
+        <li>URL och anslutningsuppgifter för Party-tjänsten</li>
+        <li>Gräns för när cachade fakturor betraktas som inaktuella (raindance.invoice.outdated)</li>
+      </ul>
+      <h3>Noterbart ur källkoden</h3>
+      <ul>
+        <li>Tjänsten läser Raindances databas direkt via en skrivskyddad SQL Server-datakälla i stället för att gå via något API – verifierat i RaindanceDataSourceConfig.</li>
+        <li>OCR-nummer för betalningspåminnelser genereras i koden med Luhn-kontrollsiffra utifrån Raindance-fälten – verifierat i util/OCR.java.</li>
+        <li>Egna hälsoindikatorer exponerar status för synkroniserings-, backup- och återställningsjobben via actuator.</li>
+        <li>Base64-innehåll i PDF-anrop maskeras i anropsloggarna via Logbook-filter.</li>
+      </ul>
+
+      <h3>Källkod</h3>
+      <p>
+        Källkoden är öppen och finns hos
+        <a href="https://github.com/Sundsvallskommun/api-service-invoice-cache" rel="external">Sundsvalls kommun på GitHub</a>.
+        I källkodsförrådet finns även instruktioner för att klona, konfigurera och
+        starta tjänsten i egen miljö.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
