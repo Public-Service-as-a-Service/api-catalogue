@@ -15,8 +15,9 @@ API-plattform. Många av API:erna utvecklas som öppen källkod på
 börjar med `api-service` – men katalogen kan även omfatta API:er vars lösningar
 inte publiceras som öppen källkod; att källkoden är öppen är sekundärt. Utöver
 beskrivningssidorna exponeras varje API:s OpenAPI-specifikation interaktivt via
-Swagger UI. Publiceras till GitHub Pages via
-`.github/workflows/deploy-pages.yml` vid push till `main`.
+Swagger UI, och varje API:s programvaruförteckning (SBOM) i SPDX-format.
+Publiceras till GitHub Pages via `.github/workflows/deploy-pages.yml` vid push
+till `main`.
 
 ## Grundprinciper
 
@@ -74,6 +75,11 @@ arkitekturritningen och startsidans kort (mellan `API-CARDS`-markörerna i
 `index.html`) genereras då automatiskt med rätt struktur. Fyll fälten enligt
 tabellen ovan – uppgifterna ska vara härledda ur källkodsrepot.
 
+SBOM-sidan ingår inte i det här steget: den skapas först när
+`refresh-sbom.yml` har lagt en `assets/sbom/<slug>.spdx.json` på plats. Ett nytt
+API får alltså sin programvaruförteckning vid nästa schemalagda körning, eller
+direkt om du kör workflowet manuellt.
+
 ## API-sidans struktur
 
 Strukturen, som generatorn producerar:
@@ -85,14 +91,17 @@ Strukturen, som generatorn producerar:
 3. **"Om API:et"** – 2–4 stycken verksamhetsnära text: vilket behov API:et
    löser, vilka som använder det, vilken nytta det ger. Därefter punktlistan
    "Det här gör API:et". I sidokolumnen en `fact-box` ("Snabbfakta") med
-   version, kategori, status och målgrupp samt länkar till Swagger UI och
-   källkoden.
+   version, kategori, status och målgrupp samt länkar till Swagger UI,
+   programvaruförteckningen och källkoden.
 4. **"API-dokumentation"** (`section-slim`, id `api-dokumentation`) – knappar
-   till Swagger UI-sidan och OpenAPI-specifikationen (YAML).
+   till Swagger UI-sidan, OpenAPI-specifikationen (YAML) och
+   programvaruförteckningen. Knappraden visas så snart något av underlagen
+   finns, så ett API utan incheckad spec får ändå sin SBOM-knapp.
 5. **"Teknisk dokumentation"** (`section-alt`, id `teknisk-dokumentation`) med
    underrubrikerna, i denna ordning: **Arkitektur** (diagram + prosa),
    **Teknikstack**, **Beroenden till andra mikrotjänster** (tabell: Tjänst,
    Version, Användning – versionerna ordagrant ur integrationsklienterna),
+   **Programvaruförteckning** (antal komponenter och licenser, med länk vidare),
    **Konfiguration och driftsättning**, **Noterbart ur källkoden** (kodverifierade
    särdrag och README-avvikelser), **Källkod**.
 6. **Sidfot** – samma `site-footer` som övriga sidor.
@@ -106,6 +115,46 @@ specifikationen från `assets/openapi/<slug>.yml` med Swagger UI
 inga externa CDN-beroenden). "Try it out" är avstängt och
 serverlistan dold, eftersom specens server-URL är en genererad
 localhost-adress – riktiga anrop går via api.sundsvall.se.
+
+## Programvaruförteckningen (SBOM)
+
+`api/<slug>-sbom.html` genereras av samma skript ur
+`assets/sbom/<slug>.spdx.json` och listar tjänstens tredjepartskomponenter med
+version och licens, plus en licenssammanfattning. Filterfältet är
+progressive enhancement – tabellen renderas i sin helhet utan JavaScript.
+
+**Skriv aldrig SBOM-filerna för hand och regenerera dem inte som en del av det
+vanliga arbetsflödet.** Till skillnad från sidorna och ritningarna, som är rena
+funktioner av `apis-data.json`, är en SBOM en funktion av 75 externa repon som
+Dependabot uppdaterar löpande. De underhålls därför av
+`.github/workflows/refresh-sbom.yml`, som varje vecka checkar ut varje
+källkodsrepo, kör Trivy och commitar det som ändrats.
+
+Tre saker är avgörande om workflowet någon gång skrivs om:
+
+- **Scanningen måste ske inifrån utcheckningen med `trivy fs … .`** Trivy
+  härleder varje pakets `SPDXID` ur ett PkgID som innehåller scan-sökvägen, så
+  `trivy fs src` i stället för `cd src && trivy fs .` byter identitet på samtliga
+  paket och gör att hela filen skrivs om vid varje körning.
+- **`--offline-scan` efter `mvn dependency:go-offline`.** En onlinescanning är
+  dels ömtålig – Maven Central spärrar IP-adressen efter en handfull repon vid en
+  svep över hela flottan – dels icke-deterministisk: en strypt körning
+  rapporterar tyst licenser som `NOASSERTION` i stället för att fela, vilket
+  hade gett en commit som inte motsvarar någon verklig beroendeändring. Offline
+  ger identisk komponentlista till en kostnad av cirka 1 % av licensuppgifterna.
+- **Trivy-versionen är pinnad** i workflowet, av samma skäl. En uppgradering ska
+  vara en egen, granskad ändring.
+
+`scripts/normalize-sbom.py` låser de fält som annars varierar mellan körningar
+(dokumentets namnrymd och tidsstämpeln) till den scannade committen, tar bort
+Trivys verktygsinterna annoteringar och skriver in härkomsten i dokumentet. Utan
+det skulle varje veckokörning producera en commit även när inget beroende
+ändrats.
+
+Observera att SBOM-sidan visar varje komponent en gång, medan SPDX-dokumentet
+behåller samtliga poster. Flermodulsrepon listar samma beroende per modul –
+`api-service-operaton` har 12 `pom.xml` och 6 895 poster för 331 unika
+komponenter.
 
 ## Arkitekturritningen
 

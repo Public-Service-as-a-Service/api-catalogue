@@ -1,0 +1,165 @@
+name: Refresh SBOMs
+
+# Regenerates every API's software bill of materials from the source repositories
+# and commits the result. The catalogue's own generators are pure functions of
+# apis-data.json and can be run by hand, but an SBOM tracks 75 external repos that
+# Dependabot bumps continuously -- it has to be scheduled to stay honest.
+#
+# Pushing to main here also triggers deploy-pages.yml, so a refresh publishes itself.
+
+on:
+  schedule:
+    # 05:00 UTC on Mondays, after the services' own Sunday 03:00 CI run.
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Kör bara för denna slug (t.ex. garbage). Tomt = alla API:er."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-sbom
+  cancel-in-progress: false
+
+jobs:
+  matrix:
+    name: Build matrix
+    runs-on: ubuntu-latest
+    outputs:
+      apis: ${{ steps.build.outputs.apis }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read apis-data.json
+        id: build
+        env:
+          ONLY: ${{ inputs.only }}
+        run: |
+          apis=$(jq -c --arg only "$ONLY" \
+            '[.[] | {slug, repo}] | if $only == "" then . else map(select(.slug == $only)) end' \
+            scripts/apis-data.json)
+          if [ "$(echo "$apis" | jq 'length')" -eq 0 ]; then
+            echo "::error::No API matched '$ONLY'."
+            exit 1
+          fi
+          echo "apis=$apis" >> "$GITHUB_OUTPUT"
+          echo "$apis" | jq -r 'length | "\(.) APIs in the matrix"'
+
+  sbom:
+    name: SBOM ${{ matrix.api.slug }}
+    needs: matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      # Keeps us inside GitHub's concurrent-job limit and stops 75 parallel jobs
+      # from hammering Maven Central into rate-limiting us.
+      max-parallel: 10
+      matrix:
+        api: ${{ fromJson(needs.matrix.outputs.apis) }}
+    steps:
+      - name: Checkout catalogue
+        uses: actions/checkout@v4
+
+      - name: Checkout ${{ matrix.api.repo }}
+        uses: actions/checkout@v4
+        with:
+          repository: Sundsvallskommun/${{ matrix.api.repo }}
+          path: src
+          fetch-depth: 1
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: "25"
+          distribution: temurin
+          cache: maven
+          cache-dependency-path: src/pom.xml
+
+      - name: Resolve dependencies
+        # Populates ~/.m2 so Trivy reads parent and BOM poms locally instead of
+        # fetching them from Maven Central, which rate-limits fleet-wide scans.
+        working-directory: src
+        run: mvn -B -q dependency:go-offline -DskipTests
+
+      - name: Install Trivy
+        # Pinned deliberately: a Trivy upgrade can change the document contents and
+        # would rewrite all 75 SBOMs at once. Bumping it should be its own reviewable
+        # change, not a silent side effect of a scheduled run.
+        uses: aquasecurity/setup-trivy@v0.3.1
+        with:
+          version: v0.74.0
+
+      - name: Generate SPDX SBOM
+        # Two things here are deliberate:
+        #
+        # 1. MUST run from inside the checkout and scan "." -- Trivy derives every
+        #    package SPDXID from a PkgID containing the scan path, so scanning "src"
+        #    instead would change every identifier and churn the whole file.
+        # 2. --offline-scan resolves purely from the ~/.m2 populated above. Scanning
+        #    online is both fragile (Maven Central rate-limits a fleet-wide sweep
+        #    after a handful of repositories) and non-deterministic: a throttled run
+        #    silently degrades licences to NOASSERTION, which would commit a diff
+        #    that is not a real dependency change. Offline costs about 1% of licences
+        #    and yields an identical component list.
+        working-directory: src
+        run: |
+          trivy fs --format spdx-json --scanners license --quiet --offline-scan \
+            --output "$GITHUB_WORKSPACE/raw.spdx.json" .
+
+      - name: Normalise
+        run: |
+          mkdir -p assets/sbom
+          python3 scripts/normalize-sbom.py \
+            --input raw.spdx.json \
+            --output "assets/sbom/${{ matrix.api.slug }}.spdx.json" \
+            --slug "${{ matrix.api.slug }}" \
+            --repo "${{ matrix.api.repo }}" \
+            --source src
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ matrix.api.slug }}
+          path: assets/sbom/${{ matrix.api.slug }}.spdx.json
+          if-no-files-found: error
+
+  commit:
+    name: Commit refreshed SBOMs
+    needs: sbom
+    # Runs even if some services failed to scan: their artifact is simply absent
+    # and the previously committed SBOM is left untouched rather than deleted.
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download SBOMs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: sbom-*
+          path: assets/sbom
+          merge-multiple: true
+
+      - name: Regenerate pages
+        # Only generate-pages.py is affected; the architecture diagrams are a pure
+        # function of apis-data.json and are unrelated to the SBOMs.
+        run: python3 scripts/generate-pages.py
+
+      - name: Commit if changed
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No SBOM changes - nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/sbom api index.html
+          git commit -m "Uppdatera programvaruförteckningar (SBOM)"
+          git push
+          echo "Pushed refreshed SBOMs."

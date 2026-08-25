@@ -28,6 +28,10 @@ Swagger UI-sida för den interaktiva API-dokumentationen.
   OpenAPI-specifikationen interaktivt.
 - `assets/openapi/<slug>.yml` – API:ets OpenAPI-specifikation, hämtad ur
   källkodsrepots incheckade spec.
+- `api/<slug>-sbom.html` – programvaruförteckning per API: tredjepartskomponenter
+  med version och licens, plus en licenssammanfattning.
+- `assets/sbom/<slug>.spdx.json` – förteckningen i SPDX-format, maskinellt
+  härledd ur källkodsrepots beroendeträd.
 - `scripts/apis-data.json` – fakta om varje API, härledd ur respektive
   källkodsrepo.
 - `assets/styles.css` – webbplatsens utseende.
@@ -35,8 +39,12 @@ Swagger UI-sida för den interaktiva API-dokumentationen.
   `scripts/generate-diagrams.py`.
 - `CLAUDE.md` – AI-instruktion som i detalj beskriver hur ett API
   dokumenteras i katalogen.
+- `scripts/normalize-sbom.py` – gör Trivys SPDX-utdata reproducerbar så att en
+  oförändrad beroendelista inte ger någon diff.
 - `.github/workflows/deploy-pages.yml` – arbetsflöde som publicerar webbplatsen
   till GitHub Pages.
+- `.github/workflows/refresh-sbom.yml` – arbetsflöde som varje vecka uppdaterar
+  programvaruförteckningarna från källkodsrepona.
 
 ## Publicering
 
