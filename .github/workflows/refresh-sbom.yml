@@ -5,7 +5,9 @@ name: Refresh SBOMs
 # apis-data.json and can be run by hand, but an SBOM tracks 75 external repos that
 # Dependabot bumps continuously -- it has to be scheduled to stay honest.
 #
-# Pushing to main here also triggers deploy-pages.yml, so a refresh publishes itself.
+# Note: a push made with GITHUB_TOKEN does NOT trigger other workflows, so
+# deploy-pages.yml will not pick this commit up. The publish job below therefore
+# deploys to Pages explicitly.
 
 on:
   schedule:
@@ -131,6 +133,8 @@ jobs:
   commit:
     name: Commit refreshed SBOMs
     needs: sbom
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
     # Runs even if some services failed to scan: their artifact is simply absent
     # and the previously committed SBOM is left untouched rather than deleted.
     if: always()
@@ -152,14 +156,49 @@ jobs:
         run: python3 scripts/generate-pages.py
 
       - name: Commit if changed
+        id: commit
         run: |
           if [ -z "$(git status --porcelain)" ]; then
             echo "No SBOM changes - nothing to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          echo "changed=true" >> "$GITHUB_OUTPUT"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/sbom api index.html
           git commit -m "Uppdatera programvaruförteckningar (SBOM)"
           git push
           echo "Pushed refreshed SBOMs."
+
+  publish:
+    name: Publish to GitHub Pages
+    needs: commit
+    if: needs.commit.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    # Same concurrency group as deploy-pages.yml so the two never race.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

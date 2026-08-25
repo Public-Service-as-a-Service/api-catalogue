@@ -128,7 +128,10 @@ vanliga arbetsflödet.** Till skillnad från sidorna och ritningarna, som är re
 funktioner av `apis-data.json`, är en SBOM en funktion av 75 externa repon som
 Dependabot uppdaterar löpande. De underhålls därför av
 `.github/workflows/refresh-sbom.yml`, som varje vecka checkar ut varje
-källkodsrepo, kör Trivy och commitar det som ändrats.
+källkodsrepo, kör Trivy och commitar det som ändrats. Workflowet publicerar
+också till GitHub Pages i ett eget steg: en push som gjorts med `GITHUB_TOKEN`
+startar inga nya workflows, så `deploy-pages.yml` plockar *inte* upp den
+commiten.
 
 Tre saker är avgörande om workflowet någon gång skrivs om:
 
