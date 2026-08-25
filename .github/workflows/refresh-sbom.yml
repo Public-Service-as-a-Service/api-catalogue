@@ -35,7 +35,7 @@ jobs:
       apis: ${{ steps.build.outputs.apis }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Read apis-data.json
         id: build
@@ -65,10 +65,10 @@ jobs:
         api: ${{ fromJson(needs.matrix.outputs.apis) }}
     steps:
       - name: Checkout catalogue
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Checkout ${{ matrix.api.repo }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: Sundsvallskommun/${{ matrix.api.repo }}
           path: src
@@ -141,10 +141,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Download SBOMs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: sbom-*
           path: assets/sbom
@@ -168,8 +168,19 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/sbom api index.html
           git commit -m "Uppdatera programvaruförteckningar (SBOM)"
-          git push
-          echo "Pushed refreshed SBOMs."
+          # main can move between this job's checkout and its push, which rejects
+          # the push as non-fast-forward and loses the whole refresh. Rebase and
+          # retry rather than failing the run.
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Pushed refreshed SBOMs."
+              exit 0
+            fi
+            echo "Push rejected (attempt $attempt); rebasing onto the latest main."
+            git pull --rebase origin main
+          done
+          echo "::error::Could not push after 3 attempts."
+          exit 1
 
   publish:
     name: Publish to GitHub Pages
@@ -193,7 +204,7 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # Must be the branch tip, not github.sha: the commit job pushed a new
           # commit during this run, and the default checkout would deploy the tree
@@ -201,13 +212,13 @@ jobs:
           ref: main
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Upload site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: .
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
