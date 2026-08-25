@@ -174,7 +174,11 @@ jobs:
   publish:
     name: Publish to GitHub Pages
     needs: commit
-    if: needs.commit.outputs.changed == 'true'
+    # always() is required, not cosmetic: GitHub skips a job when anything in its
+    # needs-chain failed, and the sbom job is a 75-leg matrix with fail-fast off.
+    # Without it, a single unscannable repository silently blocks publication of
+    # all the others.
+    if: always() && needs.commit.outputs.changed == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
