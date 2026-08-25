@@ -85,8 +85,26 @@ jobs:
       - name: Resolve dependencies
         # Populates ~/.m2 so Trivy reads parent and BOM poms locally instead of
         # fetching them from Maven Central, which rate-limits fleet-wide scans.
+        #
+        # Retried because that rate-limiting also hits Maven itself: with ten
+        # matrix legs resolving at once, the odd repository gets refused and the
+        # leg dies even though nothing is wrong with it (measured at roughly 1% of
+        # legs). Without the retry the run goes red on a transient fault, and a red
+        # run that is "normal" is one nobody reads -- which is how a genuinely
+        # stuck repository would sit stale for weeks unnoticed.
         working-directory: src
-        run: mvn -B -q dependency:go-offline -DskipTests
+        run: |
+          for attempt in 1 2 3; do
+            if mvn -B -q dependency:go-offline -DskipTests; then
+              exit 0
+            fi
+            echo "::warning::Dependency resolution failed (attempt ${attempt}/3)."
+            if [ "$attempt" -lt 3 ]; then
+              sleep $((attempt * 45))
+            fi
+          done
+          echo "::error::Could not resolve dependencies after 3 attempts."
+          exit 1
 
       - name: Install Trivy
         # Pinned deliberately: a Trivy upgrade can change the document contents and
