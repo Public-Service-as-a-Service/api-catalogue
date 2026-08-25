@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>API-katalogen – Öppen källkod från Sundsvalls kommun</title>
-  <meta name="description" content="En katalog över de API:er som Sundsvalls kommun publicerar som öppen källkod på GitHub, med dokumentation via Swagger UI.">
+  <title>API-katalogen – Sundsvalls kommuns API:er</title>
+  <meta name="description" content="Sundsvalls kommuns API-katalog: de API:er som körs i produktion på kommunens API-plattform, med dokumentation via Swagger UI.">
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -30,13 +30,13 @@
 
   <section class="hero">
     <div class="container">
-      <p class="hero-kicker">Öppen källkod från Sundsvalls kommun</p>
-      <h1>En katalog över kommunens öppna API:er</h1>
+      <p class="hero-kicker">Sundsvalls kommun</p>
+      <h1>En katalog över kommunens API:er</h1>
       <p class="hero-lead">
         Sundsvalls kommun bygger sina digitala tjänster på en gemensam plattform av
-        mikrotjänster – och delar dem öppet med omvärlden. Här hittar du en samlad
-        översikt över de API:er som kommunen publicerar som öppen källkod, med
-        interaktiv API-dokumentation via Swagger UI.
+        mikrotjänster. Här hittar du en samlad översikt över de API:er som körs i
+        produktion på kommunens API-plattform, med interaktiv API-dokumentation
+        via Swagger UI.
       </p>
       <div class="hero-actions">
         <a class="button button-primary" href="#apier">Utforska API:erna</a>
@@ -51,9 +51,10 @@
       <div class="columns">
         <div class="column-text">
           <p>
-            Sundsvalls kommun arbetar enligt principen <em>öppen källkod först</em> och
-            tillgängliggör sina mikrotjänster på GitHub, där de kan användas,
-            granskas och vidareutvecklas av andra kommuner, organisationer och intresserade.
+            Det här är Sundsvalls kommuns API-katalog: en samlad förteckning över de
+            API:er som just nu körs skarpt i produktion på kommunens gemensamma
+            API-plattform. Varje API listas under det namn och med den version som
+            det exponeras med på plattformen.
           </p>
           <p>
             Varje API presenteras på en egen sida med två delar: en verksamhetsnära
@@ -64,18 +65,20 @@
             tjänstens OpenAPI-specifikation.
           </p>
           <p>
-            Katalogen omfattar samtliga API:er som kommunen publicerar öppet och
-            uppdateras när nya tillkommer.
+            Kommunen arbetar enligt principen <em>öppen källkod först</em>, och många av
+            API:erna delas därför på GitHub där de kan användas, granskas och
+            vidareutvecklas av andra kommuner och organisationer. Katalogen omfattar
+            dock även API:er vars lösningar inte publiceras som öppen källkod.
           </p>
         </div>
         <aside class="fact-box" aria-label="Snabbfakta">
           <h3>Snabbfakta</h3>
           <ul>
-            <li><strong>Ett 80-tal</strong> öppna API:er</li>
+            <li><strong>Ett 70-tal</strong> API:er i skarp produktion</li>
             <li>Mikrotjänster bakom kommunens <strong>digitala tjänster</strong></li>
             <li>Interaktiv dokumentation via <strong>Swagger UI</strong></li>
-            <li>Publiceras öppet på <strong>GitHub</strong></li>
-            <li>Fritt att <strong>återanvända och vidareutveckla</strong></li>
+            <li>Nås via kommunens <strong>API-plattform</strong></li>
+            <li>Många delas som <strong>öppen källkod</strong> på GitHub</li>
           </ul>
         </aside>
       </div>
@@ -86,10 +89,9 @@
     <div class="container">
       <h2>API:er i katalogen</h2>
       <p class="section-intro">
-        Katalogen omfattar de mikrotjänster som Sundsvalls kommun publicerar som öppen
-        källkod, grupperade per område. Alla API:er nås i produktion via kommunens
-        gemensamma API-plattform. Välj ett API för att läsa mer och utforska dess
-        dokumentation.
+        Katalogen omfattar de API:er som körs i produktion på kommunens gemensamma
+        API-plattform, grupperade per område. Välj ett API för att läsa mer och
+        utforska dess dokumentation.
       </p>
 
       <!-- BEGIN:API-CARDS -->
@@ -200,24 +202,6 @@
           <h3>SnailMailSender</h3>
           <p>
             Samlar ihop fysiska brevförsändelser i batchar och lämnar över dem till tryck- och kuverteringsleverantör via filöverföring.
-          </p>
-          <span class="teaser-more">Läs mer →</span>
-        </a>
-
-        <a class="teaser-card" href="api/teams-sender.html">
-          <span class="app-tag">Kommunikation</span> <span class="app-tag app-tag-status">Prototyp</span>
-          <h3>TeamsSender</h3>
-          <p>
-            Skickar chattmeddelanden i Microsoft Teams till enskilda medarbetare, som en kanal för meddelanden från kommunens meddelandetjänst.
-          </p>
-          <span class="teaser-more">Läs mer →</span>
-        </a>
-
-        <a class="teaser-card" href="api/teams-sender-old.html">
-          <span class="app-tag">Kommunikation</span> <span class="app-tag app-tag-status">Avvecklad</span>
-          <h3>TeamsSender (äldre version)</h3>
-          <p>
-            Äldre variant av TeamsSender – tjänsten som skickar chattmeddelanden i Microsoft Teams – ersatt av det nyare repot api-service-teams-sender.
           </p>
           <span class="teaser-more">Läs mer →</span>
         </a>
@@ -449,15 +433,6 @@
           <span class="teaser-more">Läs mer →</span>
         </a>
 
-        <a class="teaser-card" href="api/business-engagements.html">
-          <span class="app-tag">Parts- och kunddata</span> <span class="app-tag app-tag-status">Avvecklad</span>
-          <h3>BusinessEngagements</h3>
-          <p>
-            Hämtar en persons företagsengagemang och företags grunduppgifter från Bolagsverket, uppslaget på partyId.
-          </p>
-          <span class="teaser-more">Läs mer →</span>
-        </a>
-
         <a class="teaser-card" href="api/contactsettings.html">
           <span class="app-tag">Parts- och kunddata</span>
           <h3>ContactSettings</h3>
@@ -539,15 +514,6 @@
           <span class="teaser-more">Läs mer →</span>
         </a>
 
-        <a class="teaser-card" href="api/webapp-users.html">
-          <span class="app-tag">Parts- och kunddata</span> <span class="app-tag app-tag-status">Prototyp</span>
-          <h3>WebappUsers</h3>
-          <p>
-            Användarhantering för webbapplikationer – konton med roller, status och inloggning via JWT.
-          </p>
-          <span class="teaser-more">Läs mer →</span>
-        </a>
-
       </div>
 
       <h3 class="card-group-title">AI-tjänster</h3>
@@ -608,15 +574,6 @@
           <h3>CaseManagement</h3>
           <p>
             Integrationslager som tar emot ärenden från e-tjänster och skickar dem vidare till rätt verksamhetssystem – ByggR, Ecos, Alk-T, EDP Future eller CaseData – och ger en samlad statusbild tillbaka.
-          </p>
-          <span class="teaser-more">Läs mer →</span>
-        </a>
-
-        <a class="teaser-card" href="api/contract-loader.html">
-          <span class="app-tag">Integration</span> <span class="app-tag app-tag-status">Avvecklad</span>
-          <h3>ContractLoader</h3>
-          <p>
-            Engångsladdare som migrerade kommunens arrendekontrakt från fastighetssystemet Xpand till det gemensamma Contract-API:et.
           </p>
           <span class="teaser-more">Läs mer →</span>
         </a>
@@ -738,15 +695,6 @@
           <span class="teaser-more">Läs mer →</span>
         </a>
 
-        <a class="teaser-card" href="api/systemregister.html">
-          <span class="app-tag">Integration</span> <span class="app-tag app-tag-status">Prototyp</span>
-          <h3>Systemregistret</h3>
-          <p>
-            Register över kommunens IT-system med leverantörer, kritikalitet, informationsklassning, personuppgiftsbehandlingar och sårbarhetsuppföljning – ett stöd för IT-styrning och informationsförvaltning.
-          </p>
-          <span class="teaser-more">Läs mer →</span>
-        </a>
-
       </div>
 
       <h3 class="card-group-title">Samhällsservice</h3>
@@ -802,15 +750,6 @@
           <h3>MeasurementData</h3>
           <p>
             Hämtar förbrukningsmätvärden – fjärrvärme, fjärrkyla, el, bredband och avfall – per kund och anläggning ur Stadsbackens datalager.
-          </p>
-          <span class="teaser-more">Läs mer →</span>
-        </a>
-
-        <a class="teaser-card" href="api/precheck.html">
-          <span class="app-tag">Samhällsservice</span> <span class="app-tag app-tag-status">Avvecklad</span>
-          <h3>PreCheck</h3>
-          <p>
-            Kontrollerar om en kommunal infrastrukturtjänst – till exempel fjärrvärme – kan levereras till en viss adress. Repot är arkiverat och tjänsten vidareutvecklas inte.
           </p>
           <span class="teaser-more">Läs mer →</span>
         </a>
@@ -883,7 +822,7 @@
       <!-- END:API-CARDS -->
 
       <div class="coming-soon" role="note">
-        <p>Katalogen omfattar samtliga repon som börjar med <code>api-service</code> hos Sundsvalls kommun på GitHub. Nya API:er läggs till efter hand som de publiceras.</p>
+        <p>Katalogen visar de API:er, och de versioner, som körs skarpt i produktion vid ögonblicket. Avvecklade API:er och prototyper ingår inte. Nya API:er läggs till efter hand som de driftsätts.</p>
       </div>
     </div>
   </section>
@@ -894,7 +833,7 @@
   <div class="container footer-inner">
     <div>
       <p class="footer-title">API-katalogen</p>
-      <p>En översikt över de API:er som Sundsvalls kommun delar som öppen källkod.</p>
+      <p>En översikt över de API:er som körs i produktion på Sundsvalls kommuns API-plattform.</p>
     </div>
     <div>
       <p class="footer-title">Länkar</p>
