@@ -1,8 +1,12 @@
 # API-katalogen
 
-En katalog över de API:er som Sundsvalls kommun publicerar som öppen källkod på
-GitHub ([github.com/Sundsvallskommun](https://github.com/Sundsvallskommun)
-– repon som börjar med `api-service`).
+Sundsvalls kommuns API-katalog: en förteckning över de API:er som körs i
+produktion på kommunens API-plattform, med de versioner som är driftsatta.
+Avvecklade API:er och prototyper ingår inte. Många av API:erna utvecklas som
+öppen källkod på GitHub
+([github.com/Sundsvallskommun](https://github.com/Sundsvallskommun)
+– repon som börjar med `api-service`), men katalogen omfattar även API:er vars
+lösningar inte publiceras som öppen källkod.
 
 Katalogen beskriver API:erna på ett lättillgängligt sätt: vad varje API gör,
 vem det är till för och vilken nytta det skapar – och exponerar dessutom varje
@@ -17,7 +21,7 @@ Swagger UI-sida för den interaktiva API-dokumentationen.
 
 - `index.html` – förstasidan med information om katalogen och en översikt över
   API:erna, grupperad per kategori.
-- `api/<slug>.html` – en sida per API (ett 80-tal), med beskrivning och
+- `api/<slug>.html` – en sida per API (ett 70-tal), med beskrivning och
   teknisk dokumentation. Genereras från `scripts/apis-data.json` med
   `scripts/generate-pages.py`.
 - `api/<slug>-swagger.html` – Swagger UI-sida per API som renderar

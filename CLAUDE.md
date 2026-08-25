@@ -8,30 +8,39 @@ struktur med systerkatalogen
 
 ## Vad katalogen är
 
-En statisk webbplats (ren HTML/CSS, inget byggsteg) som beskriver de API:er
-Sundsvalls kommun publicerar som öppen källkod på
+En statisk webbplats (ren HTML/CSS, inget byggsteg) som är Sundsvalls kommuns
+API-katalog: den beskriver de API:er som körs skarpt i produktion på kommunens
+API-plattform. Många av API:erna utvecklas som öppen källkod på
 [github.com/Sundsvallskommun](https://github.com/Sundsvallskommun) – repon som
-börjar med `api-service`. Utöver beskrivningssidorna exponeras varje API:s
-OpenAPI-specifikation interaktivt via Swagger UI. Publiceras till GitHub Pages
-via `.github/workflows/deploy-pages.yml` vid push till `main`.
+börjar med `api-service` – men katalogen kan även omfatta API:er vars lösningar
+inte publiceras som öppen källkod; att källkoden är öppen är sekundärt. Utöver
+beskrivningssidorna exponeras varje API:s OpenAPI-specifikation interaktivt via
+Swagger UI. Publiceras till GitHub Pages via
+`.github/workflows/deploy-pages.yml` vid push till `main`.
 
 ## Grundprinciper
 
-1. **API-plattformens namn, inte reponamn.** API:er presenteras under det namn
+1. **Endast API:er i skarp produktion.** Katalogen listar de API:er, och de
+   versioner, som körs i produktion vid ögonblicket. Avvecklade API:er och
+   prototyper ska inte finnas i katalogen – när ett API tas ur drift tas dess
+   post bort ur `scripts/apis-data.json` tillsammans med de genererade filerna
+   (API-sidan, Swagger UI-sidan, OpenAPI-specifikationen och diagrammet),
+   varefter generatorskripten körs om.
+2. **API-plattformens namn, inte reponamn.** API:er presenteras under det namn
    de exponeras med på kommunens API-plattform (`info.title` i
    OpenAPI-specifikationen), t.ex. "Messaging" – inte `api-service-messaging`.
-2. **En sida per API** plus en Swagger UI-sida. Sidan heter `api/<slug>.html`
+3. **En sida per API** plus en Swagger UI-sida. Sidan heter `api/<slug>.html`
    och Swagger UI-sidan `api/<slug>-swagger.html` (slug utan å/ä/ö, med
    bindestreck, härledd ur API-namnet).
-3. **Koden är sanningskällan, inte README.** README-filer kan vara inaktuella.
+4. **Koden är sanningskällan, inte README.** README-filer kan vara inaktuella.
    Härled alltid teknisk fakta (beroenden, versioner, beteenden) ur
    källkodsrepots konfiguration och kod. Verifierade avvikelser från README har
    företräde och noteras under "Noterbart ur källkoden".
-4. **Två delar på samma sida.** Varje API-sida har först en verksamhetsnära
+5. **Två delar på samma sida.** Varje API-sida har först en verksamhetsnära
    beskrivning (utan tekniska utvecklingsdetaljer), därefter en sektion
    "Teknisk dokumentation" – på samma sida, inte en undersida. Däremellan en
    sektion "API-dokumentation" med länkar till Swagger UI och specifikationen.
-5. **Allt innehåll på svenska.**
+6. **Allt innehåll på svenska.**
 
 ## Så härleder du teknisk fakta ur ett `api-service`-repo
 
