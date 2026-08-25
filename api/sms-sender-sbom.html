@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SmsSender – Programvaruförteckning (SBOM) – API-katalogen</title>
+  <meta name="description" content="Programvaruförteckning (SBOM) i SPDX-format för SmsSender: tredjepartskomponenter med version och licens.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">⬡</span>
+      <a class="brand-name" href="../index.html">API-katalogen</a>
+    </div>
+    <nav class="site-nav" aria-label="Huvudmeny">
+      <a href="../index.html#om-katalogen">Om katalogen</a>
+      <a href="../index.html#apier">API:er</a>
+      <a href="https://github.com/Sundsvallskommun" rel="external">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="page-hero page-hero-slim">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <a href="sms-sender.html">SmsSender</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">SBOM</span>
+      </nav>
+      <span class="app-tag app-tag-light">Kommunikation</span>
+      <h1>SmsSender – programvaruförteckning</h1>
+      <p class="hero-lead">
+        Samtliga tredjepartskomponenter som ingår i tjänstens bygge, med version och
+        licens. Förteckningen är maskinellt härledd ur källkodens beroendeträd och
+        publiceras i SPDX-format.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="../assets/sbom/sms-sender.spdx.json" download>Ladda ner SPDX (JSON)</a>
+        <a class="button button-secondary" href="sms-sender.html">Tillbaka till SmsSender</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="om-forteckningen">
+    <div class="container">
+      <h2>Om förteckningen</h2>
+      <ul>
+        <li>Antal komponenter: <strong>224</strong></li>
+        <li>Antal unika licenser: <strong>11</strong></li>
+        <li>Källa: <strong>api-service-sms-sender@f673ba5</strong> (<a href="https://github.com/Sundsvallskommun/api-service-sms-sender" rel="external">källkod på GitHub</a>)</li>
+        <li>Avser källkod från: <strong>2026-08-17</strong></li>
+        <li>Format: <strong>SPDX-2.3</strong>, genererad med <strong>trivy-0.74.0</strong></li>
+      </ul>
+      <p>
+        Förteckningen uppdateras automatiskt och beskriver beroendena i tjänstens
+        huvudgren vid angivet datum. Den avser programbibliotek – vilka andra
+        mikrotjänster API:et anropar framgår av
+        <a href="sms-sender.html#teknisk-dokumentation">den tekniska dokumentationen</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="licenser">
+    <div class="container">
+      <h2>Licenser</h2>
+      <p class="section-intro">
+        Fördelning av deklarerade licenser bland komponenterna.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Licensfördelning för SmsSender</caption>
+          <thead>
+            <tr><th scope="col">Licens</th><th scope="col">Antal komponenter</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Apache-2.0</td><td>178</td></tr>
+            <tr><td>MIT</td><td>22</td></tr>
+            <tr><td>BSD-3-Clause</td><td>12</td></tr>
+            <tr><td>Ej angiven</td><td>4</td></tr>
+            <tr><td>EPL-2.0 AND LGPL-2.1-only</td><td>2</td></tr>
+            <tr><td>BSD-2-Clause</td><td>1</td></tr>
+            <tr><td>CC0-1.0 AND BSD-2-Clause</td><td>1</td></tr>
+            <tr><td>CDDL-1.1 AND LicenseRef-2e634d8e67fc133b</td><td>1</td></tr>
+            <tr><td>EPL-2.0 AND LicenseRef-2e634d8e67fc133b</td><td>1</td></tr>
+            <tr><td>LGPL-2.1-only</td><td>1</td></tr>
+            <tr><td>MIT-0</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="komponenter">
+    <div class="container">
+      <h2>Komponenter</h2>
+      <p class="section-intro">
+        Samtliga 224 komponenter, inklusive transitiva beroenden.
+      </p>
+      <p class="sbom-filter" hidden>
+        <label for="sbom-filter">Filtrera listan</label>
+        <input type="search" id="sbom-filter" placeholder="Sök på komponent eller licens" autocomplete="off">
+        <span id="sbom-count" aria-live="polite"></span>
+      </p>
+      <div class="table-wrap">
+        <table id="sbom-table">
+          <caption class="sr-only">Tredjepartskomponenter i SmsSender</caption>
+          <thead>
+            <tr><th scope="col">Komponent</th><th scope="col">Version</th><th scope="col">Licens</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>ch.qos.logback:logback-classic</td><td>1.5.34</td><td>EPL-2.0 AND LGPL-2.1-only</td></tr>
+            <tr><td>ch.qos.logback:logback-core</td><td>1.5.34</td><td>EPL-2.0 AND LGPL-2.1-only</td></tr>
+            <tr><td>com.fasterxml.jackson.core:jackson-annotations</td><td>2.21</td><td>Apache-2.0</td></tr>
+            <tr><td>com.fasterxml.jackson.core:jackson-core</td><td>2.21.4</td><td>Apache-2.0</td></tr>
+            <tr><td>com.fasterxml.jackson.core:jackson-databind</td><td>2.21.4</td><td>Apache-2.0</td></tr>
+            <tr><td>com.fasterxml.jackson.dataformat:jackson-dataformat-xml</td><td>2.21.4</td><td>Apache-2.0</td></tr>
+            <tr><td>com.fasterxml.jackson.dataformat:jackson-dataformat-yaml</td><td>2.21.4</td><td>Apache-2.0</td></tr>
+            <tr><td>com.fasterxml.jackson.datatype:jackson-datatype-jdk8</td><td>2.21.4</td><td>Apache-2.0</td></tr>
+            <tr><td>com.fasterxml.jackson.datatype:jackson-datatype-jsr310</td><td>2.21.4</td><td>Apache-2.0</td></tr>
+            <tr><td>com.fasterxml.jackson.module:jackson-module-jaxb-annotations</td><td>2.21.4</td><td>Apache-2.0</td></tr>
+            <tr><td>com.fasterxml.woodstox:woodstox-core</td><td>7.1.1</td><td>Apache-2.0</td></tr>
+            <tr><td>com.fasterxml:classmate</td><td>1.7.3</td><td>Apache-2.0</td></tr>
+            <tr><td>com.github.stephenc.jcip:jcip-annotations</td><td>1.0-1</td><td>Apache-2.0</td></tr>
+            <tr><td>com.google.code.findbugs:jsr305</td><td>3.0.2</td><td>Apache-2.0</td></tr>
+            <tr><td>com.google.errorprone:error_prone_annotations</td><td>2.47.0</td><td>Apache-2.0</td></tr>
+            <tr><td>com.google.guava:failureaccess</td><td>1.0.3</td><td>Apache-2.0</td></tr>
+            <tr><td>com.google.guava:guava</td><td>33.6.0-jre</td><td>Apache-2.0</td></tr>
+            <tr><td>com.google.guava:listenablefuture</td><td>9999.0-empty-to-avoid-conflict-with-guava</td><td>Apache-2.0</td></tr>
+            <tr><td>com.google.j2objc:j2objc-annotations</td><td>3.1</td><td>Apache-2.0</td></tr>
+            <tr><td>com.jayway.jsonpath:json-path</td><td>2.10.0</td><td>Apache-2.0</td></tr>
+            <tr><td>com.nimbusds:content-type</td><td>2.3</td><td>Apache-2.0</td></tr>
+            <tr><td>com.nimbusds:lang-tag</td><td>1.7</td><td>Apache-2.0</td></tr>
+            <tr><td>com.nimbusds:nimbus-jose-jwt</td><td>10.9</td><td>Apache-2.0</td></tr>
+            <tr><td>com.nimbusds:oauth2-oidc-sdk</td><td>11.37.2</td><td>Apache-2.0</td></tr>
+            <tr><td>com.squareup.okhttp3:okhttp</td><td>4.12.0</td><td>Apache-2.0</td></tr>
+            <tr><td>com.squareup.okio:okio</td><td>3.6.0</td><td>Apache-2.0</td></tr>
+            <tr><td>com.squareup.okio:okio-jvm</td><td>3.6.0</td><td>Apache-2.0</td></tr>
+            <tr><td>com.sun.xml.bind:jaxb-core</td><td>4.0.9</td><td>BSD-3-Clause</td></tr>
+            <tr><td>com.sun.xml.bind:jaxb-impl</td><td>4.0.9</td><td>BSD-3-Clause</td></tr>
+            <tr><td>com.sun.xml.messaging.saaj:saaj-impl</td><td>3.0.6</td><td>BSD-3-Clause</td></tr>
+            <tr><td>commons-fileupload:commons-fileupload</td><td>1.6.0</td><td>Apache-2.0</td></tr>
+            <tr><td>commons-logging:commons-logging</td><td>1.3.6</td><td>Apache-2.0</td></tr>
+            <tr><td>de.codecentric:spring-boot-admin-client</td><td>4.1.2</td><td>Apache-2.0</td></tr>
+            <tr><td>de.codecentric:spring-boot-admin-starter-client</td><td>4.1.2</td><td>Apache-2.0</td></tr>
+            <tr><td>de.siegmar:logback-gelf</td><td>6.1.2</td><td>LGPL-2.1-only</td></tr>
+            <tr><td>io.github.openfeign:feign-core</td><td>13.6.1</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.openfeign:feign-form</td><td>13.6.1</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.openfeign:feign-form-spring</td><td>13.6.1</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.openfeign:feign-jackson</td><td>13.6.1</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.openfeign:feign-jaxb-jakarta</td><td>13.6.1</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.openfeign:feign-okhttp</td><td>13.6.1</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.openfeign:feign-slf4j</td><td>13.6.1</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.openfeign:feign-soap-jakarta</td><td>13.6.1</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-annotations</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-bulkhead</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-circuitbreaker</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-circularbuffer</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-consumer</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-core</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-framework-common</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-micrometer</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-ratelimiter</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-retry</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-spring-boot4</td><td>2.4.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-spring6</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.github.resilience4j:resilience4j-timelimiter</td><td>2.3.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.kubernetes:client-java</td><td>24.0.0</td><td>Ej angiven</td></tr>
+            <tr><td>io.kubernetes:client-java-extended</td><td>24.0.0</td><td>Ej angiven</td></tr>
+            <tr><td>io.micrometer:micrometer-commons</td><td>1.17.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.micrometer:micrometer-core</td><td>1.17.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.micrometer:micrometer-jakarta9</td><td>1.17.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.micrometer:micrometer-observation</td><td>1.17.0</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-buffer</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-codec-base</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-codec-classes-quic</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-codec-compression</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-codec-dns</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-codec-http</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-codec-http2</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-codec-http3</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-codec-socks</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-common</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-handler</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-handler-proxy</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-resolver</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-resolver-dns</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-resolver-dns-classes-macos</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-resolver-dns-native-macos</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-transport</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-transport-classes-epoll</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-transport-native-epoll</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.netty:netty-transport-native-unix-common</td><td>4.2.15.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>io.projectreactor.netty:reactor-netty-core</td><td>1.3.6</td><td>Apache-2.0</td></tr>
+            <tr><td>io.projectreactor.netty:reactor-netty-http</td><td>1.3.6</td><td>Apache-2.0</td></tr>
+            <tr><td>io.projectreactor:reactor-core</td><td>3.8.6</td><td>Apache-2.0</td></tr>
+            <tr><td>io.swagger.core.v3:swagger-annotations-jakarta</td><td>2.2.52</td><td>Apache-2.0</td></tr>
+            <tr><td>io.swagger.core.v3:swagger-core-jakarta</td><td>2.2.52</td><td>Apache-2.0</td></tr>
+            <tr><td>io.swagger.core.v3:swagger-models-jakarta</td><td>2.2.52</td><td>Apache-2.0</td></tr>
+            <tr><td>jakarta.activation:jakarta.activation-api</td><td>2.1.4</td><td>BSD-3-Clause</td></tr>
+            <tr><td>jakarta.annotation:jakarta.annotation-api</td><td>3.0.0</td><td>EPL-2.0 AND LicenseRef-2e634d8e67fc133b</td></tr>
+            <tr><td>jakarta.validation:jakarta.validation-api</td><td>3.1.1</td><td>Apache-2.0</td></tr>
+            <tr><td>jakarta.xml.bind:jakarta.xml.bind-api</td><td>4.0.5</td><td>BSD-3-Clause</td></tr>
+            <tr><td>jakarta.xml.soap:jakarta.xml.soap-api</td><td>3.0.2</td><td>BSD-3-Clause</td></tr>
+            <tr><td>jakarta.xml.ws:jakarta.xml.ws-api</td><td>4.0.3</td><td>BSD-3-Clause</td></tr>
+            <tr><td>javax.xml.bind:jaxb-api</td><td>2.2.12</td><td>CDDL-1.1 AND LicenseRef-2e634d8e67fc133b</td></tr>
+            <tr><td>net.minidev:accessors-smart</td><td>2.6.0</td><td>Apache-2.0</td></tr>
+            <tr><td>net.minidev:json-smart</td><td>2.6.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.apache.commons:commons-lang3</td><td>3.20.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.apache.commons:commons-text</td><td>1.13.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.apache.httpcomponents.client5:httpclient5</td><td>5.6.1</td><td>Apache-2.0</td></tr>
+            <tr><td>org.apache.httpcomponents.core5:httpcore5</td><td>5.4.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.apache.httpcomponents.core5:httpcore5-h2</td><td>5.4.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.apache.logging.log4j:log4j-api</td><td>2.25.4</td><td>Apache-2.0</td></tr>
+            <tr><td>org.apache.logging.log4j:log4j-to-slf4j</td><td>2.25.4</td><td>Apache-2.0</td></tr>
+            <tr><td>org.apache.tomcat.embed:tomcat-embed-core</td><td>11.0.22</td><td>Apache-2.0</td></tr>
+            <tr><td>org.apache.tomcat.embed:tomcat-embed-el</td><td>11.0.22</td><td>Apache-2.0</td></tr>
+            <tr><td>org.apache.tomcat.embed:tomcat-embed-websocket</td><td>11.0.22</td><td>Apache-2.0</td></tr>
+            <tr><td>org.apiguardian:apiguardian-api</td><td>1.1.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.aspectj:aspectjweaver</td><td>1.9.25.1</td><td>Ej angiven</td></tr>
+            <tr><td>org.bouncycastle:bcprov-jdk18on</td><td>1.81.1</td><td>MIT</td></tr>
+            <tr><td>org.codehaus.janino:commons-compiler</td><td>3.1.12</td><td>BSD-3-Clause</td></tr>
+            <tr><td>org.codehaus.janino:janino</td><td>3.1.12</td><td>BSD-3-Clause</td></tr>
+            <tr><td>org.codehaus.woodstox:stax2-api</td><td>4.2.2</td><td>BSD-2-Clause</td></tr>
+            <tr><td>org.eclipse.angus:angus-activation</td><td>2.0.3</td><td>BSD-3-Clause</td></tr>
+            <tr><td>org.hdrhistogram:HdrHistogram</td><td>2.2.2</td><td>CC0-1.0 AND BSD-2-Clause</td></tr>
+            <tr><td>org.hibernate.validator:hibernate-validator</td><td>9.1.0.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>org.jboss.logging:jboss-logging</td><td>3.6.3.Final</td><td>Apache-2.0</td></tr>
+            <tr><td>org.jetbrains.kotlin:kotlin-stdlib</td><td>2.3.21</td><td>Apache-2.0</td></tr>
+            <tr><td>org.jetbrains.kotlin:kotlin-stdlib-common</td><td>2.3.21</td><td>Ej angiven</td></tr>
+            <tr><td>org.jetbrains.kotlin:kotlin-stdlib-jdk7</td><td>2.3.21</td><td>Apache-2.0</td></tr>
+            <tr><td>org.jetbrains.kotlin:kotlin-stdlib-jdk8</td><td>2.3.21</td><td>Apache-2.0</td></tr>
+            <tr><td>org.jetbrains:annotations</td><td>13.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.jspecify:jspecify</td><td>1.0.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.jvnet.staxex:stax-ex</td><td>2.1.0</td><td>BSD-3-Clause</td></tr>
+            <tr><td>org.ow2.asm:asm</td><td>9.7.1</td><td>BSD-3-Clause</td></tr>
+            <tr><td>org.reactivestreams:reactive-streams</td><td>1.0.4</td><td>MIT-0</td></tr>
+            <tr><td>org.slf4j:jul-to-slf4j</td><td>2.0.18</td><td>MIT</td></tr>
+            <tr><td>org.slf4j:slf4j-api</td><td>2.0.18</td><td>MIT</td></tr>
+            <tr><td>org.snakeyaml:snakeyaml-engine</td><td>3.0.1</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springdoc:springdoc-openapi-starter-common</td><td>3.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springdoc:springdoc-openapi-starter-webmvc-api</td><td>3.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springdoc:springdoc-openapi-starter-webmvc-ui</td><td>3.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-actuator</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-actuator-autoconfigure</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-autoconfigure</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-configuration-processor</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-health</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-http-client</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-http-codec</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-http-converter</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-jackson</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-micrometer-metrics</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-micrometer-observation</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-netty</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-reactor</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-reactor-netty</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-restclient</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-security</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-security-oauth2-client</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-servlet</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-actuator</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-jackson</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-logging</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-micrometer-metrics</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-reactor-netty</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-restclient</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-security</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-security-oauth2-client</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-tomcat</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-tomcat-runtime</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-validation</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-webflux</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-starter-webmvc</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-tomcat</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-validation</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-web-server</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-webflux</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.boot:spring-boot-webmvc</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-commons</td><td>5.0.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-config-client</td><td>5.0.4</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-context</td><td>5.0.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-kubernetes-client-autoconfig</td><td>5.0.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-kubernetes-client-config</td><td>5.0.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-kubernetes-commons</td><td>5.0.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-openfeign-core</td><td>5.0.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-starter</td><td>5.0.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-starter-bootstrap</td><td>5.0.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-starter-config</td><td>5.0.4</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-starter-kubernetes-client-config</td><td>5.0.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.cloud:spring-cloud-starter-openfeign</td><td>5.0.2</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.data:spring-data-commons</td><td>4.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.retry:spring-retry</td><td>2.0.13</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.security:spring-security-config</td><td>7.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.security:spring-security-core</td><td>7.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.security:spring-security-crypto</td><td>7.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.security:spring-security-oauth2-client</td><td>7.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.security:spring-security-oauth2-core</td><td>7.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.security:spring-security-oauth2-jose</td><td>7.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework.security:spring-security-web</td><td>7.1.0</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework:spring-aop</td><td>7.0.8</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework:spring-aspects</td><td>7.0.8</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework:spring-beans</td><td>7.0.8</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework:spring-context</td><td>7.0.8</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework:spring-core</td><td>7.0.8</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework:spring-expression</td><td>7.0.8</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework:spring-web</td><td>7.0.8</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework:spring-webflux</td><td>7.0.8</td><td>Apache-2.0</td></tr>
+            <tr><td>org.springframework:spring-webmvc</td><td>7.0.8</td><td>Apache-2.0</td></tr>
+            <tr><td>org.webjars:swagger-ui</td><td>5.32.11</td><td>Apache-2.0</td></tr>
+            <tr><td>org.webjars:webjars-locator-lite</td><td>1.1.3</td><td>MIT</td></tr>
+            <tr><td>org.yaml:snakeyaml</td><td>2.6</td><td>Apache-2.0</td></tr>
+            <tr><td>org.zalando:faux-pas</td><td>0.9.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-api</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-common</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-core</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-json</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-json-jackson2</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-netty</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-openfeign</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-servlet</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-spring</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-spring-boot-autoconfigure</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-spring-boot-webflux-autoconfigure</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>org.zalando:logbook-spring-webflux</td><td>4.1.0</td><td>MIT</td></tr>
+            <tr><td>se.sundsvall.dept44:dept44-common-validators</td><td>8.0.9</td><td>MIT</td></tr>
+            <tr><td>se.sundsvall.dept44:dept44-starter</td><td>8.0.9</td><td>MIT</td></tr>
+            <tr><td>se.sundsvall.dept44:dept44-starter-feign</td><td>8.0.9</td><td>MIT</td></tr>
+            <tr><td>se.sundsvall.dept44:dept44-starter-logback-logserver</td><td>8.0.9</td><td>MIT</td></tr>
+            <tr><td>se.sundsvall:api-service-sms-sender</td><td>2.0</td><td>MIT</td></tr>
+            <tr><td>tools.jackson.core:jackson-core</td><td>3.1.4</td><td>Apache-2.0</td></tr>
+            <tr><td>tools.jackson.core:jackson-databind</td><td>3.1.4</td><td>Apache-2.0</td></tr>
+            <tr><td>tools.jackson.dataformat:jackson-dataformat-yaml</td><td>3.1.4</td><td>Apache-2.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-title">API-katalogen</p>
+      <p>En översikt över de API:er som körs i produktion på Sundsvalls kommuns API-plattform.</p>
+    </div>
+    <div>
+      <p class="footer-title">Länkar</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/Sundsvallskommun" rel="external">Sundsvalls kommun på GitHub</a></li>
+        <li><a href="https://sundsvall.se" rel="external">sundsvall.se</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Progressive enhancement: the table is fully rendered server-side and stays
+  // usable without JavaScript.
+  (function () {
+    var input = document.getElementById('sbom-filter');
+    var count = document.getElementById('sbom-count');
+    var rows = Array.prototype.slice.call(
+      document.querySelectorAll('#sbom-table tbody tr')
+    );
+    if (!input || !rows.length) return;
+    document.querySelector('.sbom-filter').hidden = false;
+    input.addEventListener('input', function () {
+      var q = input.value.trim().toLowerCase();
+      var shown = 0;
+      rows.forEach(function (row) {
+        var match = !q || row.textContent.toLowerCase().indexOf(q) !== -1;
+        row.hidden = !match;
+        if (match) shown++;
+      });
+      count.textContent = q ? shown + ' av ' + rows.length : '';
+    });
+  })();
+</script>
+
+</body>
+</html>

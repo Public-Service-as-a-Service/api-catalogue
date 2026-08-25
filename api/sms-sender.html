@@ -79,6 +79,9 @@
             <a href="sms-sender-swagger.html">API-dokumentation (Swagger UI)</a>
           </p>
           <p class="fact-box-link">
+            <a href="sms-sender-sbom.html">Programvaruförteckning (SBOM)</a>
+          </p>
+          <p class="fact-box-link">
             <a href="https://github.com/Sundsvallskommun/api-service-sms-sender" rel="external">Källkod på GitHub</a>
           </p>
         </aside>
@@ -93,10 +96,13 @@
         API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
         OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
         interaktivt i Swagger UI eller laddas ner som YAML.
+        Programvaruförteckningen (SBOM) listar tjänstens samtliga
+        tredjepartskomponenter med version och licens.
       </p>
       <div class="hero-actions">
         <a class="button button-primary" href="sms-sender-swagger.html">Öppna Swagger UI</a>
         <a class="button button-outline" href="../assets/openapi/sms-sender.yml" download>OpenAPI-specifikation (YAML)</a>
+        <a class="button button-outline" href="sms-sender-sbom.html">Programvaruförteckning (SBOM)</a>
       </div>
     </div>
   </section>
@@ -131,6 +137,14 @@
       <h3>Beroenden till andra mikrotjänster</h3>
       <p>
         Inga anrop till andra mikrotjänster hittades i källkodens konfiguration.
+      </p>
+
+      <h3>Programvaruförteckning</h3>
+      <p>
+        Tjänsten bygger på 224 tredjepartskomponenter fördelade på
+        11 olika licenser. Till skillnad från tabellen ovan, som listar
+        andra mikrotjänster, avses här de programbibliotek som ingår i bygget.
+        Se <a href="sms-sender-sbom.html">programvaruförteckningen</a> för hela listan.
       </p>
 
       <h3>Konfiguration och driftsättning</h3>

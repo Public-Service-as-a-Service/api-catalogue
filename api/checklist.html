@@ -80,6 +80,9 @@
             <a href="checklist-swagger.html">API-dokumentation (Swagger UI)</a>
           </p>
           <p class="fact-box-link">
+            <a href="checklist-sbom.html">Programvaruförteckning (SBOM)</a>
+          </p>
+          <p class="fact-box-link">
             <a href="https://github.com/Sundsvallskommun/api-service-checklist" rel="external">Källkod på GitHub</a>
           </p>
         </aside>
@@ -94,10 +97,13 @@
         API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
         OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
         interaktivt i Swagger UI eller laddas ner som YAML.
+        Programvaruförteckningen (SBOM) listar tjänstens samtliga
+        tredjepartskomponenter med version och licens.
       </p>
       <div class="hero-actions">
         <a class="button button-primary" href="checklist-swagger.html">Öppna Swagger UI</a>
         <a class="button button-outline" href="../assets/openapi/checklist.yml" download>OpenAPI-specifikation (YAML)</a>
+        <a class="button button-outline" href="checklist-sbom.html">Programvaruförteckning (SBOM)</a>
       </div>
     </div>
   </section>
@@ -150,6 +156,14 @@
           </tbody>
         </table>
       </div>
+
+      <h3>Programvaruförteckning</h3>
+      <p>
+        Tjänsten bygger på 266 tredjepartskomponenter fördelade på
+        14 olika licenser. Till skillnad från tabellen ovan, som listar
+        andra mikrotjänster, avses här de programbibliotek som ingår i bygget.
+        Se <a href="checklist-sbom.html">programvaruförteckningen</a> för hela listan.
+      </p>
 
       <h3>Konfiguration och driftsättning</h3>
       <ul>
