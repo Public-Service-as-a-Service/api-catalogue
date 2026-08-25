@@ -190,6 +190,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Must be the branch tip, not github.sha: the commit job pushed a new
+          # commit during this run, and the default checkout would deploy the tree
+          # as it looked when the run started -- silently publishing stale content.
+          ref: main
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
