@@ -10,6 +10,7 @@ Run from anywhere: python3 scripts/generate-pages.py
 import html
 import json
 import os
+from collections import Counter
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 DATA = os.path.join(ROOT, "scripts", "apis-data.json")
@@ -133,6 +134,54 @@ def has_spec(api):
     return os.path.exists(os.path.join(ROOT, "assets", "openapi", f"{api['slug']}.yml"))
 
 
+def sbom_path(api):
+    return os.path.join(ROOT, "assets", "sbom", f"{api['slug']}.spdx.json")
+
+
+def has_sbom(api):
+    return os.path.exists(sbom_path(api))
+
+
+def load_sbom(api):
+    """Return (components, licence counts, provenance) from the SPDX document.
+
+    Components are the packages carrying a package-manager purl; the two
+    remaining packages describe the scanned repository itself.
+    """
+    with open(sbom_path(api), encoding="utf-8") as f:
+        doc = json.load(f)
+    components = []
+    for pkg in doc.get("packages", []):
+        if not pkg.get("externalRefs"):
+            continue
+        licens = pkg.get("licenseDeclared") or "NOASSERTION"
+        if licens == "NOASSERTION":
+            licens = "Ej angiven"
+        components.append({
+            "namn": pkg.get("name", ""),
+            "version": pkg.get("versionInfo", ""),
+            "licens": licens,
+        })
+    # Multi-module repositories (api-service-operaton has 12 poms) list the same
+    # dependency once per module -- 6895 entries for 331 distinct components. The
+    # SPDX document keeps them all, since the relationships reference them, but the
+    # page shows each component once.
+    unique = {(c["namn"], c["version"], c["licens"]): c for c in components}
+    components = sorted(unique.values(), key=lambda c: (c["namn"].lower(), c["version"]))
+    licenser = Counter(c["licens"] for c in components)
+    provenans = {
+        "namn": doc.get("name", ""),
+        "created": doc.get("creationInfo", {}).get("created", ""),
+        "spdx": doc.get("spdxVersion", ""),
+        "verktyg": next(
+            (c[len("Tool: "):] for c in doc.get("creationInfo", {}).get("creators", [])
+             if c.startswith("Tool: ")),
+            "",
+        ),
+    }
+    return components, licenser, provenans
+
+
 def page(api):
     slug = api["slug"]
     namn = api["namn"]
@@ -173,38 +222,68 @@ def page(api):
     konf = api.get("konfiguration") or []
     konf_html = "\n".join(f"        <li>{e(k)}</li>" for k in konf) or "        <li>Se källkodens miljöfilsexempel.</li>"
 
+    # The button row is shared: an API without an OpenAPI specification still has
+    # a software bill of materials, and vice versa. Kept as pre-wrapped lines so the
+    # generated HTML stays wrapped the way the rest of the page is.
     if has_spec(api):
+        intro_lines = [
+            "        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en",
+            "        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas",
+            "        interaktivt i Swagger UI eller laddas ner som YAML.",
+        ]
+    else:
+        intro_lines = [
+            "        Ingen incheckad OpenAPI-specifikation hittades i källkodsförrådet; se",
+            "        källkoden för aktuell API-dokumentation.",
+        ]
+    if has_sbom(api):
+        intro_lines += [
+            "        Programvaruförteckningen (SBOM) listar tjänstens samtliga",
+            "        tredjepartskomponenter med version och licens.",
+        ]
+    apidok_intro = "\n".join(intro_lines)
+
+    buttons = []
+    swagger_fact_link = ""
+    if has_spec(api):
+        buttons.append(f'        <a class="button button-primary" href="{slug}-swagger.html">Öppna Swagger UI</a>')
+        buttons.append(f'        <a class="button button-outline" href="../assets/openapi/{slug}.yml" download>OpenAPI-specifikation (YAML)</a>')
         swagger_fact_link = f"""          <p class="fact-box-link">
             <a href="{slug}-swagger.html">API-dokumentation (Swagger UI)</a>
           </p>
 """
-        apidok_section = f"""
-  <section class="section section-slim" id="api-dokumentation">
-    <div class="container">
-      <h2>API-dokumentation</h2>
-      <p class="section-intro">
-        API:ets samtliga resurser, parametrar och datamodeller finns beskrivna i en
-        OpenAPI-specifikation som är hämtad ur källkodsförrådet. Den kan utforskas
-        interaktivt i Swagger UI eller laddas ner som YAML.
-      </p>
-      <div class="hero-actions">
-        <a class="button button-primary" href="{slug}-swagger.html">Öppna Swagger UI</a>
-        <a class="button button-outline" href="../assets/openapi/{slug}.yml" download>OpenAPI-specifikation (YAML)</a>
-      </div>
-    </div>
-  </section>
+    sbom_fact_link = ""
+    if has_sbom(api):
+        buttons.append(f'        <a class="button button-outline" href="{slug}-sbom.html">Programvaruförteckning (SBOM)</a>')
+        sbom_fact_link = f"""          <p class="fact-box-link">
+            <a href="{slug}-sbom.html">Programvaruförteckning (SBOM)</a>
+          </p>
 """
-    else:
-        swagger_fact_link = ""
-        apidok_section = """
+
+    sbom_section = ""
+    if has_sbom(api):
+        komponenter, licenser, _ = load_sbom(api)
+        sbom_section = f"""
+      <h3>Programvaruförteckning</h3>
+      <p>
+        Tjänsten bygger på {len(komponenter)} tredjepartskomponenter fördelade på
+        {len(licenser)} olika licenser. Till skillnad från tabellen ovan, som listar
+        andra mikrotjänster, avses här de programbibliotek som ingår i bygget.
+        Se <a href="{slug}-sbom.html">programvaruförteckningen</a> för hela listan.
+      </p>
+"""
+
+    actions = ""
+    if buttons:
+        actions = '      <div class="hero-actions">\n' + "\n".join(buttons) + "\n      </div>\n"
+    apidok_section = f"""
   <section class="section section-slim" id="api-dokumentation">
     <div class="container">
       <h2>API-dokumentation</h2>
       <p class="section-intro">
-        Ingen incheckad OpenAPI-specifikation hittades i källkodsförrådet; se
-        källkoden för aktuell API-dokumentation.
+{apidok_intro}
       </p>
-    </div>
+{actions}    </div>
   </section>
 """
 
@@ -261,7 +340,7 @@ def page(api):
             <li>Status: <strong>{e(STATUS_LABEL.get(api.get('status'), 'Aktiv'))}</strong></li>
             <li>Målgrupp: <strong>{e(api.get('malgrupp', '–'))}</strong></li>
           </ul>
-{swagger_fact_link}          <p class="fact-box-link">
+{swagger_fact_link}{sbom_fact_link}          <p class="fact-box-link">
             <a href="{repo_url}" rel="external">Källkod på GitHub</a>
           </p>
         </aside>
@@ -295,7 +374,7 @@ def page(api):
       </ul>
 
 {dep_html}
-
+{sbom_section}
       <h3>Konfiguration och driftsättning</h3>
       <ul>
 {konf_html}
@@ -398,6 +477,159 @@ def swagger_page(api):
 """
 
 
+def sbom_page(api):
+    slug = api["slug"]
+    namn = api["namn"]
+    repo_url = f"https://github.com/Sundsvallskommun/{api['repo']}"
+    komponenter, licenser, prov = load_sbom(api)
+
+    licens_rader = "\n".join(
+        f"            <tr><td>{e(licens)}</td><td>{antal}</td></tr>"
+        for licens, antal in sorted(licenser.items(), key=lambda x: (-x[1], x[0].lower()))
+    )
+    komponent_rader = "\n".join(
+        f'            <tr><td>{e(k["namn"])}</td><td>{e(k["version"])}</td><td>{e(k["licens"])}</td></tr>'
+        for k in komponenter
+    )
+    datum = prov["created"][:10]
+
+    return f"""<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{e(namn)} – Programvaruförteckning (SBOM) – API-katalogen</title>
+  <meta name="description" content="Programvaruförteckning (SBOM) i SPDX-format för {e(namn)}: tredjepartskomponenter med version och licens.">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="../assets/favicon-180.png">
+</head>
+<body>
+
+{header(1)}
+
+<main>
+
+  <section class="page-hero page-hero-slim">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Brödsmulor">
+        <a href="../index.html">Start</a> <span aria-hidden="true">/</span>
+        <a href="../index.html#apier">API:er</a> <span aria-hidden="true">/</span>
+        <a href="{slug}.html">{e(namn)}</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">SBOM</span>
+      </nav>
+      <span class="app-tag app-tag-light">{e(api['kategori'])}</span>
+      <h1>{e(namn)} – programvaruförteckning</h1>
+      <p class="hero-lead">
+        Samtliga tredjepartskomponenter som ingår i tjänstens bygge, med version och
+        licens. Förteckningen är maskinellt härledd ur källkodens beroendeträd och
+        publiceras i SPDX-format.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="../assets/sbom/{slug}.spdx.json" download>Ladda ner SPDX (JSON)</a>
+        <a class="button button-secondary" href="{slug}.html">Tillbaka till {e(namn)}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-slim" id="om-forteckningen">
+    <div class="container">
+      <h2>Om förteckningen</h2>
+      <ul>
+        <li>Antal komponenter: <strong>{len(komponenter)}</strong></li>
+        <li>Antal unika licenser: <strong>{len(licenser)}</strong></li>
+        <li>Källa: <strong>{e(prov['namn'])}</strong> (<a href="{repo_url}" rel="external">källkod på GitHub</a>)</li>
+        <li>Avser källkod från: <strong>{e(datum)}</strong></li>
+        <li>Format: <strong>{e(prov['spdx'])}</strong>, genererad med <strong>{e(prov['verktyg'])}</strong></li>
+      </ul>
+      <p>
+        Förteckningen uppdateras automatiskt och beskriver beroendena i tjänstens
+        huvudgren vid angivet datum. Den avser programbibliotek – vilka andra
+        mikrotjänster API:et anropar framgår av
+        <a href="{slug}.html#teknisk-dokumentation">den tekniska dokumentationen</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="licenser">
+    <div class="container">
+      <h2>Licenser</h2>
+      <p class="section-intro">
+        Fördelning av deklarerade licenser bland komponenterna.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Licensfördelning för {e(namn)}</caption>
+          <thead>
+            <tr><th scope="col">Licens</th><th scope="col">Antal komponenter</th></tr>
+          </thead>
+          <tbody>
+{licens_rader}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="komponenter">
+    <div class="container">
+      <h2>Komponenter</h2>
+      <p class="section-intro">
+        Samtliga {len(komponenter)} komponenter, inklusive transitiva beroenden.
+      </p>
+      <p class="sbom-filter" hidden>
+        <label for="sbom-filter">Filtrera listan</label>
+        <input type="search" id="sbom-filter" placeholder="Sök på komponent eller licens" autocomplete="off">
+        <span id="sbom-count" aria-live="polite"></span>
+      </p>
+      <div class="table-wrap">
+        <table id="sbom-table">
+          <caption class="sr-only">Tredjepartskomponenter i {e(namn)}</caption>
+          <thead>
+            <tr><th scope="col">Komponent</th><th scope="col">Version</th><th scope="col">Licens</th></tr>
+          </thead>
+          <tbody>
+{komponent_rader}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{footer()}
+
+<script>
+  // Progressive enhancement: the table is fully rendered server-side and stays
+  // usable without JavaScript.
+  (function () {{
+    var input = document.getElementById('sbom-filter');
+    var count = document.getElementById('sbom-count');
+    var rows = Array.prototype.slice.call(
+      document.querySelectorAll('#sbom-table tbody tr')
+    );
+    if (!input || !rows.length) return;
+    document.querySelector('.sbom-filter').hidden = false;
+    input.addEventListener('input', function () {{
+      var q = input.value.trim().toLowerCase();
+      var shown = 0;
+      rows.forEach(function (row) {{
+        var match = !q || row.textContent.toLowerCase().indexOf(q) !== -1;
+        row.hidden = !match;
+        if (match) shown++;
+      }});
+      count.textContent = q ? shown + ' av ' + rows.length : '';
+    }});
+  }})();
+</script>
+
+</body>
+</html>
+"""
+
+
 def teaser_card(api):
     href = f"api/{api['slug']}.html"
     return f"""        <a class="teaser-card" href="{href}">
@@ -430,6 +662,7 @@ def main():
         apis = json.load(f)
     os.makedirs(OUT, exist_ok=True)
     missing = []
+    missing_sbom = []
     for api in apis:
         with open(os.path.join(OUT, f"{api['slug']}.html"), "w", encoding="utf-8") as f:
             f.write(page(api))
@@ -438,9 +671,17 @@ def main():
                 f.write(swagger_page(api))
         else:
             missing.append(api["slug"])
-    print(f"wrote {len(apis)} API pages ({len(apis) - len(missing)} Swagger UI pages)")
+        if has_sbom(api):
+            with open(os.path.join(OUT, f"{api['slug']}-sbom.html"), "w", encoding="utf-8") as f:
+                f.write(sbom_page(api))
+        else:
+            missing_sbom.append(api["slug"])
+    print(f"wrote {len(apis)} API pages ({len(apis) - len(missing)} Swagger UI pages, "
+          f"{len(apis) - len(missing_sbom)} SBOM pages)")
     if missing:
         print("no OpenAPI spec (Swagger UI skipped):", ", ".join(missing))
+    if missing_sbom:
+        print("no SBOM (SBOM page skipped):", ", ".join(missing_sbom))
 
     index_path = os.path.join(ROOT, "index.html")
     with open(index_path, encoding="utf-8") as f:
