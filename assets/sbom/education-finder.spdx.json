@@ -856,7 +856,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -875,7 +876,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -1882,7 +1884,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/eclipse-aspectj/aspectj/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "EPL-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "org.aspectj:aspectjweaver",
       "primaryPackagePurpose": "LIBRARY",
@@ -1977,7 +1980,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/eclipse-ee4j/jaxb-ri/blob/master/LICENSE.md; se scripts/license-overrides.json.",
+      "licenseConcluded": "BSD-3-Clause",
       "licenseDeclared": "NOASSERTION",
       "name": "org.glassfish.jaxb:jaxb-runtime",
       "primaryPackagePurpose": "LIBRARY",

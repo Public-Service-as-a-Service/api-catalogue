@@ -1,0 +1,104 @@
+{
+  "beskrivning": "Manuellt fastställda licenser för komponenter där Trivy inte kan härleda någon ur pom-kedjan (offlinescanningen når inte alla föräldra-pommar, och äldre artefakter saknar licensuppgift i sin pom). Används av normalize-sbom.py, som ENDAST fyller i licenseConcluded när scanningen gav NOASSERTION/NONE — en licens Trivy själv hittat skrivs aldrig över. licenseDeclared lämnas orörd: paketmetadatan saknar faktiskt uppgiften, och licenseConcluded är SPDX-fältet för dokumentförfattarens egen bedömning. Varje post är verifierad mot komponentens källrepo (länken i \"källa\"). Nya luckor rapporteras som varningar av refresh-sbom-körningen — rätta i första hand vid källan, i andra hand med en post här.",
+  "komponenter": {
+    "com.github.albfernandez:juniversalchardet": {
+      "licens": "MPL-1.1 OR GPL-3.0-only OR LGPL-3.0-only",
+      "källa": "https://github.com/albfernandez/juniversalchardet",
+      "kommentar": "Trippellicensierad enligt pomens licenses-block; MPL-1.1-spåret är mildast (svag copyleft)."
+    },
+    "com.jayway.jsonpath:json-path": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/json-path/JsonPath/blob/master/LICENSE"
+    },
+    "io.kubernetes:client-java": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/kubernetes-client/java/blob/master/LICENSE"
+    },
+    "io.kubernetes:client-java-extended": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/kubernetes-client/java/blob/master/LICENSE"
+    },
+    "io.netty:netty-codec": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/netty/netty/blob/4.2/LICENSE.txt"
+    },
+    "io.netty:netty-tcnative-boringssl-static": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/netty/netty-tcnative/blob/main/LICENSE.txt"
+    },
+    "io.netty:netty-transport-native-kqueue": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/netty/netty/blob/4.2/LICENSE.txt"
+    },
+    "io.opentelemetry:opentelemetry-api": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/open-telemetry/opentelemetry-java/blob/main/LICENSE"
+    },
+    "io.opentelemetry:opentelemetry-context": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/open-telemetry/opentelemetry-java/blob/main/LICENSE"
+    },
+    "isorelax:isorelax": {
+      "licens": "MIT",
+      "källa": "https://sourceforge.net/projects/iso-relax/",
+      "kommentar": "MIT-formulerad licens i distributionen; artefakt från 2003 utan licensuppgift i pom."
+    },
+    "javax.annotation:javax.annotation-api": {
+      "licens": "CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0",
+      "källa": "https://github.com/javaee/javax.annotation/blob/master/LICENSE"
+    },
+    "javax.servlet:servlet-api": {
+      "licens": "CDDL-1.0",
+      "källa": "https://javaee.github.io/servlet-spec/",
+      "kommentar": "Sun-erans artefakt (2.4, 2003) utan licensuppgift i pom; distribuerad under CDDL. Utpekad för pensionering i licensgenomgången 2026-08-26."
+    },
+    "javax.xml.soap:javax.xml.soap-api": {
+      "licens": "CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0",
+      "källa": "https://github.com/javaee/javax.xml.soap-api/blob/master/LICENSE.md"
+    },
+    "javax.xml.ws:jaxws-api": {
+      "licens": "CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0",
+      "källa": "https://github.com/javaee/jax-ws-spec/blob/master/LICENSE.md"
+    },
+    "org.apache.pdfbox:fontbox": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/apache/pdfbox/blob/trunk/LICENSE.txt"
+    },
+    "org.apache.pdfbox:pdfbox": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/apache/pdfbox/blob/trunk/LICENSE.txt"
+    },
+    "org.apache.pdfbox:xmpbox": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/apache/pdfbox/blob/trunk/LICENSE.txt"
+    },
+    "org.aspectj:aspectjweaver": {
+      "licens": "EPL-2.0",
+      "källa": "https://github.com/eclipse-aspectj/aspectj/blob/master/LICENSE"
+    },
+    "org.glassfish.jaxb:jaxb-core": {
+      "licens": "BSD-3-Clause",
+      "källa": "https://github.com/eclipse-ee4j/jaxb-ri/blob/master/LICENSE.md",
+      "kommentar": "Eclipse Distribution License 1.0 = BSD-3-Clause."
+    },
+    "org.glassfish.jaxb:jaxb-runtime": {
+      "licens": "BSD-3-Clause",
+      "källa": "https://github.com/eclipse-ee4j/jaxb-ri/blob/master/LICENSE.md",
+      "kommentar": "Eclipse Distribution License 1.0 = BSD-3-Clause."
+    },
+    "org.glassfish.jaxb:txw2": {
+      "licens": "BSD-3-Clause",
+      "källa": "https://github.com/eclipse-ee4j/jaxb-ri/blob/master/LICENSE.md",
+      "kommentar": "Eclipse Distribution License 1.0 = BSD-3-Clause."
+    },
+    "org.jetbrains.kotlin:kotlin-stdlib-common": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt"
+    },
+    "org.slf4j:jcl-over-slf4j": {
+      "licens": "Apache-2.0",
+      "källa": "https://github.com/qos-ch/slf4j",
+      "kommentar": "Till skillnad från slf4j i övrigt (MIT) är jcl-over-slf4j Apache-2.0 — den härstammar från Apache commons-logging. Deklarerad i modulens egen pom."
+    }
+  }
+}

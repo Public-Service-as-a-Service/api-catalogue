@@ -154,6 +154,28 @@ Trivys verktygsinterna annoteringar och skriver in härkomsten i dokumentet. Uta
 det skulle varje veckokörning producera en commit även när inget beroende
 ändrats.
 
+Samma skript täpper också de licensluckor offlinescanningen lämnar
+(`NOASSERTION`), i två steg som båda är rena funktioner av indata och därmed
+inte bryter determinismen:
+
+1. **Avstämning inom dokumentet** – i ett flermodulsrepo listas samma komponent
+   dels ur modulens egen pom (med licens, ärvd ur föräldrakedjan), dels som
+   beroende hos systermoduler (utan licens, eftersom reaktormoduler aldrig
+   installeras i `~/.m2`). När alla licensierade poster för samma
+   (namn, version) är överens fylls de tomma i från dem.
+2. **`scripts/license-overrides.json`** – manuellt verifierade licenser för
+   komponenter Trivy inte klarar (t.ex. `io.kubernetes:client-java`, vars
+   föräldra-pom inte nås offline). Fyller **endast** i `licenseConcluded` när
+   scanningen gav `NOASSERTION`/`NONE`; en licens Trivy själv hittat skrivs
+   aldrig över, och `licenseDeclared` lämnas orörd. Varje post ska vara
+   verifierad mot komponentens källrepo (länken i `källa`).
+
+Komponenter som fortfarande saknar licens skrivs som `::warning::` och syns som
+annoteringar på veckokörningen — dyker en ny upp (t.ex. efter en
+Dependabot-bump): rätta i första hand vid källan (pom/metadata), i andra hand
+med en ny post i override-filen. SBOM-sidorna visar `licenseConcluded` i första
+hand och `licenseDeclared` som reserv.
+
 Observera att SBOM-sidan visar varje komponent en gång, medan SPDX-dokumentet
 behåller samtliga poster. Flermodulsrepon listar samma beroende per modul –
 `api-service-operaton` har 12 `pom.xml` och 6 895 poster för 331 unika

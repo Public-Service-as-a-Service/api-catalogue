@@ -20754,7 +20754,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20773,7 +20774,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20792,7 +20794,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20811,7 +20814,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20830,7 +20834,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20849,7 +20854,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20868,7 +20874,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20887,7 +20894,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20906,7 +20914,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20925,7 +20934,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20944,7 +20954,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20963,7 +20974,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -20982,7 +20994,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -21001,7 +21014,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -21020,7 +21034,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -21039,7 +21054,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -21058,7 +21074,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -21077,7 +21094,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -21096,7 +21114,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -21115,7 +21134,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -21134,7 +21154,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -21153,7 +21174,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -21172,7 +21194,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -21191,7 +21214,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21210,7 +21234,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21229,7 +21254,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21248,7 +21274,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21267,7 +21294,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21286,7 +21314,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21305,7 +21334,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21324,7 +21354,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21343,7 +21374,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21362,7 +21394,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21381,7 +21414,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21400,7 +21434,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21419,7 +21454,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21438,7 +21474,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21457,7 +21494,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21476,7 +21514,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21495,7 +21534,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21514,7 +21554,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21533,7 +21574,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21552,7 +21594,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21571,7 +21614,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21590,7 +21634,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -21609,7 +21654,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -49220,7 +49266,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "org.jetbrains.kotlin:kotlin-stdlib-common",
       "primaryPackagePurpose": "LIBRARY",
@@ -49239,7 +49286,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "org.jetbrains.kotlin:kotlin-stdlib-common",
       "primaryPackagePurpose": "LIBRARY",
@@ -49258,7 +49306,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "org.jetbrains.kotlin:kotlin-stdlib-common",
       "primaryPackagePurpose": "LIBRARY",
@@ -49277,7 +49326,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "org.jetbrains.kotlin:kotlin-stdlib-common",
       "primaryPackagePurpose": "LIBRARY",
@@ -49296,7 +49346,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "org.jetbrains.kotlin:kotlin-stdlib-common",
       "primaryPackagePurpose": "LIBRARY",
@@ -49315,7 +49366,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "org.jetbrains.kotlin:kotlin-stdlib-common",
       "primaryPackagePurpose": "LIBRARY",
@@ -49334,7 +49386,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "org.jetbrains.kotlin:kotlin-stdlib-common",
       "primaryPackagePurpose": "LIBRARY",
@@ -49353,7 +49406,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "org.jetbrains.kotlin:kotlin-stdlib-common",
       "primaryPackagePurpose": "LIBRARY",
@@ -93860,7 +93914,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -93898,7 +93953,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -93917,7 +93973,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -93936,7 +93993,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -93955,7 +94013,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -93974,7 +94033,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -93993,7 +94053,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -94012,7 +94073,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -94031,7 +94093,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -94069,7 +94132,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -94088,7 +94152,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -94107,7 +94172,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-core",
       "primaryPackagePurpose": "LIBRARY",
@@ -94126,7 +94192,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-decision",
       "primaryPackagePurpose": "LIBRARY",
@@ -94164,7 +94231,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-decision",
       "primaryPackagePurpose": "LIBRARY",
@@ -94202,7 +94270,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-deployment",
       "primaryPackagePurpose": "LIBRARY",
@@ -94240,7 +94309,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-deployment",
       "primaryPackagePurpose": "LIBRARY",
@@ -94278,7 +94348,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-process",
       "primaryPackagePurpose": "LIBRARY",
@@ -94335,7 +94406,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-process",
       "primaryPackagePurpose": "LIBRARY",
@@ -94354,7 +94426,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-webapp",
       "primaryPackagePurpose": "LIBRARY",
@@ -94411,7 +94484,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-webapp",
       "primaryPackagePurpose": "LIBRARY",
@@ -94430,7 +94504,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers",
       "primaryPackagePurpose": "LIBRARY",
@@ -94449,7 +94524,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers",
       "primaryPackagePurpose": "LIBRARY",
@@ -94468,7 +94544,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers",
       "primaryPackagePurpose": "LIBRARY",
@@ -94487,7 +94564,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers",
       "primaryPackagePurpose": "LIBRARY",
@@ -94525,7 +94603,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers",
       "primaryPackagePurpose": "LIBRARY",
@@ -94544,7 +94623,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers",
       "primaryPackagePurpose": "LIBRARY",
@@ -94563,7 +94643,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers",
       "primaryPackagePurpose": "LIBRARY",
@@ -94601,7 +94682,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers",
       "primaryPackagePurpose": "LIBRARY",
@@ -94620,7 +94702,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers",
       "primaryPackagePurpose": "LIBRARY",
@@ -94639,7 +94722,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers",
       "primaryPackagePurpose": "LIBRARY",
@@ -94658,7 +94742,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers-caremanagement",
       "primaryPackagePurpose": "LIBRARY",
@@ -94715,7 +94800,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers-caremanagement",
       "primaryPackagePurpose": "LIBRARY",
@@ -94753,7 +94839,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers-financialaid",
       "primaryPackagePurpose": "LIBRARY",
@@ -94791,7 +94878,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers-financialaid",
       "primaryPackagePurpose": "LIBRARY",
@@ -94848,7 +94936,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers-messaging",
       "primaryPackagePurpose": "LIBRARY",
@@ -94867,7 +94956,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers-messaging",
       "primaryPackagePurpose": "LIBRARY",
@@ -94886,7 +94976,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers-supportmanagement",
       "primaryPackagePurpose": "LIBRARY",
@@ -94924,7 +95015,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd ur systerposten för samma komponent i detta dokument (flermodulsrepo); se scripts/normalize-sbom.py.",
+      "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
       "name": "se.sundsvall:operaton-workers-supportmanagement",
       "primaryPackagePurpose": "LIBRARY",
