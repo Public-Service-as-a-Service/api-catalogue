@@ -1,15 +1,15 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "comment": "Genererad ur api-service-datawarehousereader commit 4b802412f7481d898ddf94be10b256895ebcd40f (2026-08-19T06:46:25Z) med trivy-0.74.0. Underhålls av .github/workflows/refresh-sbom.yml i api-catalogue.",
-    "created": "2026-08-19T06:46:25Z",
+    "comment": "Genererad ur api-service-datawarehousereader commit 9e8c0a3f5de08df2c70553fb9711f3be37789696 (2026-08-25T14:42:09Z) med trivy-0.74.0. Underhålls av .github/workflows/refresh-sbom.yml i api-catalogue.",
+    "created": "2026-08-25T14:42:09Z",
     "creators": [
       "Organization: aquasecurity",
       "Tool: trivy-0.74.0"
     ]
   },
   "dataLicense": "CC0-1.0",
-  "documentNamespace": "https://public-service-as-a-service.github.io/api-catalogue/sbom/datawarehousereader/4b802412f7481d898ddf94be10b256895ebcd40f",
+  "documentNamespace": "https://public-service-as-a-service.github.io/api-catalogue/sbom/datawarehousereader/9e8c0a3f5de08df2c70553fb9711f3be37789696",
   "hasExtractedLicensingInfos": [
     {
       "extractedText": "This component is licensed under \"GPL-2.0-only WITH classpath-exception\"",
@@ -17,7 +17,7 @@
       "name": "GPL-2.0-only WITH classpath-exception"
     }
   ],
-  "name": "api-service-datawarehousereader@4b80241",
+  "name": "api-service-datawarehousereader@9e8c0a3",
   "packages": [
     {
       "SPDXID": "SPDXRef-Repository-741c5ff31ac42f2e",
