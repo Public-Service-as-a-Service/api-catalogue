@@ -110,9 +110,15 @@ jobs:
         # Pinned deliberately: a Trivy upgrade can change the document contents and
         # would rewrite all 75 SBOMs at once. Bumping it should be its own reviewable
         # change, not a silent side effect of a scheduled run.
+        #
+        # cache: true because the download from GitHub releases is the kind of
+        # transient network fault that otherwise reddens a leg for no real reason
+        # (observed: curl exit 35 mid-run). With the cache, one leg downloads the
+        # binary and the other 74 restore it from the Actions cache.
         uses: aquasecurity/setup-trivy@v0.3.1
         with:
           version: v0.74.0
+          cache: true
 
       - name: Generate SPDX SBOM
         # Two things here are deliberate:
