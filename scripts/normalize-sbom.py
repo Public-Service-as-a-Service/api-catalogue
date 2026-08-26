@@ -7,6 +7,12 @@ rewrite all SBOMs and produce a commit even when no dependency changed. This
 script pins the volatile fields to the scanned commit and records provenance in
 the document itself, so an unchanged dependency tree yields a byte-identical file.
 
+It also closes the licence gaps the offline scan leaves behind: first from
+sibling entries within the document (multi-module repos), then from the curated
+map in license-overrides.json. Both steps are pure functions of the input and
+the committed map, so determinism is preserved. Anything still unlicensed is
+printed as a GitHub Actions warning.
+
 IMPORTANT: the scan must be run from inside the checkout as `trivy fs ... .`.
 Trivy derives every package SPDXID from a PkgID that includes the scan path, so
 scanning `src` instead of `.` changes every identifier in the document and makes
@@ -23,6 +29,22 @@ import os
 import subprocess
 
 NAMESPACE_BASE = "https://public-service-as-a-service.github.io/api-catalogue/sbom"
+
+# SPDX values that all mean "the scan produced no licence".
+MISSING_LICENSES = ("", "NONE", "NOASSERTION")
+
+
+def concluded_licence(pkg):
+    """The package's concluded licence, or None when the scan produced nothing.
+
+    Trivy usually writes the string NOASSERTION but emits JSON null for licence
+    names it cannot parse into an SPDX expression (observed with v0.74.0), so
+    both spellings of "nothing" must be treated alike.
+    """
+    licence = pkg.get("licenseConcluded")
+    if licence is None or licence in MISSING_LICENSES:
+        return None
+    return licence
 
 
 def git(source, *args):
@@ -98,6 +120,76 @@ def normalise(doc, slug, repo, sha, short_sha, date):
     return doc
 
 
+def load_overrides():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "license-overrides.json")
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)["komponenter"]
+
+
+def reconcile_duplicate_licences(doc):
+    """Fill licence gaps from sibling entries for the same component.
+
+    A multi-module reactor lists each component once per referencing pom. The
+    entries parsed from a module's own pom carry the licence (inherited down
+    the parent chain), but the entries where that module appears as a
+    dependency of a sibling are resolved against ~/.m2 -- where reactor
+    modules are never installed -- and come back without one. When every
+    licensed entry for a (name, version) agrees on the licence, conclude it
+    for the empty entries too; if the licensed entries disagree, leave the
+    gap alone rather than guessing.
+    """
+    by_component = {}
+    for pkg in doc.get("packages", []):
+        if not pkg.get("externalRefs"):
+            continue
+        licence = concluded_licence(pkg)
+        if licence is not None:
+            key = (pkg.get("name", ""), pkg.get("versionInfo", ""))
+            by_component.setdefault(key, set()).add(licence)
+    for pkg in doc.get("packages", []):
+        if not pkg.get("externalRefs"):
+            continue
+        if concluded_licence(pkg) is not None:
+            continue
+        licences = by_component.get((pkg.get("name", ""), pkg.get("versionInfo", "")), set())
+        if len(licences) == 1:
+            pkg["licenseConcluded"] = next(iter(licences))
+            pkg["licenseComments"] = (
+                "Fastställd ur systerposten för samma komponent i detta dokument "
+                "(flermodulsrepo); se scripts/normalize-sbom.py."
+            )
+    return doc
+
+
+def apply_licence_overrides(doc, overrides):
+    """Fill remaining licence gaps from the curated license-overrides.json.
+
+    Only fills licenseConcluded where the scan produced nothing -- a licence
+    Trivy did resolve always wins, so an override can never mask a real
+    upstream licence change. licenseDeclared is left untouched: the package
+    metadata genuinely lacks a declaration, and licenseConcluded is SPDX's
+    field for the document author's own determination.
+
+    Returns the (name, version) pairs still without a licence, for reporting.
+    """
+    remaining = set()
+    for pkg in doc.get("packages", []):
+        if not pkg.get("externalRefs"):
+            continue
+        if concluded_licence(pkg) is not None:
+            continue
+        override = overrides.get(pkg.get("name", ""))
+        if override is None:
+            remaining.add((pkg.get("name", ""), pkg.get("versionInfo", "")))
+            continue
+        pkg["licenseConcluded"] = override["licens"]
+        pkg["licenseComments"] = (
+            f"Fastställd manuellt mot {override['källa']}; "
+            "se scripts/license-overrides.json."
+        )
+    return remaining
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", required=True, help="raw Trivy SPDX JSON")
@@ -112,6 +204,13 @@ def main():
 
     sha, short_sha, date = commit_info(args.source)
     doc = normalise(doc, args.slug, args.repo, sha, short_sha, date)
+    doc = reconcile_duplicate_licences(doc)
+    remaining = apply_licence_overrides(doc, load_overrides())
+    # ::warning:: makes the gap visible as an annotation on the scheduled run
+    # instead of silently accumulating; locally it is just a printed line.
+    for name, version in sorted(remaining):
+        print(f"::warning::{args.slug}: {name} {version} saknar licensuppgift -- "
+              "rätta vid källan eller lägg till i scripts/license-overrides.json.")
 
     components = sum(1 for p in doc.get("packages", []) if p.get("externalRefs"))
     if components < 50:

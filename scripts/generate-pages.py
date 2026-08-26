@@ -154,9 +154,14 @@ def load_sbom(api):
     for pkg in doc.get("packages", []):
         if not pkg.get("externalRefs"):
             continue
-        licens = pkg.get("licenseDeclared") or "NOASSERTION"
-        if licens == "NOASSERTION":
-            licens = "Ej angiven"
+        # licenseConcluded first: normalize-sbom.py records manually verified
+        # licences there (see scripts/license-overrides.json), while
+        # licenseDeclared honestly keeps what the package metadata itself says.
+        licens = next(
+            (v for v in (pkg.get("licenseConcluded"), pkg.get("licenseDeclared"))
+             if v and v not in ("NOASSERTION", "NONE")),
+            "Ej angiven",
+        )
         components.append({
             "namn": pkg.get("name", ""),
             "version": pkg.get("versionInfo", ""),

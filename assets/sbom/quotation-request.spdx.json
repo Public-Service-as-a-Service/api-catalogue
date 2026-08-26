@@ -1122,7 +1122,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java",
       "primaryPackagePurpose": "LIBRARY",
@@ -1141,7 +1142,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/kubernetes-client/java/blob/master/LICENSE; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "io.kubernetes:client-java-extended",
       "primaryPackagePurpose": "LIBRARY",
@@ -2281,7 +2283,8 @@
         }
       ],
       "filesAnalyzed": false,
-      "licenseConcluded": "NOASSERTION",
+      "licenseComments": "Fastställd manuellt mot https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt; se scripts/license-overrides.json.",
+      "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "NOASSERTION",
       "name": "org.jetbrains.kotlin:kotlin-stdlib-common",
       "primaryPackagePurpose": "LIBRARY",
