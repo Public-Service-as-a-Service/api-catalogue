@@ -181,6 +181,18 @@ behåller samtliga poster. Flermodulsrepon listar samma beroende per modul –
 `api-service-operaton` har 12 `pom.xml` och 6 895 poster för 331 unika
 komponenter.
 
+**60-dagarsregeln.** GitHub stänger av schemalagda workflows i publika repon efter
+60 dagar utan aktivitet i repot. Workflowet commitar bara när ett beroende faktiskt
+ändrats, så ett par genuint tysta månader hade gett noll aktivitet och schemat hade
+tystnat utan att någon märkte det. `keepalive`-jobbet återaktiverar därför workflowet
+via API:et vid varje körning, oavsett om något ändrats.
+
+GitHub dokumenterar varken vad som räknas som "repository activity" eller att
+återaktivering nollställer räknaren — det är den bästa tillgängliga åtgärden, inte en
+garanti. Jobbet loggar därför workflowets `state` före och efter, så att utfallet går
+att se. Att commita sig levande vore alternativet, men keepalive-verktygen har gått
+ifrån dummy-commits till just API-anropet.
+
 ## Arkitekturritningen
 
 En SVG per API i `assets/diagrams/<samma slug>.svg`, genererad ur

@@ -246,3 +246,38 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  keepalive:
+    name: Reset inactivity timer
+    # Runs on every scheduled execution, whether or not anything changed. That is
+    # the whole point: GitHub disables a scheduled workflow in a public repository
+    # after 60 days without repository activity, and this workflow only commits
+    # when a dependency actually changed -- a genuinely quiet couple of months
+    # would produce no activity at all and the schedule would stop silently.
+    #
+    # Re-enabling the workflow through the API is what the keepalive tooling
+    # settled on after moving away from dummy commits (keepalive-workflow v1 -> v2,
+    # gh-workflow-immortality), and it avoids polluting the history. Note that
+    # GitHub documents neither what counts as "repository activity" nor that
+    # enabling resets the counter -- this is the best available mitigation, not a
+    # guarantee. The state check below makes the outcome observable either way.
+    needs: sbom
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Re-enable this workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          before=$(gh api "repos/$REPO/actions/workflows/refresh-sbom.yml" --jq '.state')
+          echo "state before: $before"
+          if [ "$before" = "disabled_inactivity" ]; then
+            echo "::warning::The schedule had been disabled for inactivity and is being re-enabled."
+          fi
+          gh api -X PUT "repos/$REPO/actions/workflows/refresh-sbom.yml/enable"
+          after=$(gh api "repos/$REPO/actions/workflows/refresh-sbom.yml" --jq '.state')
+          echo "state after: $after"
+          [ "$after" = "active" ] || { echo "::error::Workflow is $after, expected active."; exit 1; }
