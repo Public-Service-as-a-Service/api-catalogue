@@ -190,7 +190,7 @@ jobs:
           echo "changed=true" >> "$GITHUB_OUTPUT"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/sbom api index.html
+          git add assets/sbom api
           git commit -m "Uppdatera programvaruförteckningar (SBOM)"
           # main can move between this job's checkout and its push, which rejects
           # the push as non-fast-forward and loses the whole refresh. Rebase and
@@ -235,13 +235,25 @@ jobs:
           # as it looked when the run started -- silently publishing stale content.
           ref: main
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v5
         with:
-          path: .
+          path: dist
 
       - name: Deploy to GitHub Pages
         id: deployment
