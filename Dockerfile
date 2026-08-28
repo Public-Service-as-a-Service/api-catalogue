@@ -1,7 +1,12 @@
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
 FROM nginx:alpine
 
-COPY index.html /usr/share/nginx/html/
-COPY api /usr/share/nginx/html/api
-COPY assets /usr/share/nginx/html/assets
+COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80
