@@ -41,6 +41,15 @@ den här filen.
    beroendetabellen, databas, teknikstack och särdrag enligt tabellen i
    `CLAUDE.md`. Uppdatera posten och kopiera in den nya specifikationen till
    `assets/openapi/<slug>.yml` när den ändrats.
+   **Även verksamhetsbeskrivningen ingår i jämförelsen.** Har källrepots
+   README eller specens `info.description` ändrats sedan posten skrevs,
+   eller stämmer postens bild av API:et inte längre, omprövas ingress,
+   beskrivning och målgrupp. README är aldrig ensam sanningskälla:
+   verifiera varje ändrad uppgift i koden (tjänstelagret, resurserna i
+   specen) innan posten ändras – i webbkatalogen missades i augusti 2026
+   på det här sättet att två tjänster sedan länge betjänade även
+   privatpersoner. En README-uppgift utan kodtäckning flaggas i
+   PR-beskrivningen i stället för att skrivas in.
 6. Kör `python3 scripts/generate-pages.py` följt av
    `python3 scripts/generate-diagrams.py` och verifiera sidorna lokalt med
    headless Chromium enligt `CLAUDE.md`.
