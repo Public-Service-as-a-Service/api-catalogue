@@ -1,15 +1,15 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "comment": "Genererad ur api-service-installation commit b2b48b9dd14d8c2e00478ba00cae53d89be08aca (2026-08-18T06:06:47Z) med trivy-0.74.0. Underhålls av .github/workflows/refresh-sbom.yml i api-catalogue.",
-    "created": "2026-08-18T06:06:47Z",
+    "comment": "Genererad ur api-service-installation commit f7b8de74806e79c99cb39fa6e151af6de739b71b (2026-08-28T05:49:29Z) med trivy-0.74.0. Underhålls av .github/workflows/refresh-sbom.yml i api-catalogue.",
+    "created": "2026-08-28T05:49:29Z",
     "creators": [
       "Organization: aquasecurity",
       "Tool: trivy-0.74.0"
     ]
   },
   "dataLicense": "CC0-1.0",
-  "documentNamespace": "https://public-service-as-a-service.github.io/api-catalogue/sbom/installation/b2b48b9dd14d8c2e00478ba00cae53d89be08aca",
+  "documentNamespace": "https://public-service-as-a-service.github.io/api-catalogue/sbom/installation/f7b8de74806e79c99cb39fa6e151af6de739b71b",
   "hasExtractedLicensingInfos": [
     {
       "extractedText": "This component is licensed under \"GPL-2.0-only WITH classpath-exception\"",
@@ -17,7 +17,7 @@
       "name": "GPL-2.0-only WITH classpath-exception"
     }
   ],
-  "name": "api-service-installation@b2b48b9",
+  "name": "api-service-installation@f7b8de7",
   "packages": [
     {
       "SPDXID": "SPDXRef-Repository-741c5ff31ac42f2e",

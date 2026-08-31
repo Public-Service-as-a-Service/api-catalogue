@@ -1,15 +1,15 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "comment": "Genererad ur api-service-caremanagement commit b0c604a4dcbaaab4b74f0dd0e92a9786bd4c30f8 (2026-08-25T01:05:10Z) med trivy-0.74.0. Underhålls av .github/workflows/refresh-sbom.yml i api-catalogue.",
-    "created": "2026-08-25T01:05:10Z",
+    "comment": "Genererad ur api-service-caremanagement commit 735696bf1d67742384ef6bdcbf42fb4432196298 (2026-08-28T06:52:00Z) med trivy-0.74.0. Underhålls av .github/workflows/refresh-sbom.yml i api-catalogue.",
+    "created": "2026-08-28T06:52:00Z",
     "creators": [
       "Organization: aquasecurity",
       "Tool: trivy-0.74.0"
     ]
   },
   "dataLicense": "CC0-1.0",
-  "documentNamespace": "https://public-service-as-a-service.github.io/api-catalogue/sbom/caremanagement/b0c604a4dcbaaab4b74f0dd0e92a9786bd4c30f8",
+  "documentNamespace": "https://public-service-as-a-service.github.io/api-catalogue/sbom/caremanagement/735696bf1d67742384ef6bdcbf42fb4432196298",
   "hasExtractedLicensingInfos": [
     {
       "extractedText": "This component is licensed under \"GPL-2.0-only WITH classpath-exception\"",
@@ -17,7 +17,7 @@
       "name": "GPL-2.0-only WITH classpath-exception"
     }
   ],
-  "name": "api-service-caremanagement@b0c604a",
+  "name": "api-service-caremanagement@735696b",
   "packages": [
     {
       "SPDXID": "SPDXRef-Repository-741c5ff31ac42f2e",

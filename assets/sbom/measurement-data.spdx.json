@@ -1,15 +1,15 @@
 {
   "SPDXID": "SPDXRef-DOCUMENT",
   "creationInfo": {
-    "comment": "Genererad ur api-service-measurement-data commit 5c34c9345cbef79a972f96da871c527e51520c06 (2026-08-17T12:34:29Z) med trivy-0.74.0. Underhålls av .github/workflows/refresh-sbom.yml i api-catalogue.",
-    "created": "2026-08-17T12:34:29Z",
+    "comment": "Genererad ur api-service-measurement-data commit 804e9ab6ddfac44fde9008444f102557d477764b (2026-08-28T05:48:50Z) med trivy-0.74.0. Underhålls av .github/workflows/refresh-sbom.yml i api-catalogue.",
+    "created": "2026-08-28T05:48:50Z",
     "creators": [
       "Organization: aquasecurity",
       "Tool: trivy-0.74.0"
     ]
   },
   "dataLicense": "CC0-1.0",
-  "documentNamespace": "https://public-service-as-a-service.github.io/api-catalogue/sbom/measurement-data/5c34c9345cbef79a972f96da871c527e51520c06",
+  "documentNamespace": "https://public-service-as-a-service.github.io/api-catalogue/sbom/measurement-data/804e9ab6ddfac44fde9008444f102557d477764b",
   "hasExtractedLicensingInfos": [
     {
       "extractedText": "This component is licensed under \"GPL-2.0-only WITH classpath-exception\"",
@@ -17,7 +17,7 @@
       "name": "GPL-2.0-only WITH classpath-exception"
     }
   ],
-  "name": "api-service-measurement-data@5c34c93",
+  "name": "api-service-measurement-data@804e9ab",
   "packages": [
     {
       "SPDXID": "SPDXRef-Repository-741c5ff31ac42f2e",
