@@ -1,5 +1,16 @@
 # API-katalogen
 
+> **Arkiverat – innehållet har flyttat.** API-katalogen är numera sektionen
+> `api/` på
+> [ekosystemet.sundsvall.dev](https://ekosystemet.sundsvall.dev/api/index.html)
+> och underhålls i repot
+> [Public-Service-as-a-Service/dev-web](https://github.com/Public-Service-as-a-Service/dev-web),
+> tillsammans med målarkitekturen och webbkatalogen. API-sidorna har kvar sina
+> sökvägar (`/api/<slug>.html` med sina `-swagger`- och `-sbom`-sidor) och
+> adresser under `api-katalog.sundsvall.dev` omdirigeras dit. Det här repot
+> ligger kvar som historik och tar inte emot ändringar – historiken följde med
+> till dev-web via `git subtree`.
+
 Sundsvalls kommuns API-katalog: en förteckning över de API:er som körs i
 produktion på kommunens API-plattform, med de versioner som är driftsatta.
 Avvecklade API:er och prototyper ingår inte. Många av API:erna utvecklas som
