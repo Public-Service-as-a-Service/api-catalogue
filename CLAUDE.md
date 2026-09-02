@@ -247,6 +247,16 @@ Ritningens lager, uppifrån och ned:
 Innehållet i diagrammet (beroenden, versioner, noteringar) ska stämma exakt
 med sidans beroendetabell – båda kommer från samma fält i datafilen.
 
+All text mäts innan den ritas (`text_width` i generatorn, med teckenbredder för
+Helvetica/Arial). Text som är bredare än sin låda kortas av med ellips, precis
+som i systerkatalogen web-catalogue, så att etiketter aldrig hamnar utanför
+lådan eller krockar med grannlådans text; hela texten behålls som `<title>` och
+visas när muspekaren vilar över etiketten. Noteringarna under diagrammet
+radbryts i stället på ordgränser. Korta därför inte av fälten i
+`scripts/apis-data.json` för hand för att de ska "få plats" – skriv dem
+fullständiga och låt generatorn sköta avkortningen. Fulltexten finns alltid på
+API-sidan (beroendetabellen och "Noterbart ur källkoden").
+
 ## Övrigt att uppdatera
 
 - **`README.md`** – uppdatera vid behov beskrivningen av innehållet.
